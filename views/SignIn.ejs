@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs')%>
+  <body  >
+    <section   class="relative">
+      <div class="container-fluid vh-100">
+        <div class="row d-flex justify-content-center  align-items-center h-100">
+          <div class="col-md-9 col-lg-6 col-xl-5">
+            <img
+              src="/BADES.jpg"
+              class="img-fluid"
+              alt="logo"
+            />
+          </div>
+          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1  justify-content-center  p-3 align-items-center d-flex col">
+            <form id="form">
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input
+                  type="email"
+                  class="form-control form-control-lg shadow"
+                  placeholder="Registered Email"
+                  name="Email"
+                />
+                
+                <p class="email error " style="color: chocolate;"></p>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-3">
+                <input
+                  type="password"
+                  class="form-control form-control-lg shadow"
+                  placeholder="Password"
+                  name="password"
+                />
+               
+                <p class="password error " style="color: chocolate;"></p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <% if (!user) { %>
+                <a href="/api/v1/Reset" class="link-opacity-50-hover">Forgot password?</a>
+                <% } %>
+              </div>
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <button
+                  type="submit"
+                  class="btn btn-dark btn-lg shadow"
+                  style="padding-left: 2.5rem; padding-right: 2.5rem"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+    </section>
+  </body>
+  <script>
+    const emailError = document.querySelector(".email.error");
+    const passwordError = document.querySelector(".password.error");
+    const form = document.querySelector("#form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // clear error fileds
+      emailError.textContent = "";
+      passwordError.textContent = "";
+
+      // targeting input elements
+      let Email = form.Email.value;
+      let password = form.password.value;
+
+      try {
+        const res = await fetch("/api/v1/SignIn", {
+          method: "POST",
+          body: JSON.stringify({ Email, password }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        if (data.errorMessage) {
+          emailError.textContent = data.errorMessage;
+        }
+
+        if (data.errorPassword) {
+          passwordError.textContent = data.errorPassword;
+        }
+
+        if (data.serverError) {
+          emailError.textContent = data.serverError;
+        }
+
+        //check for registered customer
+        if (data.Newcustomer) {
+          // form.reset()
+          location.assign(`/api/v1/Dashboard/${data.Newcustomer}`);
+        }
+      } catch (e) {
+        emailError.textContent = `${e}`;
+      }
+    });
+  </script>
+  <!-- <script src="App.js"></script> -->
+</html>

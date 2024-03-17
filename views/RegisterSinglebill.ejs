@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+
+      /* activitiy modal */
+
+      .sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav p {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav p:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#pspdfkit-header {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav p {font-size: 18px;}
+}
+
+
+      /* ends here  */
+
+
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+          .box {
+      position: relative;
+    }
+    .ribbon {
+      position: absolute;
+      right: -5px; top: -5px;
+      z-index: 1;
+      overflow: hidden;
+      width: 75px; height: 75px;
+      text-align: right;
+    }
+    .ribbon span {
+      font-size: 10px;
+      font-weight: bold;
+      color: #FFF;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      width: 100px;
+      display: block;
+      background: #79A70A;
+      background: linear-gradient(#9BC90D 0%, #79A70A 100%);
+      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+      position: absolute;
+      top: 19px; right: -21px;
+    }
+    .ribbon span::before {
+      content: "";
+      position: absolute; left: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid #79A70A;
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #79A70A;
+    }
+    .ribbon span::after {
+      content: "";
+      position: absolute; right: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid transparent;
+      border-right: 3px solid #79A70A;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #79A70A;
+    }
+
+     /* for canceled bill */
+     .CANCELLED {
+      position: absolute;
+      right: -5px; top: -5px;
+      z-index: 1;
+      overflow: hidden;
+      width: 75px; height: 75px;
+      text-align: right;
+    }
+    .CANCELLED span {
+      font-size: 10px;
+      font-weight: bold;
+      color: #FFF;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      width: 100px;
+      display: block;
+      background: #c5160a;
+      background: linear-gradient(#df3e0c 0%, #df3e0c 100%);
+      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+      position: absolute;
+      top: 19px; right: -21px;
+    }
+    .CANCELLED span::before {
+      content: "";
+      position: absolute; left: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid #df3e0c;
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #df3e0c;
+    }
+    .CANCELLED span::after {
+      content: "";
+      position: absolute; right: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid transparent;
+      border-right: 3px solid #df3e0c;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #df3e0c;
+    }
+        </style>
+  </head>
+
+  <body id="main">
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <h5>
+              <a
+                class="nav-link breadcrumb-item active"
+                aria-current="page"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: #fff !important"
+              >
+              <%=Singlebill.billStatus.toUpperCase()%>/<%=Singlebill.billReferenceNo%>/<%=Singlebill.invoicelocation%>
+              </a>
+            </h5>
+          </li>
+        </ul>
+        <%-include('./partials/USER.ejs')%>
+        <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+   
+    <!-- approve and reject buttons -->
+   <div class="">
+  
+   </div>
+     <!-- validation work flow -->
+     <!-- <div class="d-flex justify-content-end shadow-sm align-tems-center " style="background-color: rgb(73, 237, 158); color:#6d5c5c; padding-right:10px;"> -->
+       <!-- validation work flow -->
+     <div class="d-flex justify-content-end shadow-sm align-tems-center " style="background-color: rgba(187, 169, 3, 0.575); color:#6d5c5c; padding-right:10px;">
+      <div class="p-2	" title="Creating"><img width="40" height="40" src="https://img.icons8.com/papercut/60/new.png" alt="new"/></div>
+      <div class="p-2 " title="In Payment"  <%if(Singlebill.status ==="Locked"){%>
+        style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+        <%}%>><img width="44" height="44" src="https://img.icons8.com/hands/100/experimental-card-in-use-hands.png"  alt="card-in-use"/></div>
+      <div class="p-2 " title="Awaiting delivery"  <%if(Singlebill.status==="Approved" && !Singlebill.isDelivered){%>
+        style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+        <%}%>><img width="44" height="44" src="https://img.icons8.com/stickers/100/data-pending.png" alt="data-pending"/></div>
+        <div class="p-2 " title="Delivered"  <%if(Singlebill.isDelivered){%>
+          style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+          <%}%> ><img width="44" height="44" src="https://img.icons8.com/cotton/64/delivery.png" alt="delivery"/></div>
+     </div>
+     
+   </div>
+    <div id="invoice " class="shadow-lg m-4 p-3 box ">
+
+      <div class=" <%if(Singlebill.billStatus.toUpperCase() === 'CANCELLED'){%>
+        CANCELLED
+        <%}else{%>
+          ribbon
+        <%}%>
+          "><span><%=Singlebill.billStatus%></span></div>
+
+      <div id="pspdfkit-header">
+        <span style="font-size:20px;cursor:pointer" onclick="
+        document.getElementById('mySidenav').style.width = '250px';
+        document.getElementById('main').style.marginLeft = '250px';
+        document.body.style.backgroundColor = 'rgba(0,0,0,0.4)';">&#9776; See ActivityLog</span>
+    
+
+          <!-- action buttons -->
+     <div class="p-2">
+      <span id="download-button" onclick="generatePdf()" data-id="<%=Singlebill._id%>" type="button" title="download <%=Singlebill.billStatus%> as Pdf file" >
+        <img src="data:image/png;base64,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"
+        height="40"
+        width="40"
+        >
+      </span>
+     
+      <%if( cust.category !== 'Credit-Customer'){%>
+      <%if(Singlebill.grandTotal  !== Singlebill.registeredBalance ){%>
+      <button type="button" class="btn btn-success" onclick="document.getElementById('myModal').style.display='block'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z"/>
+          <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z"/>
+          <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z"/>
+          <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z"/>
+        </svg>
+        Register Payment
+      </button>
+      <%}%>
+      <%}%>
+      <%if(Singlebill.registeredBalance === Singlebill.grandTotal){%>
+        <span title="Generate Reciept" >
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAADC0lEQVR4nO2az2sTQRTHV/8A7x48KurBq/fOtsad1h+dTaO0aoVaEKqeUrAGk4CUCiIigopVKza2NWpVMDS2/kqu6qWH5odSUWy1sWLAiL3kyUQTt5tN02h3J2zeF94l85h57zM/3gxZSUKhUJXI4WhdQxTVQyh7SSj7LlMVzDSisAWZqmclSVoliVa9wrYSqs6YnbSxsUtCITQ0Nm+UKfsmJvkqgCBT9Wk+kN172iEUfgLz81/BTFUNhDqHc3M+gG07XBBLJE1NfGkAOQj9Xq93tWUACHV25gf3+PssSV4P4NyFy+JWAlFUT37gqwMBIQCy2aw4CIQyX37QG4ERIQC4OITzF/ut3w6kSgAIg0AEAWhibYUktRXHcghEEIDDR7sLCYbGJha1WXomEEEAbo3cBe3dYyqeFAOBCAKQyfwA175DoL2DnPD1wsDNYRgOjuZs6PYotLR1mAuBCALAxWd9V8uBiq/NhKqttgDA9f7DR3D3+CsEwHy2AaAF8WhsPBfDleuDRXbM7bE3gHLisSEAiisAcAtQPAMAD0GKVcBneRlMZ35CMBKHa+HJRcZ/S2cWyvqVM30/VVcGJ6dTJYPnbcvxK2fafqoOQJrPbNRgBUQNVkD0H1aArp+qAyBaCCCAKwDEnwERrAKAVSCMVUCI8BAMYBUArAIU3wKAbwGKbwHAxxDF16DP8reAaNnjHjCTAnjwHOD+s2J78Yr/J25zAF19AM7u0sYh1DSAyOsa2AJ3JgAGQ8XGk7f9FvgPIYAArgDALUAtPgNmP32G/R1d0N55BN5Ovyu5P3mb2X5CtkDw3sPCoGzvQcOg+W+8zWw/EQCysURyqJ6qX0oFrQ/WTD9/7xlLAcwBQCNvr2tiW2SFpfRBFwXLfUz0s/IzuccAsFbrYwRBHyz3MdvPdAAnT50eBwDDr7JlxbVJpmzWIJg5HqiVfisKQKas52/H6vGlfItm5M9MWe1HFKdbWimR7a4NMmVvflvz+nL+uWAoi8mUxY2CNdOPKGqCKOpUw07XumWmh0JJNaxfuQkeFqUw8aQAAAAASUVORK5CYII="
+            width="40" height="40" class="shadow"
+            >
+        </span>
+      <%}%>
+
+     </div>
+
+     <span class="logotype ms-5 border-top border-bottom p-2" >
+          <img  src="/logo.jpg" height="150" width="150"/>
+     </span>
+     <div class="header-columns d-flex justify-content-between ">
+      <div class="ms-5">
+        <h5><%=Business.CompayName%></h5>
+            <p>[<%=Business.email%>]</p>
+            <p><%=Business.Tel%></p>
+            <p><%=Business.Address%></p>
+            <p><%=Business.CompanyCity%></p>
+            <h5 class="font-bold <%if(Singlebill.billStatus.toUpperCase() === 'CANCELLED'){%>
+              text-danger
+              <%}%>
+                "><%=Singlebill.billStatus%>/<%=Singlebill.billReferenceNo%>/<%=Singlebill.invoicelocation%></h5>
+
+      </div>
+
+      <div class="me-5">
+        <h5><%=cust.Username%></h5>
+        <p ><%=cust.phone%></p>
+        <p ><%=cust.Email%></p>
+        <p> <%=Singlebill.startDate.toLocaleString()%></p>
+      </div>
+          
+        </div>
+      </div>
+
+      <div class="page" >
+        <div>
+          <h2><%=Singlebill.WayBillNo%></h2>
+        </div>
+
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >Photo Desc</td>
+              <td  >ExpiryDate</td>
+              <td  >BatchId No</td>
+              <td  >Promo</td>
+              <td  >QTY</td>
+              <td  >Scale</td>
+              <td  >VAT</td>
+              <!-- <td  >Unit Price (₦)</td> -->
+              <td  >Total (₦)</td>
+            </tr>
+            <tbody  class="item" id="item">
+             
+              <!-- define all ites in orders here -->
+              <%if(Singlebill.orders.length > 0){%>
+                <%if(Singlebill.orders.map(bill=>{%>
+                  <tr class="heading font-bold" title="<%=bill.item.Description%>">
+                    <td  ><%=bill.item.Name%></td>
+                    <td  ><%if(bill.item.image){%>
+                      <img src="<%=bill.item.image%>" alt="" srcset="" width="30" height="30">
+                    <%}else{%>
+                      <img width="30" height="30" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD9UlEQVR4nO2dT08TQRiHl8QvoNGEbbbtxXD2b2IFCREUbxrxAMabeG27RDi0BvkAJEakKibtzcgFL8aDiRdSh6MpR++WwIHYmXBS4TVTaWxaSmfLru8Cv1/yXtvkefad2c40M5aFIAiCIAiCIAiCIPtFKXVNSrkopSxLKX8rpQiljBloZlLK71LKd0qpvo6fNiI6IaV8BfjK1wdQSpnTbD0LgQwV2EhQLpcLnocpdIYKdGguFArjlmV1mXbHIoSoQIWsrpa+RKPRS6ZCyo0fkHu+REP9Lg0kkqiEOQPNLDe31CRkY2Nj03Hsse7u7jMmQprepiAj2fGDeKN/oklIpVLZ1kJischVkzmk6QPQGckDMdiLqRbiOPadAwsh4aJEewZmQiKjECL+zwNl2CFjECIg5FgOcQPoEJddAoQIfvAQIvhhQ4jgBwwhgh8qhAh+kBASAngEIfzA6KgIqdVgX5Kyj1L0eT6Nmk9TdjxVZeJxcbG9ECnlT9Pl98HeJGTM/30gr/d6Wn7f8dIh35o2qOZab1ChQ9JVBq02qF6+eL/XBtUPL0LettuCxHK863nOaNzCNV5+39raOiel3IEQ19dJvL4mJycyxhtUu10yCyFuIEKKxeUPteHKaAtXh4i6lFLPpJTbGLJcX4ToibxYLH6Mx537/4TETlpeUqlULkOI64uQqanH2ZoIXfF45LwnGXXDFyZ14d8PQT2Rx2L2hY5kQIjr+y9zx3FOdSyDQ8ivZZdeZ1I0ctP/P+WNDKdoIZOufkdol0rCJmQhs/ePLD9LfweEGAoZCaAzGuvucApCjIUMpwIXcu+W/52NISvRuZA3WXSIp0l9IZMOpFMwqR+jGjiqb1l0SAtCBL8ECBH84CFE8MOGEMEPGEIEP1QICQFIghB+eAQh/MAIQvghEYTwgyEI4YdBISgsnQh+CRAi+MFDiOCHDSGCHzCECH6oEBICkAQh/PAIQviBEYTwQyII4QdDEMIPg0JQWDoR/BIgRPCDhxDBDxtCBD9gCBH8UCEkBCAJQvjhEYTwAyMI4YdEEMIPhiCEHwaFoLB0IvglQIjgBw8hgh/2oRKCSjYxCFQILglL+nYJmF9Cyl5OKT3ONdTiFNL19fVNP4Xoi3XbHuyIUi0ZlEpfzU8hNRBypd0ppSi1L4OZmemnWkg0at8+sJBdKTlAVx09eCsrK5/qzllM+CJEXzm9traWhxTlWUZPz9kHNSFGV616ST6ff1gqlYSepPSbAwSpprcpzUafXD09/aQ6TNUdCXvRCiBd+pbj+i9C2W0Z7Mowu667k+jW06cy60lKvzlAit0gITKq2WhGtm2fDkwEgiAIgiAIgliHLn8AKSCcApR8l94AAAAASUVORK5CYII=" alt="" srcset="">
+                    <%}%></td>
+                    <td  ><%=bill.ExpiryDate%></td>
+                    <td  ><%=bill.BatchId%></td>
+                    <td  >₦<%=bill.promotionData ? bill.promotionData : 0%></td>
+                    <td  ><%=bill.Qty%></td>
+                    <td  ><%=bill.scale%></td>
+                    <td  ><%=bill.item.VAT.$numberDecimal ? bill.item.VAT.$numberDecimal : bill.item.VAT%></td>
+                    <!-- <td  >₦<%=bill.priceListPrice%></td> -->
+                    <td  >₦<%=bill.total%></td>
+                  </tr>
+                <%})){%>
+                <%}%>
+              <%}%>
+            </tbody>
+            <tbody class="item" id="promosection"></tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-box">
+          <table cellpadding="10" cellspacing="0">
+            <tbody>
+              <tr class="item">
+                <td></td>
+                <td>Subtotal:</td>
+                <td id="Subtotal"> ₦<%=Singlebill.subTotal%></td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Discount:</td>
+                <td>5%</td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Tax Rate:</td>
+                <td>₦<%=Singlebill.taxRate%></td>
+              </tr>
+
+              <tr class="no-border-item">
+                <td></td>
+                <td>Shipping/Handling:</td>
+                <td> ₦<input type="number" name="" id="Shipping" placeholder="0.00" style="width:50px"value="<%=Singlebill.shippingFee%>" disabled> </td>
+              </tr>
+
+              <tr class="total">
+                <td></td>
+                <td>Total Due:</td>
+                <td id="Grandtotal">₦<%=Singlebill.grandTotal%></td>
+              </tr>
+          </table>
+          <p>Total in words:</p>
+          <p id="word"></p>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+      
+        <div class="page" style="page-break-after: always">
+          <div class="signer">
+            <div class="form signer-item">
+              <label class="border-bottom" for="date" class="label">Terms & Conditions</label>
+                <small>WE DON'T ACCEPT CASH,ONLY TRANSFER OR Issue CHEQUE TO ALL CHANNEL DISTRIBUTORS NIG</small>
+            </div>
+
+            <div class="form signer-item">
+              <label for="signature" class="label">Issued by: <%=Singlebill.RaiseBy%></label>
+              <img class="logo" style="width: 150px; height: 150px;" src="<%=Singlebill.signatureUrl%>"
+                id="signature"
+              />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="pspdfkit-footer" >
+        <div class="footer-columns">
+          <span>"<%=Singlebill.billStatus%> #S<%=Singlebill.billReferenceNo%>"</span>
+        </div>
+      </div>
+      <!-- div for attachment -->
+      <%if(Singlebill.supportDoc){%>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            ><img width="40" height="40 "src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAKFUlEQVR4nO2dSVAb2RnHnUoqh9xSueace+6pHJKqSS6Jk9R4Jp6JU5OqmalKjZMZ7Iklu2yYeI2XwrN47Bm8IEDCIBnEIrAkENgCxGokhACDxL4YGyMhsFmM0T/1WtaulrpFq/tJ6Kv6X7rb9Nf/n/T6e68/tfftEzk+Lvj+J3ny8t/nyVWHj8iUnxyVKX994ID6h2LnseeioKD1R3lylSxPrnIfkasQpenPjpW/I3WO2W2+TFUVNFymsubJVd/nyZU382SqicD2PJnqC6lzzco4IlcWvDHe85m87K3IvfjBEZnqn3ky5bYfRNkfpcozK+MTecnP8uSqF8Tco7Ly37AdlydTHn3zLRgSN8MMCpUKP1Wo8XeFBrJEarTgWvsIdF2jaCzTjtiIsacvNz4fnkHHghuPg1rGSJ8TRnKcZei1/tqdLtc3tzrH+8Y2I49jkX0KD8m/5SLLCBpHlvBf1wpkiWSdx0f7aIwSDfYr1PAoNACbSquBHifg8oZUXj/AjO9366zY8SEinq77jxlZehU8fnoNeB11XLzwbkWeRyi1DwNtdtzdR1OUaPDLYg22EplP1Dkae0Gl2n4GQMvD4RjzGzsm8MWFGma/PF8NVY0VW9s7kpkfAKBrpwxCsRqVycxXN8a/oPIaP4BW83CE+br28ehSlJGqskMy88MBUAVBocFkMgAN7bEXM/cCqG2IBEDMd64ABef9n3wyRDmXX8E+NItjJyuYbUtLq5KYHw2AGggKDRaTAdB3xppPxvy6MACBMX/o2Raz7dipCkx6fcExv6i4ldk+MDgtifnxABCZHajMKAAB80kEANSbhoP77QsbzLaTZ6oibrhk+CHb+/onJTGfDYDkEPgACDc/HMA9YyyAgrNVEUbHAyCm+YkASAqBK4Bo80lU1MYCGFnkBsArsvnJAEgGgQsAiz3W/MX1UBkaAEDqfM9qcgBeCcznAoC5MQ9BTR2A0aj7ZuCGGw4gMMlaXUsMoK1nUhLzuQIQHQJfAAHzwwFom4aDN9y1AIBz8QE0dtAPQFQIfACEmx++FGEwOYJG+3w+KJRmNOhtEQCKSszMscaemYwAIBoELgAeT8WaT2SwTDCm3il9iESxsulD/jktc2zvuDdjAIgCgQuApu7YiyFj/trLLchOVeDzE+WYm3fHNd+7BdSbXYz5Z67oJDOfqCMFAGmvjlKZCYevauqb7Iy5py9oMTu/HGO+sWeGmRWTY5r75iQF0O1KDUBaIfAFEL2kvLPjY4Yg5qHM8XLcUjyAoXkQ2kYbLn1jCC7E3dXZJTWfaPgZ0NBBGQQ+ANjW8wmE5lYHThSoY1ZA889poe+aktx8Ib4FaYHAFQCXhylbr7bROziH6ubH0LaMwjz4FE6PT3LTo2WdAUz9QIOFAghcALTZuD3JWpFohusSWc4VLEo6E2ardqQ2xrVXAewl8120Adhr5rtoArCXzLcvAr2TgP0JJQD2kvmPZgFDf0h901iVFMBeMt/lBR44IgG02LEtGYB0mT/uBeZfAsubgGeXer4BzL4QLrfmgUgATTbsSAIgXeY/eQlw6NniHZuvhQFhtFEAIF3mP99EWoPMHxdepp6f0xtpviQAzNb0mL+4DlGCPM+eWk0txzEPBQCil6OF0MQqt+UNoSLVZZLHyxkCoKZpGMqqXs66V9MLQ4N4uq/jnlvPmDt4XSPPMwCAZegZ9r91KmskO1YavLbBxQwAMObZwfXbrbhwqZazviqsxbdfiquLl5PndfFyHYydoc6N/tkMAJCK1rchepBnGnzz7JnIARAsJlOohNpHcwAEi4kUALRGLUPkhqAUw+dLbRLWZM0BECRe7fAHMLQUaz6V3wD73Et8+MGXOPjn85z13l/O430RRc7HNbdrRSbWCohKAP1Tq0ziUtfv+wXSxSv1/vnNWIYAYOYCy69hX1jnrCXPOtbWxNP4Ere8HE82gtfUYs8gALTPAyZ5VkCjcdaAcgB28VyA7wekfy4HQLAgT9n4AjCP5ABItgQx5gYM1gwagpwrPpRXP0JRqZmzKu6aUVWZfpHz8MmLSN+5yGo+lQA6smw5+tNPSzILAPkGlKq78dW3Rs66XWREya30qvgm93yCut4EpW4hswDQWoYuxvldWzL1TLIbnwOQ5tLT6QGaonqAcgBSjFT6gdjWfqj4Box6/AkSkVYNmocgdwp1P9vaPx0AuoCWwVACJFHyYiYaAWy89rc58s1nYIGb+dIA6I5Nwr4QSt428wKH3rkoefm4XwD96Xf5yD+jTwzAKjaAntgkrHNRAN69lDUACs6yA9A/Airvw0cVAKmHIB/8ndWp5EHuZyaWZed45pfrgDItkAMQ1veZqvlc6/5w88kHMisArL3CroP0lu6m/Xx4Kbb1PK75feTNMCE/yqqzAMDy5u6rnVT6fIJaAR4M8fvkB1RjzoJ7wPRa6uM9qfNTKTX5Dj1xzX8oRRmaBADpDf2u+AGv3tALl2pxlWd/6NdXa3HpCr9zxNPZ/9Xi+KlaHD8ZqxP59VBUT7GaL808IAmAbOuO/tfhUlbziRo6KQNAVG0c4vX7AGWYqmt7odfF7+mvrumFKsW/G62yql5cv9OLq9+xq/BGL4pUy6zm17VnSRXkihLp2yTl5NIG8GzD/55SIf8+UfdEamN+uPkl97IUgCvNss0JY37WzANcIor8yiVRvc/H/BwALz/zHcR8q3DmUwtgcGGD+XEbTWobdKOq2Q0Ni9RNbtxUuXH9dkjKOg/0j3ZYzacSQN/ECt7+w2nJy8f9Auk/snus5lMJgDS0/vtwEf5xqJAKffC3Qhw6WIhDf2XXewcKcfDtkN5/N7Tv/JV2VvOpBECTHs0ARoGqnRwAL3fjySPSznHhSs0cAC+/VnLy/wiJYX5uCPJGmj8wn7yXR0jzcwC8b4YcD9CVZMhJh/lUAnj8fBuXrzYgv6AirSr4ohK6B2PMi/PC22TENJ9KAO2Op6LV6Ec/L09qfDrNpwYAKffCx2KjZRJVekdapGl0QKFx4EapAzXmF5KaTw2Aron01/Rjbv+7Ops5PDgXy3xqAJgG02f86Bvjm3gYL5b51AAgIv2UQk6k7Iv+t5MkWr2U2nyqADTb/e9U243xQ8/85WT0uzlpNZ8qAESkHCQNTnyGF9sc0OHcnelSmU8dACLytInclKNBjLn9T6P6pgGLk3v/Pc3mUwkgXOT9OuQG3SzAp5tG8wUHUKyBM9kJ73el10yDEOabQ/tr2wBFmswnUtYI25pYnOyEmvvSm26gxHzGD4OAr68vuYtfKNRYTXZSE8+a3JCl5pNhraEbHwkGgIGgxq8UGkwmOnGplt+M1JCF5pOxX9eBG/vSEWo1flyswW8VanyoUONjNtU9xNcmGyymAfSLqQYLxqpNmA+ovgOuwL4mK2zVLZgL389VWhNmtS0YrWnBYALZ69qgbuzCz/mY+n9NjD+vyupoZwAAAABJRU5ErkJggg==">
+            
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <!-- ADD BODY FROM HERE -->
+              <a href="<%=Singlebill.supportDoc%>" target="_blank" >
+                <img class="card-image" width="100" height="100" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFe0lEQVR4nO2b+0/bVhTHs40fpkn7Zf/E9uN+7i9WsUPFdcY0bNNukGWsUNZ1LQMm7VF1UekolLcoE8+GQHit6coolUqhIMh4FEhZtWmq1r3Eumlr1TGplJIByZluShzbcYLzdDrnSEdC9tf2OZ+ce7n2vVenU8k4jnuGornDJM0dwn+H0ukR9xaFmJzd7od1ZGY2Ewtd3I2kGRNFs4CdpFmbHAR8DJ/jdYiplbtXpDq9IfsVnVqmp1nOF4gcBGmwwZKLUlemU8sAoOKctU8UNIWYQYIg0rzNAzHd0qQEXu9PiumJQlemVvKnYMdaO7vFvxzN2qS/lNU2CI3NbVJYdVJdd98XinQJB0AQRBpJM2+n0+wBt9td7ks+GAShW3r6vRqPxxOYnCR5Jbr9xsLEA9BnMkd8D52ZX5DmHxRCR1evSBMsOV/ySnSS55QlBADukHwPtV+8BMFM2Ce0dFhlNTi5ppZOXtfTdz4sXVIDwDa/sARz15cglOHkZuYWYNH5jSKdc/kmfyzpAcTbUgA6UxUAqjYBY90lKHFA2P7RLECVE6D/B4Dv7gO4PRoDUCJxDOPWqoYBlDgASh0AYysAnlgC2JOV9TyFmGzSwJVSNPNhTByxDt9DXzt2GvKqh8J2Y90IFHTdgOLJfwNAXPstBgC4xy8MJyjErIV4uVDd9zH5YGq8ElAJt/+JAgCBx+qIGVY7uXA853irCELNDWVNQRYAhdhy4c3zi4qhsbndOxZPtOcXHQO5WOqaWiA3/7DonOnsuAiCkk4xAEBGBvcCidh138HP2yywtbUNatjaw4eQxRkhWCwulwsqzjTw5zNzCuD9qW0egP3HCACQNJvrO1B4pBS2t9VJHtvk9AzsFsujjQ3RK+2hvu95APXLEQFgTvoOtFt6QE3rHbgASmKpqG6UbQbm65EAQMn5ohIqFqFOOK7Ao8VwnkGlALD/gwqoHdZ2BeTVpACA5iqg7VyPtiugTQTgK+0BaLcIAFQPaQ9Ah8WWAkBpugK6erUNoNPqB5BbfTEFoCSeFfDnOsDEndj65B2Ae48irwDhHGLemS/jB8ADACfmY/MFV+qfLUYBoLvf3wSq4gzgUy0D8DWB0RWAkV9i51dXomsCeNGEH8AF7XWCXbaBFACKrwC79irAahvUOIBeAYBKrQM4fV57AGwDdl73RsVgWADwZIsfAFcc9Uhw6W5409OrLgDHHwB/b0QOYPjyqOwcoRIAp6rq+WvTafZATEaCGIJSq1h6fE35QiA4pQCWb37L62jjUcUA8EwTm3uQv1aPuJdjMhJ0RgAAg40UwObmpmgOscCypAjA5Svj/vJHzIpOp3sq6pGgM8wmcH8DYOp3gL/WA88pBSD9JoAnSd8buRcSwE8//wpZrB8ahZgPApavPCmdILYHD9bgdVORCMI7XYuyiyVHxydFyZOIvUUQpmefGAA4ifGJaRi0D4m8vLJO+C/N66bCo9BwttVbIdUNzSJI3uRpZnXvPu5F2QVM9iQFMDYxFZBoJE4i9naGIfuloCu47EkEQLiAiUKcMarEafYuRTOfGAyG50IuYbMnKQCz2fy0HjF5JM1WKXUKseZ0xB3ci5g9+HpFa/jsSQogrkYGAYCXrc/Oy3y2ERjunHD7nP56Lia6pAEw5ZjlA8FByZnb7YbK2qaY6ZIKwJik15UGLU0qWp3cGJ9EzKuqAdja2jop3WnlCzpYUpHqhOZyuY5TBjafNHD7vcNUlQCYg200bO2wBiYlsy1NsU4M4eOEJBwKQE1D81UluzKluzOj0e1AUCd5KQC5jicRW1jJTMagU8tIxL67W8cT703MFM1l6dQygiDSlHQ8O8vpTek0x4a6305yb+I9B0p0u90v3vYfMaTIcP8RXwMAAAAASUVORK5CYII=" >
+              </a>
+            </div>
+          </div>
+        </div>
+      <%}%>
+    
+    </div>
+    
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+      <div class="modal-body modal-content container">
+          <form  class="row g-3 needs-validation" id="form" data-id="<%=Singlebill._id%>">
+              <div class=" d-flex justify-content-between">
+                
+                    <!-- <h5>Register Payment</h5> -->
+                    <img width="60" height="60" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAZKElEQVR4nO1dCVSUV5audM9ML6enp7sziREQ0jl2ppP06Z5J90w6MWqh7KCA7AoCioKyibKDgKyCuOC+oRLQuOCGbCKI+xbj1h2jxh1RIELVe2jHjknunPtT9e9VFFBYiL5z7nGpv6r+d796775773fvr1C8HC/Hy/GCDLVaPZxSWkQpvUYI+Sch5GtCyDFCSE5nZ6cNAPzM1Pf4wgxK6UxCyBNKKegSfJ0QcohSmk4pHQkA/2bq+x6UgxASqA8IPfKYUlpHKU0ihPwVAP7F1HN57gel9D8ppapeAiIWHJWEkDkqlep9APiRqef33A21Wh1pJDDkpIMQspsQEtXZ2fkHAHjF1PMd8INSWitWZE3VCbC3ngPebmmQnb4JKvYchVs37/UZIEJIG6V0H6U0Qa1W//klQKKBe75mmxEobop/Hig/jJLIJK9MyM8pg+p9x6Hp7n1jANRCCNlOKZ2uVqvfUrzog1I6Qqyk+82tYD0iWhYQsfi4p0NeVilUV56A5nstxgDovhagjo4OK8WLNiilKWKl7K8+ySrc1T0CIjPCwDsgHMaOitQLDoI4JSAPlhRug4P1n0Fr60Nj2KArlNKFhJC3FS/CIITUi5WwIG8Lq+QZqWGw8ugURlYcngI5n4ZAVFYo+EwOhzEf6189Y0bMgqmT58OyxeVQX3cGWlu+7svK+ZZSmqwYzAMAfkII+Yd48gG+2axSMzZOYwERy7KGKZD5yTQOoJH6V9DYjzmAjhw6Bw8ftvcYmAcPHuQoBuuglI4WTxgNtfVHXfYDFYxK1wWIFKCpkL5hGoQlzQB3rwhQjtC/guyVc2BGyEIWoI52VbeAqNXq71etWuWuGIyDEJIhnnBVxXFWYZ4Tww0GQ06K6oUAWX/UDUDWc2BW+FLYuL4STp34G3R0yAN05szpRgsLiz8oBtsgXTEpwWTnZ5exCgpP4+yHnGTv84eYUi+YXx0AK450D9Ci6qmQtCwUpsbMBJfx+rc3FBfbBPi07IDcttVmYWHma2Vl9SvFYBkA8DO5QCL6GVqFzCvRbT9QfBeOA2WiLSP26fYQsNQVZpd5w/yaAINW0MLKEIgvmg7BkTPA2SlCFhQnm3gJICqV6omFxVA/CwuL/1MMltHZ2TlWPNHbt+5xBnhUJCw/pOOXXh8IwSvcWDDkxDHdASYvdYXYzT6QXzvZIIAW7J0KcYumg5vvTPY+giflSQBpaWlpR0CGDTMbpxgsgxCSLZ4ohke0ikC/Q6yw4OVuYJdmD9ZJuoHQCVCGAwQuc4W4LT6wpCFILzCeYcHsfSwq2CoB5MqVKxc0gHgrBsuglB4XTzQ7o4RVBDqDYkWhUrtVfLoD2KTY670ms2KSXkBsnELZ+ziw/7QEkKqqqi1dgAx1VQyG0dra+guNoyWYKIZBtIrIKhPaj4LagG7BmF3qzVy79FAQ+PDsi1jm7dUNyOK6YFB+FMl6/nLhmKNHj1a99947Aebm5krFYBhqtdpePMmbN5o4+zE6CpY3ThUoCm2BPjAcMhwE16PSdV0btNxNJyARhYHsfWAYRpc/0tzc/GDr1q2TFINhEELmiye4u/wQqwjfwJkSRaGB1gcIblO4MrTXJ27z1Xv9jPUeguu14hHK2Y+C3M3dOYnfqdVqL8XzPiilp8WTmzd3A6sIDIXwlYQ+hkN69/YDj8G4MhAMw64fLwHE1i1EEGpZkLeZiT7rAqWjo+OfW7Zs+YvieR0PHz78JSHkqXhinuPnsorI3hIiUBL6FT09VRki4Rs8BN+DK8Z6qidrQ7Qyzj4Rtm4+ACqVWhaUs2fPNJqZmQ1TPI+DEOIintC1q7fZydtYRzJRXb6i5pR59wsgmSLjPnfnxK7XIl1A6TRV4iQGTcyF0yf/JgGkvb398ZtvDvN57bXXfqF4HsajR4/ewISPhnzwjXhC5dsOspP2C5b6H/5LxhsdjLHJdrDscLDge0LXThBeFzIBlNZhAlDslHOg5UGbBBR3d9eZ5ubmHygG8nj06NF/U0pL5Y64fElLXs9OODonTGI/MCxibEC8F4yTAD9hvrP02gQ7ULoGcYCMniObV9EA4qEYiKOjo8OSELJLHwh8meCSyk44Z5vQfuRV94/9iNjgKfieosYg+QgAAjKGWyUYqpfbsqysLCZq4lsDh1mJDA5CSCyl9JGhYFz+4gY7WVu0H6KoLUZz+8V+iLz1VK39EEuAtyD6K3fiQqPeBcYAAkSlUv2KUlphCAgYRGxsOAsb1lVCVNgSjlESMvPZ2I8UO1guOjhI7AdKrD0oR4Wz91e6qVbWFwkNDY1FMAbMloXsDErpVX0g3Lp5DzYVV8G0oAI2IyiW+KyZUvuR1r0/0VPBsIoYeLdcJ+m1PpME7Jb29g7JvE6fPt2gXR0Dwqgjl4lSelMXEDeuNzEer+2o2XqTQU6jo2H1zhkCJeVW9Y/9iNxogP2IcQTlCC5HUllxTM4p/MbNbdyMLkDMfIcP/80vTQrG48ePLSild+SAIITAp2V1zDFRQjYYEQXRvnGwMDwR8mckwtrYFKgpTIeVR4Xxq1mfeMuGSDCMgr5JarkfJG33hZhSbya0bpNqZxAgWWL7Ue4nvc6di2lNC8xn5iOeY11dXTnPdvyvScFQq9W/IYRclgOj5UEbzIlaLgEi3CsWGgoz4NHuPICafGjanAP1C9IZqdmQJNlGJi4W2o8pK9z15jKWHQqG6BIvsE3VfUxGQJeL/I9pa0T2I2IcjObl308cuyiZY1tbm+qDD/4SjGBYWpp7mdSYI6OcUlqta4sKmpgrAGKK6xy4uCaTAYEvNzZls4DsKp8lsR92cznFziwWhjn0SUHtZBifI2MTEm3Bb5EB9sNpCmfXYlbKbsXbtn26jrc6/jDgsn3a05MPL6eBxnt9fAo8rRQCoZUvizlANtYJA4o5lf6sglBhhpAY+LKwPlA2oRVV4iW4Dleckm8/Qt0EwcUv/nZdMs/m5nv33357uL8GEKQEma4mhRAyjhDyg/gm799vhck8gpvdyGhme5IDQiu4ahhAitIkCo0u8WSVNOsToRINlRQZ24BMFcE1O7gw/egEW1DaTmfngJxhuR/e0qVLFvBWx3BT1/+ppWdxIrAZNh9Hw8ml8/SCgXJ2RRcgNZsSJMr0W8TZDwz69QYQXFXO87hVgrZFvNKmrebZjyBPdg4O1rFw+3azBIyvvvrqSy0YlpbmzgqF4hVT0nbOy/1iVi/fLdimDnazMrRyomgeA0j5TrH9CBacmBK2+vYKEJSApRywE2XsB2tr4u1BqZzBzmPNyj1yJ8cfkpISUnmrw1xhqkEIWSEHBpKY+aUD6+NTDAID5fDCDAaQ4obpAiXhtsLfZgL1pFy7EzwO69r6Fjfw/I9JfuwcXB2TZZnz58+fP8GtDrOxJgNDrVbbydmNq1duM0Qy7UTi/OPg++r5BoHxfXU+A8aB5akSJUZt8hSGOpLtDOZW6VwBibaMo8l/DX0Y5rU5DqAcyYVItn9aLwFDpVI9DQ4OnKUFxMzM7FWTFWRiEYv4BpE5jiQANrTgMBvUO7v8C0Pkyb75DCBVn8TrZSRqBUPjRY1C/6E7Sds1Ua/9CFnl3vW6ZwAXT/PKlM0MItOEtzo+UphqaKqJQF8NB56orhZnGwwG1ORD5548BpAde6Il9sNWh8eNoBTWcStlzdGpsPNQOOw6HA5rj4jTvpMZJgprPxZL8+fjsx1BGe0kSNnW7z8jG163sbGepiHH+bz66qv/biowguXAONx4ThAg3JeT1iMwoCYf2nfkQv3CDFh/UMi/yqoQ2g+xIFhxG33g1P5Y+EdtLvt5+PeqQ5GMt44he7G3HiOyH+inMPZjPJd8Cp++SPaYu2/fvi3c6hj6vknAUKlUv6WUEjl/g09ISA2K7zEYUJMPLVtz4cAKqf3AwJ8+QDIX+UPH3izZz/y2Og/C8+TfL7YfDE0ofJzgdHjm9BfSMFBLS/v77/8pSBteHz58+E9MEhqRKxVASU1cx07CzSYGVOXcr7QncrcsBypLpfbDp1CecWif7ADVG6O5zziwGOCrYwAPrgDc+gzg8NouZ3NrkuS9yAcW248pK91A6chRfuYmrZNdHRs3blypXR1WVm+8ozDFwDYVcje3Z+dhwS/KEOcPdAjGsbZXRAmUhEkjTB6JFeqbMQ6u75gr/AwEoOUqJ00XAGoL4Ifq+TAu1VHw/klLXCXAO0Z4cY7sqBjmxCie7927d2+/9ZbVRB6P98fPHAyVSvU/2IVHfHPXv7oLjmPj2EksjkzqNRhQkw9fFGfD2kah/Zi3V2o/ovK8QFWh48Bw7YgQlIPLmf/3SRdGidGmCOxHXSAobUL1MtxR8vPzc7nVMeTNZw4GAPyUEHJJLjQSPm0RO4EAl9nwpMIwfwN0yNkyafwKiQd8RRYsCYSn+vyaukUAN093gdH8d4DaBQx4Y5OEqwwrrATH3UzOkDvbxMsSqrUlBxrb4djvIRLs+0EICSKExBFCYjo7O30ppcWy++j6SkGcCqO0fQEDavLh4C6p/fBe4NK15yfbw871EYZ9Vm0hwNkdAEeLmX/vWh8htD0y9sPFnyPBrV4hDZGo1eofoqMjE7jV8dob/cmTwiL4e3KKl5Pz564we6x2Ap8kGx4aAT2ysy5SZD+CwX6uA6Qt9Iemnem9+ky6Lwc80oTcqoAiqf2wHsNVSH3+2WXJnM+e/ewwb3UYt+Tg8ePH5ppVINmKuhNM6vOTTaETYuFpZd+2KtDIvbp0uFSfCKcb4uB8fQJcqUoBdYX8cdYQQWOOR2KxDcKaQz4Ymds5drvjmFhZrzwwMEATIjFiYSf2iiKElBNCvu8pEFopnP8pF44eHQ1NZTlGAQP6QVavCJE9LqPHzgckOJWzH5gykK+wNSKLBLvrYP2FXDCwJ4KF9HxvvLIX3jg8A/m+Jh9WLZcHAymoEvvhx9mPkg3VeklvfSZPa05JDYZuR8ePXoSyklrYUloHRw+fZ05TjDfe3AoeLinsjSf30huHfpbHlTmQXqi7UgrZKRL7Yc3Zj3OffynnCK4wSoWthsYpGwjUClJZkE6P/aZc7BIkrBDMh588cclo3jj0o1zengyT5ulnNWIZHB+MjC3C465aLbUfXl4e4UbZrggh/rqAQKcOM2C+EzL0ktUYD1zUp+p4Ue+9cegH+a56PmxYFSrxNeREnEMJSgnWyybBukHtdjVkSB8cQU1XnXty2xIaZmRPyCnfzjkTPGdtB8+YHWBjkyx5vXBmoskBAJ483JMJEbmGka/FRaAozr4henm6Z86cYWmhQ4cO/XmvAaGUTpDbnpLj1kiUPHZMInhEb4Npm27ArIM/wKxGYCS8goC9IxfFneQcA//Ya5wjLhhBVHuzwH+e/sJPvmDqVmI/lJz9uHD+qgSQDRuKl2oSUC69BkMDyBbxh2NPQj4QLhOXQvDyCxBd/5QFQSw5S/cxHXOQZ/vl+t77BGBkQR8jrkB/VS2fw4UR4+QdQmJEWhlnP9B+ag8wfOF4un3sYUII+bv4w/k0f1wRukDgS3LjN9C8NR9UPUjFPgv5siqZYS56FTjDmGR5IJDlmLFHd0OAyYkcIEmxq2Xsx71m7Xb1xhtv9K3Xoqa7s+AL+JHZ8D0dBgGCcqlul8kBAP7qqM2HbYc5VjxmBLFYE4kQuBLGJHcZdyRf68uvO/lw9mNL6X4JICdPnjxgtKIbucwedkvT3kBEZafBgGxouGpyEIAn1w9Is4riUmYkMyBQuq5B51A5mmOVXLp4TQLIunVrl2iOu0h+69sghNwVf0HI5Hz2BoKWnjMYkDmN38GjmqUDY3XU5EPWJn9I3z1RUjHbE0kt4Y67rg5JktICjGo4OdmHdjmEw/reBABjVmJA1q7ay97E+OA1BgOCcrxuv8nBgJp8qC+JYW2EdZIduOc5Q9g6DwYgcUmBPglI4ABJiV8rWR1NTU13ecddS6M85kH8JTeu32VjUdYjZkHEPmowIEUH75kcjKdVeTA5U/cxF1O9ngUuBgHk6M3ZD+zIINbViRMn9nO5D6uf9hmQzs7OIXLtKvhZPv/cQz1aJW2160wKSNmaGQb7HFqAvHNdYVJSAMxeNRmWabrRYVc6a579kCsvWL165SKN/XBS9GdD+x28DglOXoU9AqTmwDGTgXFrewbYBvp21Wr0ABR+KYFyZAQ4eEwDj+lc8Y2bU7Ks/bCzGzu9yyG0/LPRAFGr1ZPEgDx40MZ0HtDeUNj2FoMByTyoZoyqKZzAqOlZnGKx50iE7mZkcqUEukSO6oPMEh5f13gNZJqbm38u95QBNGJsNDdpX49Wyc39Zc8ckN1FKyWKZOr9sAgzRr5MTRlnJygl4BPA+bJja4MEkGPHjlVrATE6CY5Sukn8hchVZYOJjhkQ3cDFr7qT7fXnnykYd3YUMc2Mdf7KP47sqh2PExV1+nGlBNim4+HX7QzPCpvaYB8VL9e5EBm2WLZHybJlRYU8Zkn/t17F7szjHRLZGw7Z8JXBgCQf/Aae1hQ+EzDongKY5MHVJ2L/94sXrkJqArfCWRk1E5QBPl19SJhSAq6efNeORp35IKluOp5wlbT9wNnVUECbxF+MXdHYX1Dklh5tWxf27+53MNp35ELIRC5Xg6vk0gXOm8bMJt/RZQXJbs6c0Q70y5FNOumSEydO1PZ7NZRcP0OkurDhd+sEiKr71mBAiuuv9SsYn62YB17OCYIEWV2ttDUrno727TkqIHqLBfunGAoGVtKOHDliqrbOvN8qaTs7O9+TuwF+C++goh6GUmqNH0q5tCYLkqdweXsUm5ExTDNMfYrEQiEk7okNd9SMIoPBuHXr1nUfH68IXomB8Y67coNS+rn4Jtat5oVSgnoWSjlWV2cUEFq35kJZcipMHh8r+XWjncO6E0OVeq+phdmKEUSMbMsFDFtbW1U3b968in82Nze3XL58+dzatauX8GrMmUrad999t38fTonUULm8uiCUUml4KGVxQ3OvQXi0Ow+q89KY3iZyj4vALSojpRiamh4YDIa4XkWu5R5KcfE6JgOoS4YNG2rXp1RtT3ocyoZSpvc+lNLag1DKd1X5TKnCvJAEsB8p34oJf9X4aIorl2/qVfi5c58faWtrk6QXDNmWuC5vQ92GDRtqi39ietbCwmKUxgl8djXmcr1IBKEUz56GUo53C8StT3JgzZwUcLeVJ1XgasAHpuzddQTa2vQ/sAsJz+Xl24tRoR988EFwQ0P9HuyRawgYHR0d30ZEzIg3agS3r0OtVvuJbxSXNj9xFbbtgUTx08vugLNfEZODDy27y/5/lo5Qytfbc6E8Yy6EuOl26AJ8sxlDfEemM4Kc4IpYsCA/j7+9mJub/9XPzy8EVwyCpQeMx/y6DtyWFANh6Aql8B0tuVCK/TiuX4mDa47gtRv7NzMgPN6TB/vz0yEpMB7G6OgO5zEulaEgIXu+J1vNxYsXT3Fkgy7Cs7m5+e800/pXc3PzP8bGzo4/d+7sYXTstO9rb29/hN3dtEQ37eMk3nrrrf9QDJRBKd0o13lBqzRbh3RJKMXGJok7htokC17bVn8B9mSl6bYLY2IhM20jHDvC0VINlWvXrv49JycrU2h4LdwtLS2HiueFhhhXjJWVhR+2Z9VGa0UryrPf6jp6Ozo7O8dIl7SKSWOyoZRiYShl8oKTYP1xDCMBhacEryU2PgEvhzmSZwUii7xy7zEmhkR7AMLDhw8pJoeioiLY/Z7nG4zojmxgaWn5awSmq4EYC4QHdnd7JqenXoZSJPn2wvlc0f+ECGkoJWr/E4ja/09Z4+7ks5h97+IFWw22C1QjKpXqW/QHkFSAz+CQ+WWPGTJkyOs9nSuCZ5KSZaOEUs5+yf3ClfEGh1KQZGdrz4UuLpyTsv+oDrlz587N3bt3lejYXiZgcmhQPfVM16CUviunIH9vLgkUWPR5t2BML70N4wJWCjrm6HpaANWe6lpavm5sPFjBb9rCM7g+6A9ojqQv1kPo5UIp61dXsMp19l4k4PlqZebudvBLqxWcvLSCHUflQGhvb398/vy5IwUFBTk8x4xvqO3ffNPsv56L7aW/BiFkllxjY34xp3tYCYRtvQ8zdz1kDDv6IkqZIy2GX5YvkfY/R8Fj53sydmHYMLPx5ubmfzJZ05aBNnSxUlCxOrNzMqGO7PRNOu0GOmQuLo5h/NOOmZnZhwPu6DlQBqV0s/TEoxY8qk4sWFfCHGkrjsHX3Rxpy8t3bBA1Ff6Rqec8oIemUYBsRe6hg59DUtwaJveMVBnMP2Pt4d079w06QfGJyuaMQ2YEstmLMAghmT3xGboTjCk1NBzYPXz4byfxAPmdqef53AwA+HFHR0eNMcDAdqnZ2ZnzhMbbCETlF21gHfuNGzcMfvqNXKgjMTE+RXiSYgKAfzRZD9tBMF4pLS1NxLSmIbkFjMBiN+d33nmbTX3y26X2JtTxckjHK7///e8/zM3NzTp16tSB69evX21paXnY1tamRnr++fPnjpaUlKzUMjPkQh0WFha/ealYIw/kI3WlNXXnnrW5BU0EFvlLL4+0/Txeef3114eg/2BpaWaD7ewwF4H0fCsrsw8tLYf8tt+ZGS/Hy6Hop/H/AcW+TQKL+VAAAAAASUVORK5CYII=">
+                  
+                  <h6>INVOICE REF NO: <%=Singlebill.billReferenceNo%></h6>
+                  <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('myModal').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                </div>
+                <p id="words" style="color:#ecb265" ></p>
+                <div class="col-md-4">
+                    <label for="validationCustom01" class="form-label">BILL FROM</label>
+                    <h5><%=warehouse.WHName.toUpperCase()%></h5>
+                </div>
+
+                <div class="col-md-4">
+                  <label for="validationCustom01" class="form-label">RECEIVING JOURNAL </label>
+                  <select id="bankAccount" name="bankAccount" class="form-select" >
+                    <option value="">Choose...</option>
+                   <!-- display options for department -->
+                   <%if(account.length > 0){%>
+                    <%account.forEach((account)=>{%>
+                      <option value="<%=account.AccountNum%>"><%=account.bankName%></option>
+                    <%})%>
+                    <%}%>
+                   </select>
+              </div>
+
+              <div class="col-md-4">
+                  <label for="validationCustom01" class="form-label">BILL TOTAL (₦)</label>
+                  <input type="number" disabled id="Grandtotals" class="form-control" value="<%=Singlebill.grandTotal%>" hidden/>
+                  <h5 id="Grandtotals" data-grandTotal="<%=Singlebill.grandTotal%>">₦ <%=Singlebill.grandTotal%></h5>
+              </div>
+
+              <div class="col-md-4">
+                  <label for="validationCustom01" class="form-label"> BILLED FOR</label>
+                  <h5><%=cust.Username.toUpperCase()%></h5>
+              </div>
+
+              <div class="col-md-4">
+                  <label for="validationCustom01" class="form-label">AMOUNT RECEIVED</label>
+                  <input type="number" placeholder="Amount collected " required class="form-control border" name="registeredBalance"/>
+              </div>
+
+              <div class="col-md-4">
+                  <label for="supportDoc" class="form-label"> ATTACHMENT 1</label>
+                  <input type="file"  class="form-control" required id="supportDoc" name="supportDoc"/>
+              </div>
+
+              <div class="col-md-4">
+                <label for="InvoiceNo" class="form-label">PAYMENT METHOD</label>
+                <input type="text" list="paymentMethod" name="paymentMethod" required class="form-control border" placeholder="Select payment method" required/>
+                <datalist id="paymentMethod" >
+                 <!-- display options for department -->
+                 <option >Others</option>
+                 <option >Bank Payment</option>
+                 <option >Cash payment</option>
+                 </datalist>
+            </div>
+
+              <div class="col-md-4">
+                  <label for="InvoiceNo" class="form-label">Customer Current Debt</label>
+                 <h5 style="color: rgb(50, 68, 40);">₦<%=cust.Debt%></h5>
+              </div>
+
+              <!-- <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: "></div>
+              </div> -->
+              <div class="progress col-md-4" style="height: 3px;" title="Attachement upload progress"> 
+                <div class="progress-bar progress-bar-striped progress-bar-animated " role="progressbar" id="progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+
+              <div class="col-md-4">
+              <label class="form-label" style="height: 3px;" title="Attachement upload progress"><%=cust.Username.toUpperCase()%>'s  credit Limit</label>
+              <h5>₦ <%=cust.creditLimit%></h5>
+            </div>
+
+              <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">REMARKS</label>
+                <textarea type="text"  name="remark"  class="form-control" autocomplete="off" autocapitalize="on"  ></textarea>
+            </div>
+
+              <div class="col-md-4  ">
+                <label for="InvoiceNo" class="form-label"> All done!</label>
+                  <button class="btn btn-success form-control" disabled  id="submit" >Confirm Payment for <%=cust.Username.toUpperCase()%></button>
+              </div>
+              <input type="text" value="<%=user._id%>"  name="AccountantId" hidden disabled>
+              <input type="text" value="<%=user.firstName%> <%=user.lastName%>"  name="AccountantName" hidden disabled>
+            </form>
+      </div>
+  </div>
+
+
+  <!-- activities on bills modal -->
+  <div id="mySidenav" class="sidenav">
+    <p href="javascript:void(0)" class="closebtn" onclick="document.getElementById('mySidenav').style.width = '0';
+    document.getElementById('main').style.marginLeft= '0';
+    document.body.style.backgroundColor = 'white';
+  ">&times;</p>
+    <h5>Logged Activities</h5>
+    <div class="">
+     <%Singlebill.ActivityLog.sort().map(log=>{%>
+       <div class=" border-bottom">
+         <p><b>Log: </b> <%=log.logMsg%></p>
+         <p><b>Status: </b> <%=log.status%></p>
+       </div>
+     <%})%>
+    </div>
+    
+  </div>
+  <!-- ends here  -->
+  <%-include('./partials/footer')%>
+  </body>
+  <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+  <script>
+    let Inwords
+//    /the button
+const  generatePdf = async  function  (){
+ const billId =  document.getElementById("download-button")
+const id = billId.dataset.id
+ const request = await fetch(`/api/v1/invoice/${id}`,{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+        // response ? document.getElementById('loading').style.display='none' :''
+    // console.log(response);
+var pdfObject = await jsPDFInvoiceTemplate.default( {
+        outputType: jsPDFInvoiceTemplate.OutputType.Save,
+        returnJsPDFDocObject: true,
+        fileName: `${response.bill.customerName}`,
+        orientationLandscape: false,
+        compress: true,
+        logo: {
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 26.66, //aspect ratio = width/height
+        height: 26.66,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        stamp: {
+        inAllPages: true, //by default = false, just in the last page
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 20, //aspect ratio = width/height
+        height: 20,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        business: {
+        name: "ALL CHANNELS DISTRIBUTORS NIG LTD",
+        address: "CM/104 COMPLEX KARU NEW MARKET, KARU ABUJA ,",
+        email: "(+234) 08158491682, ALLCHANNELDISTRIBUTION@YAHOO.COM",
+        phone: "Group 3 Plaza, UK Bello Road, kasuwar gwari, Minna Niger State."
+        },
+        contact: {
+        label:`Invoicer : ${response.bill.RaiseBy}`,
+        name: `${response.bill.customerName.toUpperCase()}`,
+        address: `${response.customers.street ? response.customers.street :""}`,
+        phone: `(+234)${response.customers.phone ? response.customers.phone : ''}`,
+        email: `${response.customers.Email ? response.customers.Email : ""}`,
+        otherInfo:``,
+        },
+        invoice: {
+        label:`${response.bill.billStatus.toUpperCase().substring(0,3)}/${response.bill.billReferenceNo}/${response.bill.invoicelocation}/`,
+        num: `${response.bill.WayBillNo ? response.bill.WayBillNo : '' }` ,
+        invDate: `Order Date: ${response.bill.startDate}`,
+        invGenDate: `Invoice Date: ${response.bill.DELIVERYDATE ? response.bill.DELIVERYDATE.substring(0,10) : ''}`,
+        headerBorder: true,
+        tableBodyBorder: true,
+        header: [
+          {
+            title: "#",
+            style: {
+              width: 10
+            }
+          },
+          {
+            title: "Product",
+            style: {
+              width: 50
+            }
+          },
+          {title:'Exp'},
+          // {title:'Batch'},
+          { title: "Promo"},
+          { title: "P-Sum"},
+          { title: "Price"},
+          { title: " Qty "},
+          { title: "Unit"},
+          { title: "Vat"},
+          { title: "Total"}
+        ],
+        table: response.bill.orders.map((ord,index)=>{
+        
+          return [index +1, ord.item.Name,ord.ExpiryDate ? ord.ExpiryDate :'',ord.promotionData ? ord.promotionData :0,ord.promotionData ? ord.promotionData * ord.Qty :0,ord.priceListPrice, ord.Qty, ord.scale , ord.item.VAT.$numberDecimal  ? ord.item.VAT.$numberDecimal : ord.item.VAT , ord.total ]
+        }),
+        additionalRows: [{
+            col1: 'Total:',
+            col2: "145678",
+            col3: '',
+            style: {
+                fontSize: 14 //optional, default 12
+            }
+        },
+        {
+            col1: 'VAT:',
+            col2: "20",
+            col3: '%',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        },
+        {
+            col1: 'SubTotal:',
+            col2: "116199.90",
+            col3: 'ALL',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        }],
+        invDescLabel: `TOTAL :NGN${response.bill.grandTotal}`,
+        invDesc: `(${Inwords})   SubTotal: NGN${response.bill.subTotal},    VAT TOTAL:NGN${0},   Invoice-Discount :NGN${response.bill.discount}, Sum on SKU Promo: NGN${response.bill.orders.map(promo =>{return promo.promotionData * promo.Qty}).reduce((total , currentValue) => {return total + currentValue},0)}`,
+        invTotal: "Customer Signature and date",
+        },
+        footer: {
+        text: "We've suppied, No refund after payment.WE DON'T ACCEPT CASH,ONLY TRANSFER OR Issue CHEQUE TO ALL CHANNEL DISTRIBUTORS NIG",
+        },
+        pageEnable: true,
+        pageLabel: "BADE ",
+        }); //returns number of pages created
+  }
+
+  </script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+  <!-- TODO: Add SDKs for Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+  <!-- next line will throw console warning -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script> -->
+  <script type="module" >
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+  document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+  document.body.style.backgroundColor = "white";
+}
+
+
+  import { getDatabase, ref, child,onValue, get,}
+  from "https://www.gstatic.com/firebasejs/9.13.0/firebase-database.js";
+  import { initializeApp} from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+
+          //DATABASE SHIT STARTS HERE
+//FROM BIG BERN 
+const firebaseConfig = {
+    apiKey: "AIzaSyBED3d1-cLAwWrbQJsH0LJBU1A3iDQbBi0",
+    authDomain: "bigbern-erp.firebaseapp.com",
+    databaseURL: "https://bigbern-erp-default-rtdb.firebaseio.com",
+    projectId: "bigbern-erp",
+    storageBucket: "bigbern-erp.appspot.com",
+    messagingSenderId: "129741589367",
+    appId: "1:129741589367:web:2dfd5bf29e5936bdd1af72",
+    measurementId: "G-L3T956JGTM"
+};
+  // initialize firebase
+let app = firebase.initializeApp(firebaseConfig);
+        
+    
+
+    //convert attachements uploaded to url string
+        let supportDoc   
+        document.getElementById('supportDoc').addEventListener('change',async function(e){
+        
+          let files =[]
+// form image 
+    files =   e.target.files;
+    for (let i = 0; i < files.length; i++) {
+    }
+    //checks if files are selected
+    if (files.length != 0) {
+      //Loops through all the selected files
+      for (let i = 0; i < files.length; i++) {
+        //create a storage reference
+        var storage = firebase.storage().ref(`/bill attachement/${files[i].name}`);
+  
+        //upload file
+        var upload = storage.put(files[i])
+        // function progress(snapshot) {
+            
+        //   },
+        //update progress bar
+        upload.on("state_changed",(snapshot)=> {
+          var percentage =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            document.getElementById("progress").style.width = `${percentage}%`;
+            percentage === 100 ? document.getElementById("submit").removeAttribute('disabled'): "" //enable the submit button when the user uploads attachements 
+            percentage === 100 ? alert('Attachements were successfully uploaded') : ''
+          })
+          
+      }
+    } else {
+      alert("No file chosen");
+    }
+  
+    upload.then(snapshot => {
+         return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+     }).then(downloadURL => {
+      // set image url for form
+      supportDoc =  downloadURL
+     }).catch(error => {
+        // Use to signal error if something goes wrong.
+        alert(`Failed to upload file and get link - ${error}`);
+     });
+        })
+       
+    const form = document.querySelector('form')
+    form.addEventListener('submit',async function(e){
+      e.preventDefault();
+      const id = form.dataset.id
+      const url =`/api/v1/bill/register/${id}`;
+      
+    const update ={
+      bankAccount : form.bankAccount.value,
+     registeredBalance : form.registeredBalance.value,
+     paymentMethod :form.paymentMethod.value,
+     supportDoc:supportDoc,
+     billStatus:'Invoiced',
+     remark: form.remark.value,
+     AccountantId:form.AccountantId.value,
+     AccountantName:form.AccountantName.value
+    }
+
+    const request = await fetch(url,{
+      method:"PATCH",
+      body:JSON.stringify({update:update}),
+      headers:{"content-type":"application/json"}
+    })
+    const response = await request.json()
+        if(response.message) {
+          alert(response.message)
+          form.reset()
+          location.reload()
+          document.getElementById('myModal').style.display='none'
+        }else{
+          alert(response.error)
+        }
+    })
+
+
+    let Grandtotal = document.getElementById('Grandtotals').value
+    function test(n) {
+      if (n < 0)
+      return false;
+	 let single_digit = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
+	 let double_digit = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
+	 let below_hundred = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+	if (n === 0) return 'Zero'
+	function translate(n) {
+		let word = ""
+		if (n < 10) {
+			word = single_digit[n] + ' '
+		}
+		else if (n < 20) {
+			word = double_digit[n - 10] + ' '
+		}
+		else if (n < 100) {
+			let rem = translate(n % 10)
+			word = below_hundred[(n - n % 10) / 10 - 2] + ' ' + rem
+		}
+		else if (n < 1000) {
+			word = single_digit[Math.trunc(n / 100)] + ' Hundred ' + translate(n % 100)
+		}
+		else if (n < 1000000) {
+      word = translate(parseInt(n / 1000)).trim() + ' Thousand ' + translate(n % 1000)
+		}
+		else if (n < 1000000000) {
+			word = translate(parseInt(n / 1000000)).trim() + ' Million ' + translate(n % 1000000)
+		}
+		// else {
+		// 	word = translate(parseInt(n / 1000000000)).trim() + ' Billion ' + translate(n % 1000000000)
+		// }
+		return word
+	}
+	let result = translate(n) 
+	return result.trim()+'.'
+}
+document.getElementById('words').innerHTML = `${test(parseInt(Grandtotal))} Naira only.`;
+document.getElementById('word').innerHTML = `${test(parseInt(Grandtotal))} Naira only.`;
+
+
+
+    const apporved = async () =>{
+      const approveBtn = document.getElementById('approved')
+      const id = approveBtn.dataset.id
+      const api = `/api/v1/bill/${id}/approved`
+
+      const request = await fetch(api,{
+        method:'PATCH',
+        headers:{"content-type": "application/json"}
+      })
+      const response = await request.json()
+
+      if(response.message){
+        alert(response.message)
+        location.reload()
+      }
+    }
+ 
+    ////////////////////////////////////////////////////////////////send mail functionality////////////////////////////////
+    const MailBtn = async ()=>{
+      const MailBtn = document.getElementById('Mail')
+      const id = MailBtn.dataset.id
+      const api = `/api/v1/sendmail/${id}`
+      
+      const request = await fetch(api,{
+        method:'GET',
+        headers:{"content-type": "application/json"}
+      })
+      const response = await request.json()
+      
+      if (response.message) {
+        document.getElementById('myModal').style.display = 'block'
+        document.getElementById('myModalText').innerText = response.message;
+        setTimeout(() =>{
+          document.getElementById('myModal').style.display = 'none';
+        },5000)
+      }
+      if (response.error) alert(response.error)
+    }
+
+
+   
+   
+  </script>
+</html>

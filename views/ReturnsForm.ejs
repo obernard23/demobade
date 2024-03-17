@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()"  title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  Returns Merchandise Authorization
+                  </a>
+                  </h5>
+                  
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+          <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+
+    
+  <div id="purchaseForm" class="shadow-lg m-4 p-3">
+     
+      <div id="pspdfkit-header">
+        <div class="header-columns">
+          <div class="logotype">
+            <img  height="150" width="150" src="<%=Business.CompayLogo%>" /> 
+          </div>
+
+          <div>
+            <h5><%=Business.CompayName%></h5>
+            <p>[<%=Business.email%>]</p>
+            <p><%=Business.Tel%></p>
+            <p><%=Business.Address%></p>
+            <p><%=Business.CompanyCity%></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+        <div>
+          <h2>" RMA "</h2>
+        </div>
+
+        <div class="intro-table">
+          <div class="intro-form  intro-form-item d-flex intro-table-title align-items-start  justify-content-evenly">
+            <h1 class="intro-table-title" id="Username"></h>
+            <h4 class="intro-table-title" id="Email"></h4>
+            <h4 class="intro-table-title" id="Address"></h4>
+            <h4 class="intro-table-title"id="phone"></h4>
+            <h4 class="intro-table-title"id="discount"></h4>
+            <h4 class="intro-table-title" id="creditLimit" style="color: #1db669;"> </h4>
+            <h4 class="intro-table-title" id="Debt" style="color: #c45b5b;"></h4>
+            <h4 id='startdate' class="intro-table-title"></h4>
+          </div>
+
+          <div class="intro-form">
+            <div class="intro-form-item-border d-flex flex-column gap-3">
+
+              <!-- recived date -->
+              <div class="col-md-7 ">
+                <label for="ReturnDate" class="form-label">Return Date</label>
+                <input
+                  type="date"
+                  class="form-control border"
+                  id="ReturnDate"
+                  aria-describedby="validationServer05Feedback"
+                  required
+                  name="RecievedDate"
+                />
+              </div>
+              <!-- ends here -->
+
+               <!-- P/O Ref NO -->
+               <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Bill Ref NO:</label>
+                <input type="text" name="" id="Refrence" placeholder="Enter Refrence from bill" class="form-control border" autocomplete="off">
+                <a class=" btn btn-success m-1" href="javascript:void(0)">Check InvoiceNo</a>
+              </div>
+              <!-- ends here -->
+
+            </div>
+
+          </div>
+        </div>
+        <h6 id="refDis" style="color: #fff;" class="p-2"></h6>
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >Invoiced QTY</td>
+              <td  >Scale</td>
+              <!-- <td  >Unit Price ₦</td> -->
+              <td  >Total ₦</td>
+            </tr>
+            <tbody  class="item" id="returns"></tbody>
+              <!-- for rturn product request -->
+              <tr >
+                <form action="">
+                <td>
+                 
+                 
+                  <div class="col-md-7">
+                    <label for="pricelist" class="form-label">Products from Invoice</label>
+                    <select
+                      class="form-select "
+                      id="products"
+                      aria-describedby="validationServer04Feedback"
+                      
+                    >
+                    <option>Choose...</option>
+                    <optgroup id="product" label="Invoice Product" > </optgroup>
+                    </select>
+                    </div>
+                </td>
+             </form>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-box">
+          <table cellpadding="10" cellspacing="0">
+            <tbody>
+              <!-- <tr class="item">
+                <td></td>
+                <td>Subtotal:</td>
+                <td id="Subtotal">₦0.00</td>
+              </tr> -->
+
+              <!-- <tr class="item">
+                <td></td>
+                <td>Discount:</td>
+                <td id="discountinCalc">0%</td>
+              </tr> -->
+
+              <!-- <tr class="item">
+                <td></td>
+                <td>Tax Rate:</td>
+                <td></td>
+              </tr> -->
+
+              <tr class="no-border-item">
+                <td></td>
+                <td>Shipping/Handling:</td>
+                <td id="Shipping">₦0.00</td>
+              </tr>
+
+              <tr class="total">
+                <td></td>
+                <td>Total Due:</td>
+                <td id="Grandtotal">₦0.00</td>
+              </tr>
+          </table>
+          <p id="words"></p>
+       
+        </div>
+      </div>
+      
+
+      <div class="page" style="page-break-after: always">
+      
+        <div class="page" style="page-break-after: always">
+          <div class="signer">
+
+
+            <div class="form signer-item">
+              <button type="button"  class="btn btn-danger"onclick="document.getElementById('confirmation').style.display='block'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+                </svg>  
+                Submit Return Request 
+              </button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="pspdfkit-footer">
+        <input type="text" value="<%=result._id%>" id="Whid" hidden>
+        <div class="footer-columns">
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Request confirmation modal -->
+    <!-- The Modal -->
+    <div id="confirmation" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container">
+          <form class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <span title="close" onclick="document.getElementById('confirmation').style='none'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+              </svg>
+            </span>
+            <input type="password" name="opsCode" id="opsCodes" class="form-control input-group has-validation" placeholder="Enter operational code" autocomplete="off">
+            <button type="submit" class="btn btn-danger">Action</button>
+          </form>
+        </div>
+      </div>
+      <!-- ends here -->
+
+      <input type="text" hidden id="employee" data-id="<%=user._id%>" value="<%=user.firstName%> <%=user.lastName%>">
+      
+    </div>
+      <%-include('./partials/footer')%>
+  </body>
+    <script>
+
+      //clear billproduct on page reload
+        localStorage.removeItem('bill_products');
+      let ReturnDate 
+      document.getElementById('ReturnDate').addEventListener('change',(e)=>{
+        ReturnDate = e.target.value
+      })
+      const Whid = document.getElementById('Whid').value
+      let BillId
+      let billReferenceNo
+      //get request for bills
+      const BillRefrence = document.getElementById('Refrence')
+      BillRefrence.addEventListener('change',async(e)=>{
+            const endPoint = `/api/v1/bill/${e.target.value}/${Whid}`
+            const res = await fetch(endPoint,{
+                method:'GET',
+                headers:{'Content-Type': 'application/json'}
+            })
+
+            const data = await res.json()
+            data.error ? alert(data.error) : ''
+            const Username = document.getElementById('Username').innerText = `Billed To: ${data.customerName}`;
+            const Email =  document.getElementById('Email').innerText = `Raised By: ${data.RaiseBy}`;
+            const phone = document.getElementById('phone').innerText = `Invoiced Date: ${data.startDate.substring(0,10)}`;
+            // const Address = document.getElementById('Address').innerText = `Delivery Date: ${data.DELIVERYDATE.substring(0,10)}`;
+            // const discount = document.getElementById('discount').innerText = `Discount: ₦${data.discount}`;
+            const shippingFee = document.getElementById('Shipping').innerText = `₦${data.shippingFee}`
+           const Grandtotal = document.getElementById('Grandtotal').innerText = `₦${data.grandTotal}`
+
+           const refDis = document.getElementById('refDis')
+           refDis.innerText = `Invoice ${data.billReferenceNo} Product`
+           refDis.classList.add('bg-success')
+           // display order in this bill
+           let product  = document.getElementById('product')
+           let displayTable = document.getElementById('returns')
+           displayTable.innerHTML = ""
+            product.innerHTML = ""
+
+            data.orders.forEach(order => {
+
+           let tr = document.createElement('tr')
+           let td1 = document.createElement('td')
+           let td2 = document.createElement('td')
+           let td3 = document.createElement('td')
+          //  let td4 = document.createElement('td')
+           let td5 = document.createElement('td')
+
+           td1.innerHTML = order.item.Name
+           td2.innerHTML = order.Qty
+           td3.innerHTML = order.scale
+          //  td4.innerHTML = `₦${order.priceListPrice}`
+           td5.innerHTML = `₦${order.total}`
+
+          //  add style
+          td5.classList.add('border')
+          td2.classList.add('border')
+          td1.classList.add('border')
+          // td4.classList.add('border')
+          td3.classList.add('border')
+           tr.classList.add('item')
+          // append to dom element
+           tr.appendChild(td1)
+           tr.appendChild(td2)
+           tr.appendChild(td3)
+          //  tr.appendChild(td4)
+           tr.appendChild(td5)
+           displayTable.append(tr)
+
+          })
+          // set BillId for InvoiceProduct
+          BillId = data._id
+          billReferenceNo = data.billReferenceNo
+      })
+
+
+
+      //ops code form 
+      const opsCodesForm = document.getElementById('opsCode')
+      opsCodesForm.addEventListener('submit', async (e)=>{
+        e.preventDefault()
+        let opInput = opsCodesForm.opsCode.value
+        let user = document.getElementById('employee')
+        let modal = document.getElementById('confirmation')
+        let userId =user.dataset.id
+
+        const request = await fetch(`/api/v1/users/${userId}/${opInput}`,{
+          method:'GET',
+          headers:{'Content-Type': 'application/json'}
+        })
+
+        const response = await request.json()
+        if(response.signature){
+          spinner = ()=>{
+                return`
+                <div class="modal-body d-flex justify-content-center container">
+                  <div class="spinner-border" text-info" role="status" style="width: 3rem; height: 3rem;">
+                         <span class="visually-hidden">Please Wait...</span>
+                  </div>
+                </div>
+                      `}
+              let user = document.getElementById('employee').value
+              modal.innerHTML = spinner();
+              const endpoint = `/api/v1/returns/${Whid}`
+              const res = await fetch(endpoint,{
+                method:"POST",
+                body: JSON.stringify({WHId:Whid,billReferenceNo:billReferenceNo,storeKeeper:user,BillId:BillId,ReturnDate:ReturnDate}),
+                headers:{'Content-Type': 'application/json'}
+              })
+
+              const data = await res.json()
+              if (data.message){
+                alert(data.message)
+                location.reload()
+                  }else{
+                    alert( data.error )
+              }
+          }
+        } )
+      
+    
+      
+    </script>
+</html>

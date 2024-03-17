@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+    <style>
+      .box {
+  position: relative;
+}
+.ribbon {
+  position: absolute;
+  right: -5px; top: -20px;
+  z-index: 1;
+  overflow: hidden;
+  width: 95px; height: 95px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#9BC90D 0%, #79A70A 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 19px; right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid #79A70A;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #79A70A;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+    </style>
+    <body>
+      <nav class="navbar bg-black">
+        <div class="container-fluid">
+          <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+            <img 
+            width="30"
+            hegith="30"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+           </span>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+  
+                    <h5>
+                      <a
+                      class="nav-link breadcrumb-item active"
+                      aria-current="page"
+                      href="/"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style="color: #fff !important"
+                    >
+                    <%=result.Username%>
+                    </a>
+                    </h5>
+                  
+                  </li>
+            </ul>
+            <%-include('./partials/USER.ejs')%>
+            <%-include('./partials/inactive.ejs')%>
+        </div>
+      </nav>
+    <%-include('./partials/inactive.ejs')%>
+    <div class="container p-3">
+        <div class="row g-3 shadow p-3 m-3 box">
+          <%if(!result.blocked){%>
+            <div class="ribbon"><span>QUOATABLE</span></div>
+          <%}%>
+          <h3><%=result.Username.toUpperCase()%></h3>
+            <div  style="width: 12rem;">
+                <img  src="<%if(result.Image){%>
+                  <%= result.Image %>
+                  <%}else{%>
+                     https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png
+                  <%}%>
+                  " alt="<%= result.Name %> Photo" class="card-img-top" alt="...">
+            </div>
+            <!-- view only section -->
+
+            <div class="row g-3 p-3 box">
+               <!-- curent sales person -->
+            <div class="col-6">
+              <label for="street" class="form-label">Current Sales Person </label>
+              <h5 class="form-text">
+                <%if(result.salesPerson){%>
+                  <%salesp = employees.filter((person)=>{%>
+                    <%return person._id.toString() === result.salesPerson.toString()%>
+                  <%})%>
+                  <%salesp.map(name =>{%>
+                    <%=name.firstName.toUpperCase()%> <%=name.lastName.toUpperCase()%>
+                  <%})%>
+                <%}else{%>
+                  Not Assigned
+                <%}%>
+              </h5>
+            </div>
+            <!-- ends here -->
+
+             <!-- curent billing  -->
+             <div class="col-6">
+              <label for="street" class="form-label">Billing Method </label>
+              <h5 class="form-text">
+                <%=result.category%>
+              </h5>
+            </div>
+            <!-- ends here -->
+
+             <!-- curent priceList  -->
+             <div class="col-6">
+              <label for="street" class="form-label"> PriceList </label>
+              <h5 class="form-text">
+                <%=result.priceList%>
+              </h5>
+            </div>
+            <!-- ends here -->
+
+            <!-- curent email  -->
+            <div class="col-6">
+              <label for="street" class="form-label"> Email </label>
+              <h5 class="form-text">
+                <%=result.Email%>
+              </h5>
+            </div>
+            <!-- ends here -->
+
+             <!-- curent telephone  -->
+             <div class="col-6">
+              <label for="street" class="form-label"> Telephone </label>
+              <h5 class="form-text">
+                <%=result.phone%>
+              </h5>
+            </div>
+            <!-- ends here -->
+            <!-- curent priceList  -->
+            <div class="col-6 ">
+              <label for="street" class="form-label bg-primary translate-end badge rounded-pill shadow w-contain start-50"> Account Bal... </label>
+              <h5 >
+                ₦<%=result.Debt%>
+              </h5>
+            </div>
+       
+           
+            <!-- ends here -->
+
+            <!-- curent priceList  -->
+            <div class="col-6">
+              <label for="street" class="form-label"> Address </label>
+              <h5 class="form-text">
+                <%=result.street.toUpperCase()%>
+              </h5>
+            </div>
+
+            <div class="col-6">
+              <label for="street" class="form-label"> Debt Days </label>
+              <input type="hidden"  value=" <%=result.lastPayDate%>" id="debtdays">
+              <h5 class="form-text" id="daystodebt"></h5>
+            </div>
+
+            <div class="col-6">
+              <label for="street" class="form-label"> Location </label>
+              <h5 class="form-text">
+                <h5 class="form-text">
+                  <%if(result.location){%>
+                  <%location = wh.filter((wh)=>{%>
+                    <%return wh._id.toString() === result.location.toString()%>
+                  <%})%>
+                  <%location.map(name =>{%>
+                    <%=name.WHName.toUpperCase()%> 
+                  <%})%>
+                  <%}%>
+                </h5>
+              </h5>
+            </div>
+
+            <div class="col-6">
+              <label for="street" class="form-label"> Manager </label>
+              <h5 class="form-text">
+                <h5 class="form-text">
+                  <%if(result.Manager){%>
+                  <%salesp = employees.filter((person)=>{%>
+                    <%return person._id.toString() === result.Manager.toString()%>
+                  <%})%>
+                  <%salesp.map(name =>{%>
+                    <%=name.firstName.toUpperCase()%> <%=name.lastName.toUpperCase()%>
+                  <%})%>
+                  <%}%>
+                </h5>
+              </h5>
+            </div>
+            <!-- ends here -->
+
+            <div class="col-6">
+              <label for="street" class="form-label">  </label>
+              <p>
+                <a href="/" class="link-dark link-opacity-25-hover">
+                 View Transactions 
+                </a>
+              </p>
+            </div>
+
+            </div>
+            <!-- view only div ends here -->
+
+            <%if(user.role ==="Admin" || user.jobTittle === "CFO"){%>
+            <!-- FOR customer type -->
+            <div style="border-top:silver dotted 2px;">
+              <h3 style="color: rgb(228, 165, 83);font-family:'Times New Roman', Times, serif;">EDIT <%=result.Username.toUpperCase()%> </h3>
+              <div class="col-md-4">
+                <label for="category" class="form-label">Billing Method</label>
+                <select id="category" class="form-select">
+                  <option class="bg-warning p-2" value="<%=result.category%>" ><%=result.category%> (CURRENT)</option>
+                  <option value='Credit-Customer' selected>Credit Customer</option>
+                  <!-- <option value="Pay as Go" disabled>Prepaid customer</option> -->
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="salesPerson" class="form-label">Change Sale person</label>
+              <select name="salesPerson" id="salesPerson" class="form-select">
+                <option >Choose...</option>
+                <%employees.forEach(employe=>{%>
+               <option value="<%=employe._id%>"><%=employe.firstName%> <%=employe.lastName%></option>
+               <% })%>
+            </select>
+            </div>
+
+              <!-- drop down for pricelist -->
+
+              <div class="col-md-5">
+                <label for="priceList" class="form-label">Price List</label>
+                <select
+                  class="form-select "
+                  id="priceList"
+                  aria-describedby="validationServer04Feedback"
+                  required
+                >
+                <option class="bg-warning p-2" value="<%=result.priceList%>" ><%=result.priceList%> (CURRENT)</option>
+                  <option value="Van_Price">Van Price </option>
+                  <option value="Market_Price">Super Market price</option>
+                  <option value="WareHouse_Price">Whole Sale price</option>
+                </select>
+                </div>
+
+             <!-- add credit or cash customer -->
+            <div class="col-md-4">
+                <label for="validationCustomEmail" class="form-label"> Email</label>
+                <div class="input-group has-validation">
+                    <a  href="mailto:<%=result.Email%>" class="input-group-text" id="inputGroupPrepend">@</a>
+                    <input type="text" class="form-control" id="validationCustomEmail"value="<%=result.Email%>" required aria-describedby="inputGroupPrepend"> 
+                  </div>
+              </div>
+              <div class="col-md-4">
+                <label for="validationCustomertel" class="form-label">Telephone</label>
+                <div class="input-group has-validation">
+                  <a href="tel:+234<%=result.phone%>" class="input-group-text" id="inputGroupPrepend1">&phone;<a>
+                  <input type="text" class="form-control" id="validationCustomertel" aria-describedby="inputGroupPrepend1" required value="<%=result.phone%>">
+                </div>
+              </div>
+            <div class="col-md-4 ">
+              <label for="Name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="Name" value="<%=result.Username%>">
+            </div>
+            <div class="col-4">
+              <label for="street" class="form-label">Address </label>
+              <input type="text" class="form-control" id="street" placeholder="Apartment, studio, or floor" value="<%=result.street%>">
+            </div>
+            <div class="col-md-4">
+              <label for="creditLimit" class="form-label">creditLimit</label>
+              <input type="text" class="form-control" id="creditLimit" value=<%if(result.creditLimit === null){%>
+                0
+              <%}else{%>
+                <%=result.creditLimit%>
+              <%}%> >
+            </div>
+            <div class="col-md-4">
+              <label for="discount" class="form-label">Discount</label>
+              <input id="discount" type="number" disabled class="form-control" placeholder="Register Discount Amount " value="<%=result.discount%>"/>
+              
+            </div>
+            <div class="col-md-4">
+              <label for="location" class="form-label">Location <sub>(This is mapped to designated WareHuouse Account for payment collection)</sub></label>
+              <select name="location" id="location" class="form-select">
+                
+               <option value="<%=result.location%>" class="bg-warning p-2">
+                 <%if(result.location){%>
+                <%location = wh.filter((wh)=>{%>
+                  <%return wh._id.toString() === result.location.toString()%>
+                <%})%>
+                <%location.map(name =>{%>
+                  <%=name.WHName.toUpperCase()%> 
+                <%})%>
+                <%}%>[CURRENT]</option>
+                <%wh.forEach(wh=>{%>
+               <option value="<%=wh._id%>"><%=wh.WHName%></option>
+               <% })%>
+            </select>
+            </div>
+            
+            <div class="col-md-4">
+              <label for="Manager" class="form-label">Manager</label>
+              <select name="salesPerson" id="Manager" class="form-select">
+                <option class="bg-warning p-2" value="<%=result.Manager%>" >
+                  <%if(result.Manager){%>
+                  <%salesp = employees.filter((person)=>{%>
+                    <%return person._id.toString() === result.Manager.toString()%>
+                  <%})%>
+                  <%salesp.map(name =>{%>
+                    <%=name.firstName.toUpperCase()%> <%=name.lastName.toUpperCase()%>
+                  <%})%>
+                  <%}%>(CURRENT)</option>
+                <%employees.forEach(employe=>{%>
+               <option value="<%=employe._id%>"><%=employe.firstName%> <%=employe.lastName%></option>
+               <%})%>
+            </select>
+            </div>
+
+            <div class="col-md-4">
+              <label for="inputZip" class="form-label"> Registration Date</label>
+              <input type="date" class="form-control" id="DOB" value="<%=result.DOB%>">
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck" <%if(result.NewsFeedSubscription){%>
+                    checked="checked"
+                    <%}%>>
+                <label class="form-check-label" for="gridCheck">
+                   Subscribe to Email Markerting list 
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck1" <%if(result.blocked){%>
+                    checked="checked"
+                    <%}%>>
+                <label class="form-check-label" for="gridCheck1">
+                   Block <%=result.Username%> ?
+                </label>
+              </div>
+            </div>
+            
+            <div class="col-12">
+              <button type="submit" data-id="<%=result._id%>"  id="update" class="btn btn-primary">Update <%=result.Username%> Profile</button>
+            </div>
+          </div>
+          <%}%>
+          <%-include('./partials/footer.ejs')%>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+
+  // calculate debt dats using moments
+  // Get the current date
+
+  //get debt days here
+  date = document.getElementById('debtdays').value
+
+function calculateDaysFromToday(date) {
+  const d = new Date()
+  var date1 = new Date(date);
+  today = `${d.getMonth() + 1}-${ d.getDate()}-${d.getFullYear()}`
+  var date2 = new Date(today); //mm/dd/yyyy
+  var diffDays = date2.getDate() - date1.getDate(); 
+ return `${diffDays + 1} day(s)`;
+}
+
+if(date === " "){
+    document.getElementById('daystodebt').innerText = `Not in debt`;
+}else{
+    document.getElementById('daystodebt').innerText =  calculateDaysFromToday(date) 
+}
+
+
+  // =================================================================
+  //send pactch request and delete 
+const update = document.getElementById('update');
+//get all employee list '/employee/all'
+let salesPerson 
+  document.querySelector('#salesPerson').addEventListener('change',async (e)=>{
+    let request = await fetch(`/api/v1/employee/${e.target.value}`,{
+      method: 'GET', 
+      headers:{'content-type': 'application/json'}
+    })
+    salesPerson = await request.json()
+
+  })
+  
+update.addEventListener('click',async ()=>{
+  const id = update.dataset.id;
+  const Username = document.querySelector('input#Name').value
+  const Email = document.querySelector('input#validationCustomEmail').value
+  const phone = document.querySelector('input#validationCustomertel').value
+  const Address = document.querySelector('input#validationCustomEmail').value
+  const creditLimit = document.querySelector('input#creditLimit').value
+  const street = document.querySelector('#street').value
+  const Discount = document.getElementById("discount").value
+  const NewsFeedSubscription = document.querySelector('input#gridCheck').checked
+  const blocked = document.querySelector('input#gridCheck1').checked
+  const DOB = document.querySelector('input#DOB').value;
+  const categorys = document.getElementById("category")
+  let category = categorys.options[categorys.selectedIndex].value;
+  let priceList = document.querySelector('#priceList').value
+  let Manager = document.querySelector('#Manager').value
+  let location = document.querySelector('#location').value
+  // let discount = Discount.options[Discount.selectedIndex].value;
+
+  const url = `/api/v1/customer/update/${id}`;
+
+  const data = await fetch(url,{
+    method:'PATCH',
+    body: JSON.stringify({
+      Username,
+      phone,
+      Email,
+      NewsFeedSubscription,
+      blocked,
+      creditLimit,
+      Discount,
+      DOB,
+      category,
+      street,
+      salesPerson,
+      priceList,Manager,location
+    }),
+    headers:{'Content-Type': 'application/json'}
+  })
+
+    const res = await data.json().then(json => {
+        if (json){
+          alert( json.result|| json.error)
+          json.result ? location.reload() : ''
+        }
+      }
+    )
+})
+
+
+</script>
+</html>
+

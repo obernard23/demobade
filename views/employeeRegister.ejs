@@ -1,0 +1,685 @@
+<%-include('./partials/head.ejs')%>
+<%-include('./partials/inactive.ejs')%>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Nova+Square&display=swap" rel="stylesheet">
+<style>
+         .go-corner {
+display: flex;
+align-items: center;
+justify-content: center;
+position: absolute;
+width: 32px;
+height: 32px;
+overflow: hidden;
+top: 0;
+right: 0;
+background-color: #00838d;
+border-radius: 0 4px 0 32px;
+cursor: pointer;
+}
+
+.go-arrow {
+margin-top: -4px;
+margin-right: -4px;
+color: white;
+font-family: courier, sans;
+}
+    /* card 2 */
+.card2 {
+display: block;
+top: 0px;
+position: relative;
+max-width: 262px;
+background-color: #f2f8f9;
+border-radius: 4px;
+padding: 32px 24px;
+margin: 12px;
+text-decoration: none;
+z-index: 0;
+overflow: hidden;
+border: 1px solid #f2f8f9;
+font-family: 'Dancing Script', cursive;
+font-family: 'Nova Square', sans-serif;
+
+&:hover {
+transition: all 0.2s ease-out;
+box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+top: -4px;
+border: 1px solid #cccccc;
+background-color: white;
+}
+
+&:before {
+content: "";
+position: absolute;
+z-index: -1;
+top: -16px;
+right: -16px;
+background: #00838d;
+height: 32px;
+width: 32px;
+border-radius: 32px;
+transform: scale(2);
+transform-origin: 50% 50%;
+transition: transform 0.15s ease-out;
+}
+}
+
+&:hover:before {
+transform: scale(2.15);
+}
+</style>
+
+<nav class="navbar bg-black">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/" title="Apps">
+      <img
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAVe0lEQVR4nO1de3RV1Zk/tgvrtJ2RP8bprM60IsvV6XLVtnbWaisCQwyvICbyCCEhEAR5PxIgPJIAImgFCiZIeQQiiKAJqOEhQoJIKC81g4EEEwQDBsiTJDd370todWa6Z/1Ozrl3n3PPPo97TwLVu9f6FneFc863v+/be397f68tSZEWaZEWaZEWaZEWaZEWaZEWaZEWaW60lpaWf/L5fAmU0jcppR8TQmoJIV9TStsopZcJIYWEkHltbW0PhYOHMfYdr9c7gFK6hhBySsFzWwH8Pkkp/aPP5+uPZ8PB5fV6exJC0gkhe0EDaA
+          FNwAMaKaW7fD7fKNAu3S3t9u3bP6GUbieEfEUpZVZACPkbIeRDSmlvJ3gYY9+DQAkhN+zgUXBdJ4TMYYzd6wQXpbQPIaQEfbWJ56+U0tfa29v/XbpTjTH2XULIckLIX+wyyICQ/La2tu52GEQpvRIqHkpptZ0BgL4QQgrCoAezdBl4I3Vl83g891NKD4fBIB6u+ny+X4hwEULmEkL+J1w8+AYhJE2Ex+fzPYq+uEGTx+Mp6rJlDMIghFxwSRgqs276fL5f6nFRSpe4iUeBLD2eW7du/YoQ0uwmnsbGxktXrly5v1OFASVJKX1P1Inr1+rZzteL2Oxp69iIpxez/n3msGeGZLLnxq1im9bvZZWfXTETSsOtW7f+VcXl9XqTRM96vV5WfPhj9sLibWxM/HI2KGqeDEnxy9kLS7axI0
+          WfMK+XmOEap+Lx+Xz/oihpw2crL1SzjesLZRpAC2gCbaBx144iduN6vRBPdXV1aXx8/D90mkCgM4wQt7V52ZaN+9jgqHTW7/HZQoh6IpUtX7qd1dU2iogoAh5K6c8ppe1Gz5w6eZ6lJL5kigcwPukP7PTJchGeW4SQnym4jhg9U3ujUe4r+myGBzRv2bRf5oHRd44ePbpLkqRurgujvb3934yY1NBwk6VOX2fJIB4Shj0vjzwBs4ZTSg8Z/d9bO4vZk0+k2cYT3TuNvbXziAjPQUrpSKP/++xCtdxHJzSlzXhV5oX+Wx6P5+sRI0aMkiTpHlcFgq2t0czQCyNm4FI2buIONiP9EEvNOsZmLihmz07NZ3FPv6x5bmTsEnatps6IUS1GTNr37p+1zO4zjyUkbmRTUvex2RkfyjBl9j6WkLRR/
+          j/+2f2FJ0RCCcJVU1Mn9y3wfiqLi31ZpgG0gCbQNm7CDjZk4NIgoRjNlDNnzpRIkvSo24o86JyRu2FfoEO9Ulni2C0sbXEJS1t83BAmTCtgT3LMAgGi9ZdycOnzGjag71z/e0/FvMBmLigS4gHj8Iz6/MD/mscuX6qxhSttRmCAoa/oswhPalYJS0zOlWlX38HyFTxw277u2bNniiRJ33dFIF6vN9FIgfM6o0MYxy3huRl7WBRHwInjZZZMWpKxNTADByyRZ4MVHjyDZ9X3lmbkWeL5c0lZQN/1SmMTZ7xtiyZZKJxOMVL0OTk56yRJ+p0rAoGJQI9g5/bDGiZhtNjpPGBkfGAUZi3YYsqkutpGWReoyweWJbt4pqTt949e6B4oajNcGfMDjB0Z/6ptPFgVYgYFli/svvTfLi0tPSlJUoIrC
+          p5SWqpHMHtqjr8D0Bn2O3+cTZt7UDOiPJ42IZMO7DvJLVXLHeEBDI1Z7n//4P5TQjye1jZ566w+O33e+47wQKeo70KvBuummuuSJCVKkvTTsAViZD/iFR+UnFNGDYha6H//6pUbQkZt/tNe/3Ojx2xyjCchaZP//dyN+4R4qr+47n9uQNQix3impx/yvx8ftyTo+62tre2KQB53QyBBCp1Xsth5OCVgyKDAtvLTsxeFjFr10i7/c8njtzvGg3fU9/EtER70QX0OfXOKBzzwC7Tv3KDve73e/1UEMiRsgSgmdA2CuJhMfwfMdjwiGBSd4X//84tfChn1p5x3HG8cRAp3w7p3hXg+r7rqf25QdJZjPNjZqe/jRK//fktLi08RyEg3BPKFHsGklFX+DmCP7qzzRbKCVg9vzc2tQkbtfuuoHw/OA04ZxZ9/9uQfFeJpvtmq2TzMXFjsCA94oOKZ/OzqoO/X1tY2KAIZHbZA4FzSI4Btys+op50xKmnsFv+7sAmZ7Xy+uHwtcC54Yg6bMd/+bJyRflh+R30fesIM16yp2f5nk8ZtdURTbGxA8Js3BOuqsrKyjxWBjHBDIOl6BDB98GaMCVPFBygesHvhT9KFb5eYMolSyqY9t5abJStND58BKGHPxK4M7JomrbXE8+6eEs4SkG57p8XPDvDEyIhaUFCwUxHI0LAF0tbW1oMQ8n96JDC+8adaHPqshDE4Osv/ztiEFUKjHOXgo9MVGhNF/Kh1FkIpYSNHBbblgI/OVFjiQV+SR60IbMn7Z1kK5bnpb2usDy8+/3rQd+F5jImJSVUE4shTajZLPjQ6tPFGOJzAcejDOUOjMxYWy8sUPzMG9ZvHyj4V766oDrL/WKBh8JBBy+RZyR9IsdPB3/gdHCB7zW7beLDbgqmFnynou16ngMaR8Tkaq8Po4ctYfV1T0DerqqrKFWEAfu6WQB438jFj6dIa49S9/EL59DooGrsxrQkbwoA/wy6TqOID4U0oAYbNky0FAH6k8iYTvOsEV/GhjzRCURU9dl+giT9D8WcPkb8nLS3teU4gP3RFIIpQ8o0Qwmo7Z+arQZ00AiwJTmYG1U59tm3rQTawXzDj9YBntucdlN8JBRdmCr98mQFoh23P6Dtnz549zQkjSnKzIQjALNjgxPFzsm1K76jCdhK7KShwOzqDWsCXV2vZurV75CVCzxz87dVX3mY1X9aGjQd9haJH3wNbYsV+92Q6W7xwi0yz6P2GhobmRx55ZBInkAcktxsCEuADNyMEdqEr1TfYuU8/lw99LSbnjHDhxo0GVlF+WQb87iw8oAG0gCbQBhrNnm9qaiKJiYnzOWH0cl0YnFB+6SQ+6tsGDQ0NrcnJyQs4YcRKkuQoNsxxo5Q+AB/4nSae3mVQWVl57rHHHpvCCWOYJEmdG32iE8xwkdv12wTNzc2+1atXv8IJAhAnSVL3rhQGokPev9PMoHcJXLhwoWz48OFzFWH0kyTpe10mDEJIMsJp7jQT6F0GHo/nq7KysnSpK1snRRSybxLU1dUt7xJhINbWtCO1jWz/3hOyxRMOIfgzCt78QLbaukmw1+uVg+ZwUFyzMl+G17a8JwfHOT2ZWwH6DhpAC2gCbXAtG5lJeDh79uyLnS2M3ys5H4ahOjBtmAWywWoLQ2E4zGlpaWU7th1icYMDDi49wHn2xvbD8rPh4DpzqpxNnbhGiAeHRZhmRCFG8BLm5eWN7RRhID9DdEo/eOCUbJ+yY2YAvLxip2lgAzUZqXbCSPlw0lBmJmbY+uyAp9IK4LLd+85x0dLV2LNnT2F0f8gNyTKi8E69EQ7RIQhIgD8bblf4JXhHEQCzyYmd6YvL14JmBYIRYIpPHp8nA0zu+Jt+tjgRCvq0eJHWiIm+g4aksbkyTaANNOqNpqKw1fz8/B2umk0Q9Y5sJD0irOH8EoXQSoR2Gnrv5hfJziWeAKz/dpepFG5mgEFgjFEsGP6WPH6bZgBgpthdvqCH+D4+E7eKzZx/2JAmxIjxwXhYwowCvGHTuvfee3FaDyvFzt+UnL6gac0zCaGb1hGFJfKI5i2yMBRaMWnHtkCIDRg9eda7ll48PMMLBTrFCg/CkfiltyNYztw7CZr5sFUI32hTkZmZ+ZIkSf/hikCQYKlHgBwM/8joM0+OurDnfy6RnUvqu7DaWllc47ilCqPfrp87efxrmqXLaveVs2Z3YLYPRiiQvWhMzH7eF/NB8SdB3z5y5MgBxaYVfhQ8sl31CJAso3YAUeh2mQSYMG23xlxuxqTTJ8s1OsNJyCqe5XUKdk1muHjv58Rp5u5oPSDqXn0Xrm39ty9fvnxROcH/yA2B1OkRJI0MTNPJAr0hZtQxzYgyi7ndtjUQdgql7QSPPo749bz3hXgQIM3PeCeCV/WJ+j6yugz0SKsikF+7IZCgTFveCTU746hjRvHKsPz8JSGj1qx8K0BoymuO8YxJyfO/v3ZVvhDP+XOX/M+hb07xgAfq++CNkUlFEUh/NwRy222BDOYEUnH+solA8jn9kReWQF5ZXSDEg0ERlkAWfRB4P3q+gS5s+ytnAQ5bIEFJkUiwVDswJYQlK7r3XFtL1va8cJesnBCXrGNuL1ktikBGuSGQk0FKfQmn1JMcKvWpgZCexBGdq9QHchEiVmYbXqlj4+GEpoTEDaZK/dKlSxddEwildLW7294A4QhI6LRtb8o2R9tebME7a9tbVFS037UlC4Vc9AhAHA5BTg+G/K4HB0M70SFvcNladg+Gk2ZqD4bIn7fCg0MqH2JkHSHZocyHDOYOhmNwMAw2CWVkZLyoCCTarYIB14yWEz48Bspwcupe41GUflgTa2u1plMOYPbghd9hOtkmMJ0ck2eGxnQy5g+stdVjCxe/zZZnVuxKYYD35Nl7NZsT8MLorNPQ0HCzW7duSYpAfiW50VBVx4gAGNR4AmBwQxoZMpdk42Jyrhwdrzcuwmzt2LgYE8hJkWdY1EJ5xmEnBYAC53WGulRZRb3zgD6hb/w30HekQoAW0ATaOswlWuNi/q4PDL+5a9euHZyfPfyDIRpKHClVdVwxv4cSMHel+gabMFab7363m99ra2sbu3fvPpYLB7qnSxxUcNJgZOkj/HhASoCdKHRqAlh6oFP0s0U/K5AlbHeZEgF2ZXwqhMhBJRI6HFRz5sxZxs0OuZyHqw0ljsyIgFsT2a5IsIS7E2lkyFxysmxQm6MY6zX0EE7gAPwGEzvDhQsaQAtoAm2g0cqFq1uqhrpmftc3SmmmmwR/E6GwsDCfE8boTonr5ZvX6x1DKfXdacLpXQawWW3dujVXFzDn/lJl1FDiyKx+1rcNKioqymJjY+fohPGI1JWNUjoiEkpK5VDSNWvWZHOCgImkZ5cJApXYRMW/vs1QVVVVHh0dDfPIP3aZMJQahUFOqwhQmQcej6fBqIZkpzRU77QqGNmRsHNdTm65WHW1UxN2rl+rl/0pAFFamRsAGkBLR8LOdcuEnZaWlraKior/7FRhKCltV83qTWXOz9VU1ekwPaTJ1YOQHuZGStvVKzfkgASjMnz4G6y2dqJZrAB9fWf3MbmggD4iEzQifc+s3ldTU9PNFStWhFXJ27SJigyjLB5fic0MkEhpVmyGWtiZEDdlx0wDqy0MhSEnff53lexoskMTKuMJyhWigsPJTknYIYT0MkqL/kyYFr1ISYvOCjLCIeUYqcdOR+tiXUShbL7oM0+2uAL0tRbVCEmnJ/ciYVp0pkyT3oAJAA9EhT0zMjIWuZ7ShlroekRwvWoLB6TJPgR99YOZC47ItUOQhM8LxclMWbsq4FsHPDVomRyqoy0cUCJ7+vi4LwCKDtjFc7a0Sls4oG+63HfQwNM0be77sqWZLxwAXhiVwK2srLzgatInbjQwmh28Gxej06pGoVxao3+WZvmyo1POnCrXjkbLiEJthCTATtQ9+sIvUx2lNcyLs6GcCO8tXGFeWsMd84mo+EygyHCqafVOvVD4mQJFb8WoqVxKAGJt7Raf4WOJYbW1wgMFzs8MK2EYxQhYFJ9xp3CAcn+GuDxTbBjlmabmOCrPNFMQ+Cz0dXOOMSvfSDjlmfi6XChLqP92WVnZJ66V1jByTKEWutPSTH6dsrBYU8DM7JxS8GYg3gkuYCd4wipgptMZlrNkSkDHTRpvWsAs/OIzlFKv+yX+Mm2V+Fuf/Y0p8dfuWnmmSBHM424WwRz6910mdsO+b1qZ2PBL/FFKP9EjQIUctQMoIuyk89PmvqepqmO3kPLQEAop88k0VoWU+XhlnDOc4Bk7cYdpTXuukHL4RTAppTv1CBB4Fnqp8UC8LUocme186uuaQi41jrgpfvNQX2/uA4cdLpQ4YtCOWyHUd5F3qf92aWnpCdfKxCrX4QUFJ2uK8Sfn2uo8ahRqi/GL601RBfg4KfvF+I9qgtjsFOOHoTBgdUi1rCGpQuKYzZoZb1SMf+3atTmKQGLCFkhTU9MPlavhNEhwNYPmuorkXNOZguqd/Kl27qz1lkyiSogRb87ouK6i2PT8wYd34l278VlYbjTXVUy1uK5CFkZggOVtPmB4XcWDDz74rGulxtFwT18wIq+GADUTF+splFxq5jGZORAEX9dWVXxG/ovm5mbDwAlcyhJ0oUvSRjl0FbMBgN+IQtfXXoQeMvqmES5YbfXGUpxlcM4ALaAJtIFGPumoQ3esMzQFnT59+hjn2v2JKwJpb2//sejKI71QrAB5haKCkatXr34FVXVEYatmgXh6wLOi8M6KiopP4QM3+r/KkK48Wie68uirfv36zVCE4c51FWrDpYnCS8E27be8FAx2HhjfRJeCVVZWnkPHUeLI4/EELZHyaDtZrgm8FgECrEVJnh6P5y9qdAh84EbPoI/oq9WlYNAZWzeLLwU7cODAHm52/FZysyEK3uPxGF7YBYAye/ONYnm0YNr37zuHDXsqS66FjvOE2bV5SIp8jKvEVlpaOl30LML9kZ+CxBhYjDEQAPiNvyE/w+zavA0bNmxU8URFRcXCBy56Fn2GbQo0gBbQBNpAI2g1uzavsrLy/H333TeGi0Jx58ojvuEGS1yaKOpEKICCkboahf2ACyWO3MQDKCwsLODwxCM6BAEJ8IG7iaempqbmoYcemsDhcr/eidpwg2V1dfVHbnS8rq6uSVe9M46vxFZeXv4CzA7h4sE3dLG2gB4qnqqqqt/U19c3uhUwx+2q1AHm7rV5+paSknIfLk2E0gql03DaoMjwww8/PFFXMLK7HhdKHKGqTqgMQkqArrq0YURhVlbWg/CBh4oHmbbQGVxyjnrucP9iSUHrNmzYsJG4pw97bZsj9W9VVVUVs2bNWqpj0NNmwQAocYSqOijkYpdByFzCrODyM1TThVms7f0ZGRkL4HZFX20K4mtsbXv37j1dR1PfrhSG2jAVH+3Ro0dKdnZ2Dm4jg92mpaVFrseIf2tra+vhoIHXLDo6epau02qR4W42cD2Aqjoo5ILaIShXgc0AZikAv5HtWlRUdAA5fbqRqlpa7bhREZDQa8CAAbPR53PnzpWCBp4m0AhzCGjWLU+qAv9Fpy9TFu37yj19CQYMN4LRikvznx3i+Y5SVSfWJh41c+lnIeRnPKD0cbRNPAnK1rbzLiQOoXVTroZ7XFk/R3Bm56GKgwZesx+EieceJV/v10q5ijhlZI5SfkcrCZY/cmGk/kDpc2+FBp6mGIXWn96J5SnSIi3SIi3SIi3SIi3SIk36+2v/D2fJJsBcmNmHAAAAAElFTkSuQmCC"
+        width="30"
+        height="30"
+      />
+    </a>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item dropdown">
+        <h5>
+          <a
+            class="nav-link breadcrumb-item active"
+            aria-current="page"
+            href="/api/v1/employee/Onboard"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style="color: #fff !important"
+          >
+            Employee Management
+          </a>
+        </h5>
+      </li>
+    </ul>
+    <%-include('./partials/USER.ejs')%>
+  </div>
+</nav>
+
+ <!-- The Modal -->
+ <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+  <!-- Modal content -->
+ 
+  <div class="modal-body modal-content container  bg-secondary.bg-gradient">
+
+  <!-- for employee photo -->
+  <div class=" justify-content-between  w-100"> 
+   <div class=" p-3">
+    <span title="close" onclick="document.getElementById('myModal').style='none'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+      </svg>
+    </span>
+    <h5> Employee Registration Form</h5>
+    <i>This Form consist of 2 Sections, please fill as appropriate.</i>
+   </div>
+   <div class="input-group mb-3">
+      <label style="border: 1px dotted black; padding: 30px;" id="productImage" for="files">Upload Image</label>
+      <input type="file" class="form-control" id="files" hidden />
+    </div>
+  </div>
+
+  <!-- for employee signature -->
+  <!-- <div class="input-group mb-3">
+    <label class="input-group-text" for="signature"
+      >Upload staff official Signature</label
+    >
+    <input type="file" class="form-control" id="signature" />
+  </div> -->
+  
+  <!-- ends here -->
+  <form action="" method="post" class="container" id="EmployeeForm">
+    <input type="text" name="employeeImage" id="employeeImage" hidden>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          Personal Infomation
+        </button>
+      </h2>
+      <div
+        id="collapseOne"
+        class="accordion-collapse collapse show "
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body row g-3">
+          <!-- for input starts here -->
+
+          <div class="col-md-6">
+            <label for="FirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control is-invalid" id="FirstName"  name="firstName" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="LastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control is-invalid" id="LastName" name="lastName" required />
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control is-invalid"
+              id="inputEmail4"
+              placeholder="Example@Bigbern.com"
+              required
+              name="Email"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="DOB" class="form-label">DOB</label>
+            <input type="date" class="form-control is-invalid" id="DOB" name="DOB" />
+          </div>
+          <div class="col-12">
+            <label for="inputAddress" class="form-label">Home Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputAddress"
+              placeholder="1234 Main St"
+              name="HomeAddress"
+            />
+          </div>
+          <div class="col-4">
+            <label for="NOK" class="form-label">Next of Kin</label>
+            <input
+              type="text"
+              class="form-control"
+              id="NOK"
+              placeholder="Next of Kin"
+              name="NOK"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">State of Origin</label>
+            <select id="inputState" class="form-select" name="StateOfOringin">
+              <option >Choose...</option>
+              
+              <%states.forEach(state=>{%>
+                <option value="<%=state.state%>" ><%=state.state%></option>
+              <%})%>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="LGA" class="form-label">LGA</label>
+            <input type="text" class="form-control" id="LGA" name="LGA"/>
+          </div>
+          <div class="col-md-6">
+            <label for="EmaergencyContact" class="form-label">Emergency Contact</label>
+            <input type="text" class="form-control" id="EmaergencyContact" name="EmaergencyContact" />
+          </div>
+          <div class="col-md-6">
+            <label for="EmaergencyContactNumber" class="form-label">Emergency contact Number</label>
+            <input type="text" class="form-control" id="EmaergencyContactNumber"  name="EmaergencyContactNumber"/>
+          </div>
+          <div class="col-md-6">
+            <label for="Mobile" class="form-label">Mobile</label>
+            <input
+              type="text"
+              class="form-control is-invalid"
+              id="Mobile"
+              placeholder="+234-0000-000"
+              required
+              name="telephone"
+            />
+          </div>
+          <div class="row g-3">
+            <h5>Gender</h5>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="Gender"
+                id="inlineRadio1"
+                value="Male"
+              />
+              <label class="form-check-label" for="inlineRadio1">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="Gender"
+                id="inlineRadio2"
+                value="Female"
+              />
+              <label class="form-check-label" for="inlineRadio2">Female</label>
+            </div>
+          </div>
+          <!-- endes here  -->
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button collapsed"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTwo"
+          aria-expanded="false"
+          aria-controls="collapseTwo"
+        >
+          Work Information
+        </button>
+      </h2>
+      <div
+        id="collapseTwo"
+        class="accordion-collapse collapse "
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body row g-3">
+          <!-- work information starts here -->
+          <div class="col-md-3">
+            <label for="workLocation" class="form-label">Assign Work Location</label>
+            <select  id="workLocation" class="form-select"  name="workLocation">
+              <option >Choose...</option>
+              
+              <%Warehouse.forEach(Warehouse=>{%>
+                <option value="<%=Warehouse._id%>" ><%=Warehouse.WHName%></option>
+              <%})%>
+            </select>
+          </div>
+          <!-- <div class="col-md-3">
+            <label for="validationServer02" class="form-label"
+              >Equiptment</label
+            >
+            <input
+              type="text"
+              class="form-control "
+              id="validationServer02"
+              name="Equiptment"
+            />
+          </div> -->
+          <div class="col-md-3">
+            <label for="validationServerUsername" class="form-label"
+              >Work Email</label
+            >
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend3">@</span>
+              <input
+                type="text"
+                class="form-control "
+                id="validationServerUsername"
+                name="workEmail"
+              />
+             
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label for="validationServer03" class="form-label"
+              >Employee Contract</label
+            >
+            <select
+              class="form-select is-invalid"
+              id="validationServer04"
+              aria-describedby="validationServer04Feedback"
+              name="contract"
+            >
+              <option selected disabled value="">Choose...</option>
+              <option>...</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Manager" class="form-label"
+              >Manager to report to</label
+            >
+            <select
+              class="form-select "
+              id="Manager"
+              name="Manager"
+              aria-describedby="validationServer04Feedback"
+              
+            >
+              <option >Choose...</option>
+              <optgroup label="Admin">
+                <%Admin = Employee.filter(staff=>{%>
+                  <%return staff.role === 'Admin'%>
+                <%})%>
+                  <%Admin.forEach(Employee=>{%>
+                    <option value="<%=Employee._id%>" ><%=Employee.firstName%> <%=Employee.lastName%></option>
+                  <%})%>
+              </optgroup>
+              <optgroup label="Managers">
+                <%manager = Employee.filter(staff=>{%>
+                  <%return staff.role === 'Manager'%>
+                <%})%>
+                  <%manager.forEach(Employee=>{%>
+                    <option value="<%=Employee._id%>" ><%=Employee.firstName%> <%=Employee.lastName%></option>
+                  <%})%>
+              </optgroup>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Role" class="form-label"
+              > Assign system Role </label
+            >
+            <select
+              class="form-select"
+              id="Role"
+              name="role"
+              aria-describedby="validationServer04Feedback"
+              
+            >
+              <option selected disabled value="">Choose...</option>
+                <option value="Admin" >Admin Access</option>
+                <option value="Staff" >Staff Access</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="staffId" class="form-label"
+              >Staff ID Number</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="staffId"
+              aria-describedby="staffId"
+              name="staffId"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label for="StartDate" class="form-label"
+              >Employement Date</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="StartDate"
+              aria-describedby="staffId"
+              name="StartDate"
+            />
+          </div>
+          
+          <div class="col-md-3">
+            <label for="jobTittle" class="form-label">Job Tittle</label>
+            <select
+              class="form-select "
+              id="jobTittle"
+              aria-describedby="validationServer04Feedback"
+              required
+              name="jobTittle"
+            >
+            <option>Choose...</option>
+            <option>CFO</option>
+            <option>Human Resource</option>
+            <option>Sales Manager</option>
+            <option>Junior Accountant</option>
+            <option>Accountant</option>
+            <option>Sales Rep</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Department" class="form-label">DEPARTMENT</label>
+            <select
+              class="form-select "
+              id="Department"
+              aria-describedby="validationServer04Feedback"
+              name="Department"
+            >
+              <option>Choose...</option>
+              <option>CTO Suit</option>
+              <option>Human Resource</option>
+              <option>Sales</option>
+              <option>Accounting</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="BVN" class="form-label">BVN</label>
+            <input
+              type="text"
+              class="form-control"
+              id="BVN"
+              aria-describedby="validationServer05Feedback"
+              
+              name="BVN"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="NIN" class="form-label">NIN</label>
+            <input
+              type="text"
+              class="form-control"
+              id="NIN"
+              aria-describedby="validationServer05Feedback"
+              name="NIN"
+            />
+          </div>
+            <div class="col-md-4">
+              <label for="AccountNumber" class="form-label">Account Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="AccountNumber"
+                aria-describedby="validationServer05Feedback"
+                name="AccountNumber"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="BankName" class="form-label">Bank Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="BankName"
+                name="BankName"
+              />
+            </div>
+            
+         
+         
+          <!-- ends here -->
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <button class="btn btn-dark mt-2">Submit</button>
+</form>
+  </div>
+ </div>
+
+ <div class="p-3">
+  <%if(user.role ==="Admin"){%>
+  <button class="btn btn-dark m-3" onclick="document.getElementById('myModal').style.display='block'" >Onboard New Employee</button>
+  <%}%>
+  <div class=" overflow-hidden flex-wrap d-flex">
+    
+    <%if(Employee.length > 0){%>
+        <% Employee.forEach((Employee)=> { %>
+        <div class="card2 m-1 mb-3 shadow rounded" style="width:13rem; border: <%if(Employee.lastSeen === "Online"){%>
+          2px solid rgba(0, 255, 255, 0.486)
+        <%}%>;" title="<%=Employee.Username%>"  >
+            <div class="card-img-top justify-content-center d-flex p-2">
+                <img src="<%if(Employee.image){%>
+                    <%= Employee.image %>
+                    <%}else{%>
+                        https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png
+                    <%}%>
+                    " alt="No Photo uploaded"  width=130 height="130">
+            </div>
+        
+            <div class="card-body" style="overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            max-width:150px;">
+                <h5 class="card-title"><%= Employee.firstName.charAt(0).toUpperCase() %><%= Employee.firstName.substring(1,10) %>
+                  <%if(user.firstName ==="developer"){%>
+                  <a   href="/api/v1/Appraisal/<%=Employee._id%>" title="Goto <%= Employee.firstName%> Appraisal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                      <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                    </svg>
+                  </a>
+                  <%}%>
+                </h5> 
+                <a href="mailto:<%=Employee.Email%>"><%=Employee.jobTittle%></a>
+              </div>
+            <a href='/api/v1/employee/<%=Employee._id%>/user' class="go-corner">
+              <div class="go-arrow">
+                →
+            </div>
+            </a>
+        </div>
+        <% }) %>
+    <%}else{%>
+        <h2>No Employee to display</h2>
+        <%}%>
+</div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script type="module">
+  //DATABASE SHIT STARTS HERE
+//FROM BIG BERN 
+const firebaseConfig = {
+    apiKey: "AIzaSyBED3d1-cLAwWrbQJsH0LJBU1A3iDQbBi0",
+    authDomain: "bigbern-erp.firebaseapp.com",
+    databaseURL: "https://bigbern-erp-default-rtdb.firebaseio.com",
+    projectId: "bigbern-erp",
+    storageBucket: "bigbern-erp.appspot.com",
+    messagingSenderId: "129741589367",
+    appId: "1:129741589367:web:2dfd5bf29e5936bdd1af72",
+    measurementId: "G-L3T956JGTM"
+};
+
+import { getDatabase, ref, child,onValue, get,}
+from "https://www.gstatic.com/firebasejs/9.13.0/firebase-database.js";
+import { initializeApp} from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+// initialize firebase
+const app = firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
+
+
+// form image 
+var files = [];
+document.getElementById("files").addEventListener("change", function(e) {
+    files =  e.target.files;
+    for (let i = 0; i < files.length; i++) {
+    }
+    //checks if files are selected
+    if (files.length != 0) {
+      //Loops through all the selected files
+      for (let i = 0; i < files.length; i++) {
+        //create a storage reference
+        var storage = firebase.storage().ref(`Employeephoto/${files[i].name}`);
+  
+        //upload file
+        var upload = storage.put(files[i])
+  
+        //update progress bar
+        upload.on(
+          "state_changed",alert('Image Selected')
+          // function progress(snapshot) {
+          //   var percentage =
+          //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          //   document.getElementById("progress").value = percentage;
+          // },
+        );
+      }
+    } else {
+      alert("No file chosen");
+    }
+  
+    upload.then(snapshot => {
+         return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+     }).then(downloadURL => {
+      // set image url for form
+      
+    let imageInput = document.getElementById("employeeImage").value = `${downloadURL}`;
+      // display image on form
+      document.getElementById('productImage').style.backgroundImage = `url(${downloadURL}`;
+      // return downloadURL
+      
+     }).catch(error => {
+        // Use to signal error if something goes wrong.
+        alert(`Failed to upload file and get link - ${error}`);
+     });
+   
+  });
+
+
+  // get manager
+  let manager 
+  document.getElementById('Manager').addEventListener('change',async (e) =>{
+
+    const request = await fetch(`/api/v1/employee/${e.target.value}`,{
+      method: 'GET',
+      headers:{"content-type": "application/json"}
+    })
+
+    const response = await request.json()
+    manager = response
+  })
+
+
+
+  // submit employee form
+  const EmployeeForm =  document.getElementById('EmployeeForm')
+  EmployeeForm.addEventListener('submit',async(e) => {
+    e.preventDefault();
+
+    const request = await fetch("/api/v1/register/employee",{
+      method: 'POST',
+      body: JSON.stringify({
+        firstName: EmployeeForm.firstName.value,
+        lastName: EmployeeForm.lastName.value,
+        Email:EmployeeForm.Email.value,
+        DOB:EmployeeForm.DOB.value,
+        telephone:EmployeeForm.telephone.value,
+        HomeAddress:EmployeeForm.HomeAddress.value,
+        NOK:EmployeeForm.NOK.value,
+        StateOfOringin:EmployeeForm.StateOfOringin.value,
+        LGA:EmployeeForm.LGA.value,
+        EmaergencyContact:EmployeeForm.EmaergencyContact.value,
+        EmaergencyContactNumber:EmployeeForm.EmaergencyContactNumber.value,
+        Gender:EmployeeForm.Gender.value,
+        workLocation:EmployeeForm.workLocation.value,
+        workEmail:EmployeeForm.workEmail.value,
+        contract:{},
+        Manager:manager,
+        role:EmployeeForm.role.value,
+        staffId:EmployeeForm.staffId.value,
+        jobTittle:EmployeeForm.jobTittle.value,
+        Department:EmployeeForm.Department.value,
+        BVN:EmployeeForm.BVN.value,
+        NIN:EmployeeForm.NIN.value,
+        AccountNumber:EmployeeForm.AccountNumber.value,
+        BankName:EmployeeForm.BankName.value,
+        image:EmployeeForm.employeeImage.value,
+        StartDate:EmployeeForm.StartDate.value,
+        EndDate:'',
+      }),
+      headers:{"content-type": "application/json"}
+    })
+
+    const response = await request.json()
+
+    if(response){
+      alert(response.message || response.error)
+      response.message ? EmployeeForm.reset(): ""
+      response.message ? location.reload(): ""
+    }
+    
+
+  });
+
+</script>

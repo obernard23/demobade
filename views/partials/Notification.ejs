@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+ 
+
+.notification {
+  height: fit-content;
+  width: 40%;
+  background-color: #020000a2;
+  margin-top: 5%;
+  margin-left: 76%;
+  transform-origin: right;
+  -webkit-animation: notify 1s ease-in ;
+  animation: notify 1s ease-in ;
+  display: flex;
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  padding: 20px;
+  z-index: 1203;
+  font-weight:300;
+  color: #ffff;
+}
+
+@-webkit-keyframes notify {
+  0% {transform: scaleX(0); opacity: 100%;}
+  10% {transform: scaleX(1); opacity: 100%;;}
+  13% {transform: scale(1); opacity: 100%;}
+  16% {transform: scale(1); opacity: 100%;}
+  55% {transform: scaleX(1); opacity: 100%;}
+  65% {transform: scaleX(1); opacity: 50%;}
+  95% {transform: scaleX(1); opacity: 50%;}
+  100% {transform: scaleX(0); display: none;}
+}
+
+    </style>
+</head>
+<body>   
+      <div id="cover" class="notification shadow rounded text-light">
+          <img src="/bade.jpg" alt="" srcset="" width="30px" height="30px">
+            <div id="notify" class="notify p-1">Hello <%=user.firstName%>, Responsive AI is Active.</div>
+      </div>    
+</body>
+<script>
+  const ShowServerResponse = function(respose){
+      const Notify = document.getElementById("notify")
+      Notify.innerText = respose 
+      setTimeout(()=>{
+        Notify.innerText = 'Awaiting User inputable state'
+      },5000)
+  }
+
+ 
+
+</script>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+     
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                      <a class="nav-link breadcrumb-item active" aria-current="page" href="/api/v1/warehouse" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #fff !important;">
+                        <%=result.WHName%> Stock Request
+                      </a>
+                  </h5>
+                  
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+
+    
+     <!-- action buttons -->
+     <div class="p-2">
+      <button type="button" id="submit" class="btn btn-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+        </svg>  
+        Submit 
+      </button>
+     
+     </div>
+    
+    <div id="invoice" class="shadow-lg m-4 p-3">
+      <div id="pspdfkit-header">
+        <div class="header-columns">
+          <div class="logotype">
+            <img  height="100" width="100" src="/logo.jpg"/> 
+          </div>
+
+          <div>
+            <h5><%=result.WHName%></h5>
+            <p><%=result.Address%></p>
+            <p><%=result.Tel%></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+        <div>
+          <h2>"<%=result.WHName%> Purchase Request"</h2>
+        </div>
+        <%-include('./partials/inactive.ejs')%>
+        <div class="intro-table">
+          <div class="intro-form  intro-form-item d-flex intro-table-title align-items-start  justify-content-evenly">
+            <h1 class="intro-table-title" id="Username"></h>
+            <h4 class="intro-table-title" id="Email"></h4>
+            <h4 class="intro-table-title" id="Address"></h4>
+            <h4 class="intro-table-title"id="phone"></h4>
+            <h4 class="intro-table-title"id="discount"></h4>
+            <h4 class="intro-table-title" id="creditLimit" style="color: #1db669;"> </h4>
+            <h4 class="intro-table-title" id="Debt" style="color: #c45b5b;"></h4>
+            <h4 id='startdate' class="intro-table-title"></h4>
+          </div>
+
+          <div class="intro-form">
+            <div class="intro-form-item-border d-flex flex-column gap-3">
+
+              <!-- dropdown for customer list -->
+
+             <div class="col-md-7">
+              <label for="pricelist" class="form-label">Requesting To</label>
+              <select
+                class="form-select "
+                id="customer"
+                aria-describedby="validationServer04Feedback"
+                required
+              >
+              <option selected value="">Virtual Ware House</option>
+              <!-- all the ware houses here -->
+              </select>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >QTY</td>
+              <td  >Scale</td>
+            </tr>
+            <tbody  class="item" id="item"></tbody>
+              
+              <tr class="item">
+                <form action="">
+                <td>
+                 
+                 
+                  <div class="col-md-7">
+                    <label for="pricelist" class="form-label">Product</label>
+                    <select
+                      class="form-select "
+                      id="products"
+                      aria-describedby="validationServer04Feedback"
+                      required
+                    >
+                    <option value="">Choose...</option>
+                    <%if(products){%>
+                        <%products.forEach((products)=>{%>
+                            <option value="<%=products.ADCcode%>"><%=products.productName%></option>
+                        <%})%>
+                        <%}%>
+                    </select>
+                    </div>
+                </td>
+             </form>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+       
+      </div>
+
+      <div class="page" style="page-break-after: always">
+      
+        <div class="page" style="page-break-after: always">
+          <div class="signer">
+  
+            <div class="form signer-item">
+              <input type="hidden" id="whId" value="<%=result._id%>" hidden class="d-none">
+              <label for="signature" class="label">Requested by: <%=user.firstName%> <%=user.lastName%></label>
+              <img class="logo" src=""
+                id="signature"
+              />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="pspdfkit-footer">
+        <div class="footer-columns">
+          <span>Product Request Builder</span>
+        </div>
+      </div>
+    </div>
+
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container">
+          <form class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <label for="opsCodes" class="form-label">Operational Code</label>
+            <input type="password" name="opsCode" id="opsCodes" class="form-control input-group has-validation" placeholder="Enter operational code" autocomplete="off">
+            <button type="submit" class="btn btn-danger">Action</button>
+          </form>
+        </div>
+      </div>
+      <input type="text" hidden id="employee" value="<%=user.firstName%> <%=user.lastName%>">
+  </body>
+    <script>
+      // clear bill product on refresh
+    localStorage.removeItem('bill_products');
+     const submitBtn = document.getElementById('submit')
+      //clear billproduct on page reload
+      window.onload = () => {
+        localStorage.removeItem('bill_products');
+            if(!BillProducts ){
+            submitBtn.style.display = 'none'
+          }
+      }
+
+      //get request for customer
+      const customerInput = document.getElementById('customer')
+      customerInput.addEventListener('change',async(e)=>{
+            const endPoint = `/api/v1/vendor/${e.target.value}`
+            const res = await fetch(endPoint,{
+                method:'GET',
+                headers:{'Content-Type': 'application/json'}
+            })
+            const data = await res.json()
+            const Username = document.getElementById('Username').innerText = `Billed To: ${data.item.Name}`;
+            const Email =  document.getElementById('Email').innerText = `Email: ${data.item.email}`;
+            const phone = document.getElementById('phone').innerText = `phone: ${data.item.vendor_tel}`;
+            const Address = document.getElementById('Address').innerText = `Address: ${data.item.Address}`;
+            const discount = document.getElementById('discount').innerText = `Sales person: ${data.item.contact}%`;
+            const employee = document.getElementById('employee').value
+            const d = new Date();
+            BillProducts.startDate = `${d.getFullYear() }-${d.getMonth() + 1}-${d.getDate()}`
+            const startDate = document.getElementById('startdate').innerText = `start Date: ${BillProducts.startDate}` ;
+            BillProducts.ActivityLog = []
+            BillProducts.customer = data.item._id //assign custom properties
+            BillProducts.salesPerson = employee
+            BillProducts.discount = data.item.discount //assign custom discount
+            BillProducts.ActivityLog.push({
+              logMsg:`${BillProducts.salesPerson } created  a new ${BillProducts.billStatus} for ${data.item.Username} on ${d.getFullYear() }-${d.getMonth() + 1}-${d.getDate()}`,
+              status:`${BillProducts.status} and awaiting Action`
+            }) //for activity log
+            saveToLocalStorage(BillProducts);
+      })
+     
+      //save the data to local storage
+      const saveToLocalStorage = (BillProducts) => {
+        const quoteData = JSON.stringify(BillProducts)
+        localStorage.setItem('bill_products',quoteData)
+        return quoteData;
+      }
+      
+      //get quoat data from local storage
+      const getSaveBill = () =>{
+        const quoteData = localStorage.getItem('bill_products')
+        if(quoteData === null){
+          const d = new Date();
+          return {
+          startDate:`${d.getFullYear() }-${d.getMonth() + 1}-${d.getDate()}`,
+          orders:[],
+          billReferenceNo : Math.floor(Math.random() *1000001),
+          WHID:'',
+          RaisedBy:'',
+          ActivityLog:[]
+          };
+        }else{
+          return JSON.parse(quoteData)
+        }
+      }
+
+      // for qoutation generation
+      const BillProducts = getSaveBill()
+
+      
+
+      // get product for quoatation
+      const products = document.getElementById('products')
+      products.addEventListener('change',async(e)=>{
+        const endPoint = `/api/v1/product/${e.target.value}/bill`
+        const res =await fetch(endPoint,{
+          method:'GET',
+          headers:{'Content-Type': 'application/json'}
+        })
+        const data = await res.json()
+        
+        // const Pname = document.getEle
+        BillProducts.WHID = document.getElementById('whId').value;
+        BillProducts.RaisedBy =  document.getElementById('employee').value
+        BillProducts.orders.push({...data,Qty:''})//returns product, qty to perform and vat
+        saveToLocalStorage(BillProducts)
+        RenderDom(BillProducts)
+        e.target.value=''
+      })
+
+
+      
+      
+      //Dom manupulation for 
+      RenderDom = (BillProducts)=>{
+        const  body = document.getElementById('item')
+        body.innerHTML = ''
+        BillProducts.orders.forEach(element => {
+          let tr = document.createElement('tr')
+          
+          let td2 = document.createElement('td')//product name
+        //   let td8 = document.createElement('td')//product availability
+          let td8Image = document.createElement('img')//product availability
+          let td3 = document.createElement('td')// qty
+          let td4 = document.createElement('td')//umo
+          let td5 = document.createElement('td')//vat
+
+        //   imagesrc="data:image/png;base64,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"
+          //assign values to each element and input that can stillbe edited
+          td2.innerText = element.item.Name.toUpperCase()
+          //remove item from quotation table
+          
+          const deleteItem =()=>{
+            
+            let index =BillProducts.orders.findIndex(item =>{
+              return item === element
+            })
+            if(index > -1){
+            
+              try {
+                BillProducts.orders.splice(index,1)
+                RenderDom(BillProducts)
+                //calculate  sum of available prices in orders
+                BillProducts.subTotal = parseInt(BillProducts.orders.map(item => {return item.total})
+                .reduce((total , currentValue) => {return total + currentValue},0))
+                // alert("products removed successfully")
+                saveToLocalStorage(BillProducts)
+              } catch (error) {
+                alert(error)
+              }
+             
+            }
+          }
+          td2.ondblclick = deleteItem
+
+          let td3Input = document.createElement('input')
+          td3Input.value = element.Qty
+          td3Input.setAttribute('type', 'number')
+          td3Input.addEventListener('input', async (e)=>{
+            //find index of element to set qty
+            let indexs = BillProducts.orders.findIndex((index)=>{
+              return index === element
+            })
+            //return actual object index
+            if(indexs > -1){
+             let found = BillProducts.orders.find((currentValue, obj, arr)=>{
+                return obj === indexs
+              })
+              const val = parseInt(e.target.value < 1 ? td3Input.value = 1 : e.target.value )//tenary operator  to avoid overflow or underflow of 0 qty values
+              found.Qty = val
+
+              //save to local storage function 
+              saveToLocalStorage(BillProducts)
+            }
+          })
+
+          td3Input.setAttribute('placeholder','Qty')
+          td3Input.style.width='60px'
+          td3Input.style.fontSize='10 px'
+          td3.appendChild(td3Input)
+
+          td4.innerText = element.item.UMO
+          
+
+        //   td8Image.src = imagesrc
+        //   td8Image.width = 20
+
+          //assign class
+          tr.classList.add('item')
+          td3Input.classList.add('itemQty')
+
+          //append to quotation 
+          tr.appendChild(td2)
+        //   td8.appendChild(td8Image)
+          tr.appendChild(td3)
+        //   tr.appendChild(td8)
+          tr.appendChild(td4)
+        //   tr.appendChild(td5)
+          body.appendChild(tr)
+        });
+      }
+
+
+      
+      
+    
+
+      //submit to the server and get the results
+      // const submitBtn = document.getElementById('submit')
+      submitBtn.addEventListener('click',async (e)=>{
+       
+              const modal = document.getElementById('myModal')
+              modal.style.display='block'
+
+              spinner = ()=>{
+                return`
+                <div class="modal-body d-flex justify-content-center container">
+                  <div class="spinner-border" text-info" role="status" style="width: 3rem; height: 3rem;">
+                         <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                      `}
+
+              modal.innerHTML = spinner();
+              const endpoint = '/api/v1/Stocks/request'
+              const res = await fetch(endpoint,{
+                method:"POST",
+                body: JSON.stringify(BillProducts),
+                headers:{'Content-Type': 'application/json'}
+              })
+
+              const data = await res.json()
+              if (data){
+                Notification.requestPermission().then((perm) =>{
+                  if(perm ==='granted'){
+                    new Notification('BADE Notification',{
+                      body:data.message ? data.message : data.error,
+                      icon:'495670-removebg-preview.png',
+                    })
+                  }else{
+                    alert(data.message ? data.message : data.error)
+                  }
+                })
+                localStorage.removeItem('bill_products');
+                location.assign(location.href);
+              }
+      })
+
+
+    </script>
+</html>

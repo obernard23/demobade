@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%> 
+    <%-include('./partials/inactive.ejs')%>
+    
+    <style>
+      .box {
+  position: relative;
+}
+.ribbon {
+  position: absolute;
+  right: -5px; top: -20px;
+  z-index: 1;
+  overflow: hidden;
+  width: 95px; height: 95px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #FFF;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#9BC90D 0%, #79A70A 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 19px; right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid #79A70A;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #79A70A;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+    </style>
+<body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    href="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  <%=Employee.firstName.toUpperCase()%> <%=Employee.lastName.toUpperCase()%>
+                  </a>
+                  </h5>
+                
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+
+    <div class="container p-3" >
+      
+      <div class="row g-3 shadow p-3 m-3 box" >
+        
+          <div class="ribbon"><span><%=Employee.lastSeen%></span></div>
+        
+        <h3><%=Employee.firstName.toUpperCase()%> <%=Employee.lastName.toUpperCase()%></h3>
+          <div  style="width: 12rem;" class="shadow-sm ">
+              <img  src="<%if(Employee.image){%>
+                <%= Employee.image %>
+                <%}else{%>
+                   https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png
+                <%}%>
+                " alt="<%= Employee.firstName %> Photo" class="card-img-top" alt="...">
+          </div>
+          <!-- view only section -->
+          
+          <div class="row g-3 p-3 box">
+             <!-- curent sales person -->
+          <div class="col-6">
+            <label for="street" class="form-label">Email </label>
+            <h5 class="form-text"><%= Employee.Email %></h5>
+          </div>
+          <!-- ends here -->
+
+           <!-- curent billing  -->
+           <div class="col-6">
+            <label for="street" class="form-label">Telephone </label>
+            <h5 class="form-text">
+              <%= Employee.telephone %>
+            </h5>
+          </div>
+          <!-- ends here -->
+
+           <!-- curent priceList  -->
+           <div class="col-6">
+            <label for="street" class="form-label"> Job Tittle </label>
+            <h5 class="form-text">
+              <%= Employee.jobTittle %>
+            </h5>
+          </div>
+          <!-- ends here -->
+
+          <!-- curent email  -->
+          <div class="col-6">
+            <label for="street" class="form-label"> Emergency Contact </label>
+            <h5 class="form-text">
+              <%= Employee.EmaergencyContact %>
+            </h5>
+          </div>
+          <!-- ends here -->
+
+           <!-- curent telephone  -->
+           <div class="col-6">
+            <label for="street" class="form-label"> Emergency Contact Telephone </label>
+            <h5 class="form-text">
+              <%= Employee.EmaergencyContactNumber %>
+            </h5>
+          </div>
+          <!-- ends here -->
+          <!-- curent priceList  -->
+          <div class="col-6">
+            <label for="street" class="form-label">Home Address </label>
+            <h5 class="form-text">
+              <%= Employee.HomeAddress %>
+            </h5>
+          </div>
+          <!-- ends here -->
+
+          <!-- curent priceList  -->
+          <div class="col-6">
+            <label for="street" class="form-label"> Department</label>
+            <h5 class="form-text">
+              <%= Employee.Department %>
+            </h5>
+          </div>
+          <!-- ends here -->
+
+          <!-- curent priceList  -->
+          <div class="col-6">
+            <label for="street" class="form-label"> Gender</label>
+            <h5 class="form-text">
+              <%= Employee.Gender %>
+            </h5>
+          </div>
+          <!-- ends here -->
+           <!-- curent priceList  -->
+           <div class="col-6">
+            <label for="street" class="form-label"> Birthday<small> M-D-Y</small></label>
+            <h5 class="form-text">
+              <%if(Employee.DOB){%>
+                <%= Employee.DOB.substring(5,10) %>-YYYY
+                <%}else{%>
+                  Not assigned
+                <%}%> 
+              
+            </h5>
+          </div>
+          <!-- ends here -->
+
+          <div class="col-6">
+            <label for="street" class="form-label"> Work Location </label>
+            <h5 class="form-text">
+             <%if(WH){%>
+              <%= WH.WHName %>
+              <%}else{%>
+                Not assigned
+              <%}%>  
+            </h5>
+          </div>
+
+          <div class="col-6">
+            <label for="street" class="form-label">  </label>
+            <p>
+              <a href="/api/v1/" class="link-success link-opacity-25-hover">
+               Last Appraisal 
+              </a>
+            </p>
+          </div>
+
+          <div class="col-6">
+            <label for="street" class="form-label">  </label>
+            <p>
+              <a href="/api/v1/" class="link-warning link-opacity-25-hover">
+               Absence | TimeOut
+              </a>
+            </p>
+          </div>
+
+          </div>
+          <!-- view only div ends here -->
+
+        <%if(user.role ==="Admin"){%>
+          <form class="row g-3" id="EmployeeForm" style="border-top: silver dotted 2px;background-color: rgba(253, 246, 227, 0.377);">
+            <h5 style="color: rgb(228, 165, 83);font-family:'Times New Roman', Times, serif;">EDIT <%=Employee.firstName.toUpperCase()%> <%=Employee.lastName.toUpperCase()%></h5>
+            <!-- ALL FIELDS FROM FOR HERE -->
+            
+          <div class="col-md-6">
+            <label for="FirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control is-invalid" id="FirstName"  name="firstName" value="<%=Employee.firstName%>" required />
+          </div>
+
+          <div class="col-md-6">
+            <label for="LastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control is-invalid" id="LastName" name="lastName" value="<%=Employee.lastName%>" required />
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control is-invalid"
+              id="inputEmail4"
+              placeholder="Example@Bigbern.com"
+              required
+              name="Email"
+              value="<%=Employee.Email%>"
+            />
+          </div>
+          <div class="col-md-6">
+            <label for="DOB" class="form-label">DOB</label>
+            <input type="date" class="form-control is-invalid" id="DOB" name="DOB" value="<%=Employee.DOB%>" />
+          </div>
+          <div class="col-12">
+            <label for="inputAddress" class="form-label">Home Address</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputAddress"
+              placeholder="1234 Main St"
+              name="HomeAddress"
+              value="<%=Employee.HomeAddress%>"
+            />
+          </div>
+          <div class="col-4">
+            <label for="NOK" class="form-label">Next of Kin</label>
+            <input
+              type="text"
+              class="form-control"
+              id="NOK"
+              placeholder="Next of Kin"
+              name="NOK"
+              value="<%=Employee.NOK%>"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="inputState" class="form-label">State of Origin</label>
+            <select id="inputState" class="form-select" name="StateOfOringin">
+              <option  value="<%=Employee.StateOfOringin%>"><%=Employee.StateOfOringin%> [current]</option>
+              
+              <%states.forEach(state=>{%>
+                <option value="<%=state.state%>" ><%=state.state%></option>
+              <%})%>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="LGA" class="form-label">LGA</label>
+            <input type="text" class="form-control" id="LGA" name="LGA" value="<%=Employee.LGA%>"/>
+          </div>
+          <div class="col-md-6">
+            <label for="EmaergencyContact" class="form-label">Emergency Contact</label>
+            <input type="text" class="form-control" id="EmaergencyContact" name="EmaergencyContact"  value="<%=Employee.EmaergencyContact%>"/>
+          </div>
+          <div class="col-md-6">
+            <label for="EmaergencyContactNumber" class="form-label">Emergency contact Number</label>
+            <input type="text" class="form-control" id="EmaergencyContactNumber"  name="EmaergencyContactNumber" value="<%=Employee.EmaergencyContactNumber%>"/>
+          </div>
+          <div class="col-md-6">
+            <label for="Mobile" class="form-label">Mobile</label>
+            <input
+              type="text"
+              class="form-control is-invalid"
+              id="Mobile"
+              placeholder="+234-0000-000"
+              required
+              name="telephone"
+              value="<%=Employee.telephone%>"
+            />
+          </div>
+          <div class="row g-3">
+            <h5>Gender</h5>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="Gender"
+                id="inlineRadio1"
+                value="Male"
+                <%if(Employee.Gender === "Male"){%>
+                  checked="checked"
+                  <%}%>
+              />
+              <label class="form-check-label" for="inlineRadio1">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="Gender"
+                id="inlineRadio2"
+                value="Female"
+                <%if(Employee.Gender === "Female"){%>
+                  checked="checked"
+                  <%}%>
+              />
+              <label class="form-check-label" for="inlineRadio2">Female</label>
+            </div>
+          </div>
+          <!-- work info -->
+          <div class="col-md-3">
+            <label for="workLocation" class="form-label">Assign Work Location</label>
+            <select  id="workLocation" class="form-select"  name="workLocation">
+              <%if(Employee.workLocation){%>
+                <%locations = Warehouse.filter((Warehouse)=>{%>
+                  <%return Warehouse._id.toString() === Employee.workLocation.toString() %>
+                <%})%>
+                <%locations.map(location=>{%>
+                  <option  value="<%=location._id%>"><%=location.WHName%> [current]</option>
+                <%})%>
+                <%}else{%>
+                  
+                <%}%> 
+
+    
+              <%Warehouse.forEach(Warehouse=>{%>
+                <option value="<%=Warehouse._id%>" ><%=Warehouse.WHName%></option>
+              <%})%>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="validationServer02" class="form-label"
+              >Equiptment Assigned</label
+            >
+            <input
+              type="text"
+              class="form-control "
+              id="validationServer02"
+              name="Equiptment"
+              value="<%=Employee.Equiptment%>"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="workEmail" class="form-label"
+              >Work Email</label
+            >
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend3">@</span>
+              <input
+                type="text"
+                class="form-control "
+                id="workEmail"
+                aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+                value="<%=Employee.workEmail%>"
+                name="workEmail"
+              />
+             
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label for="validationServer03" class="form-label"
+              >Employee Contract</label
+            >
+            <select
+              class="form-select is-invalid"
+              id="validationServer04"
+              aria-describedby="validationServer04Feedback"
+              name="contract"
+            >
+              <option disabled  value=""><%=Employee.contract%></option>
+              
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Manager" class="form-label"
+              >Manager to report to</label
+            >
+            <select
+              class="form-select "
+              id="Manager"
+              name="Manager"
+              aria-describedby="validationServer04Feedback"
+              
+            >
+             <%if(Employee.Manager){%>
+              <option value="<%=Employee.Manager.firstName%> <%=Employee.Manager.lastName%>" ><%=Employee.Manager.firstName%> <%=Employee.Manager.lastName%>[Current]</option>
+              <%}%>
+              <optgroup label="Admin">
+                <%Admin = Employees.filter(staff=>{%>
+                  <%return staff.role === 'Admin'%>
+                <%})%>
+                  <%Admin.forEach(Employee=>{%>
+                    <option value="<%=Employee._id%>" ><%=Employee.firstName%> <%=Employee.lastName%></option>
+                  <%})%>
+              </optgroup>
+              <optgroup label="Managers">
+                <%manager = Employees.filter(staff=>{%>
+                  <%return staff.role === 'Manager'%>
+                <%})%>
+                  <%manager.forEach(Employee=>{%>
+                    <option value="<%=Employee._id%>" ><%=Employee.firstName%> <%=Employee.lastName%></option>
+                  <%})%>
+              </optgroup>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Role" class="form-label"
+              > Assign system Role </label
+            >
+            <select
+              class="form-select"
+              id="Role"
+              name="role"
+              aria-describedby="validationServer04Feedback"
+              
+            >
+              <option   value="<%=Employee.role%>"><%=Employee.role%> [current]</option>
+              <option value="N/A">N/A</option>
+                <option value="Admin" >Admin Access</option>
+                <option value="Staff" >Staff Access</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="staffId" class="form-label"
+              >Staff ID Number</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="staffId"
+              name="staffId"
+              value="<%=Employee.staffId%>"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label for="StartDate" class="form-label"
+              >Employment Date</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="StartDate"
+              name="StartDate"
+              value="<%=Employee.StartDate%>"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label for="EndDate" class="form-label"
+              >Dismisal Date</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="EndDate"
+              name="EndDate"
+              value="<%=Employee.EndDate%>"
+            />
+          </div>
+          
+          <div class="col-md-3">
+            <label for="jobTittle" class="form-label">Job Tittle</label>
+            <select
+              class="form-select "
+              id="jobTittle"
+              required
+              name="jobTittle"
+            >
+            <option value="<%=Employee.jobTittle%>"><%=Employee.jobTittle%> [Current]</option>
+            <option value="N/A">N/A</option>
+            <option>CFO</option>
+            <option>Human Resource</option>
+            <option>Sales Manager</option>
+            <option >Junior Accountant</option>
+            <option>Accountant</option>
+            <option>Sales Rep</option>
+            <option>Invoicer</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="Department" class="form-label">DEPARTMENT</label>
+            <select
+              class="form-select "
+              id="Department"
+              name="Department"
+            >
+              <option value="<%=Employee.Department%>"><%=Employee.Department%>[Current]</option>
+              <option value="N/A">N/A</option>
+              <option>CTO Suit</option>
+              <option>Human Resource</option>
+              <option>Sales</option>
+              <option>Accounting</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="BVN" class="form-label">BVN</label>
+            <input
+              type="text"
+              class="form-control"
+              id="BVN"
+              aria-describedby="validationServer05Feedback"
+              value="<%=Employee.BVN%>"
+              name="BVN"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="NIN" class="form-label">NIN</label>
+            <input
+              type="text"
+              class="form-control"
+              id="NIN"
+              aria-describedby="validationServer05Feedback"
+              name="NIN"
+              value="<%=Employee.NIN%>"
+            />
+          </div>
+          
+            <div class="col-md-4">
+              <label for="AccountNumber" class="form-label">Account Number</label>
+              <input
+                type="text"
+                class="form-control"
+                id="AccountNumber"
+                aria-describedby="validationServer05Feedback"
+                name="AccountNumber"
+                value="<%=Employee.AccountNumber%>"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="BankName" class="form-label">Bank Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="BankName"
+                aria-describedby="validationServer05Feedback"
+                name="BankName"
+                value="<%=Employee.BankName%>"
+              />
+            </div>
+            <div class="col-md-4" >
+              <label for="Target" class="form-label">Sales Target</label><br>
+              <sub>If <%=Employee.firstName%> <%=Employee.lastName%> is a sales Staff, <br>Kindly assign sales target.</sub>
+              <input
+                type="number"
+                class="form-control"
+                id="Target"
+                aria-describedby="validationServer05Feedback"
+                name="Sales_Target"
+                value="<%=Employee.Sales_Target%>"
+                placeholder="Assign sales tartget for <%=Employee.firstName%> <%=Employee.lastName%>"
+              />
+            </div>
+
+            <div class="col-md-3">
+              <i class="fa fa-calendar-o"></i>
+              <label for="Target_Start" class="form-label">Target Start Date</label><br>
+              <sub>Ensure to assign Start date to begin calculation from</sub>
+              <input
+                type="date"
+                class="form-control"
+                id="Target_Start"
+                name="Target_Start"
+                value="<%=Employee.Target_Start%>"
+              />
+            </div>
+
+            <div class="col-md-3">
+              <i class="fa fa-calendar-o"></i>
+              <label for="Deadline" class="form-label">Target Achievement Deadline</label><br>
+              <sub>Ensure to assign sales target if period to calculate target Achievement has a value</sub>
+              <input
+                type="date"
+                class="form-control"
+                id="Deadline"
+                name="Deadline"
+                value="<%=Employee.Deadline%>"
+              />
+            </div>
+         
+            <div class="col-4" >
+              <label style="border: 1px dotted black; padding: 30px;" for="files"
+             >Upload Signature</label
+              >
+              <input type="file" class="form-control" id="files" hidden />
+              <input type="hidden" name="Signature" id="imageLoader" value="<%=Employee.Signature%>" >
+              <div id="productImage" class="d-none"></div>
+            </div>
+
+            <div class="col-4" title="Uploaded Signature for <%=Employee.firstName%>">
+              <img src="<%=Employee.Signature%>" class="form-floating" style="width: 150px; height: 150px;" alt="No signature uploaded" srcset="">
+            </div>
+
+            <!-- ENDS HERE -->
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" name="firstTimeOnboard" type="radio" <%if(Employee.firstTimeOnboard){%>
+                  checked
+                <%}%>
+                  id="invalidCheck2" >
+                <label class="form-check-label" for="invalidCheck2">
+                  Send Invitation link
+                </label>
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="<%=Employee.status%>" name="status" id="Employeestatus" <%if(Employee.status === "active"){%>
+                    checked="checked"
+                    <%}%>>
+                <label class="form-check-label" for="gridCheck1">
+                  Grant <%=Employee.firstName%> Acess to Enviroment
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <input type="hidden" id="id" name="id" value="<%=Employee._id%>">
+              <button class="btn btn-dark" type="submit">Submit</button>
+            </div>
+          </form>  
+        <%}%>
+        <%-include('./partials/footer.ejs')%>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script type="module">
+
+
+//DATABASE SHIT STARTS HERE
+//FROM BIG BERN 
+const firebaseConfig = {
+    apiKey: "AIzaSyBED3d1-cLAwWrbQJsH0LJBU1A3iDQbBi0",
+    authDomain: "bigbern-erp.firebaseapp.com",
+    databaseURL: "https://bigbern-erp-default-rtdb.firebaseio.com",
+    projectId: "bigbern-erp",
+    storageBucket: "bigbern-erp.appspot.com",
+    messagingSenderId: "129741589367",
+    appId: "1:129741589367:web:2dfd5bf29e5936bdd1af72",
+    measurementId: "G-L3T956JGTM"
+};
+
+import { getDatabase, ref, child,onValue, get,}
+from "https://www.gstatic.com/firebasejs/9.13.0/firebase-database.js";
+import { initializeApp} from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+// initialize firebase
+const app = firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
+
+
+// form image 
+var files = [];
+document.getElementById("files").addEventListener("change", function(e) {
+    files =  e.target.files;
+    for (let i = 0; i < files.length; i++) {
+    }
+    //checks if files are selected
+    if (files.length != 0) {
+      //Loops through all the selected files
+      for (let i = 0; i < files.length; i++) {
+        //create a storage reference
+        var storage = firebase.storage().ref(`gkStoreage/${files[i].name}`);
+  
+        //upload file
+        var upload = storage.put(files[i])
+  
+        //update progress bar
+        upload.on(
+          "state_changed",alert('Image Selected')
+          // function progress(snapshot) {
+          //   var percentage =
+          //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          //   document.getElementById("progress").value = percentage;
+          // },
+        );
+      }
+    } else {
+      alert("No file chosen");
+    }
+  
+    upload.then(snapshot => {
+         return snapshot.ref.getDownloadURL();   // Will return a promise with the download link
+     }).then(downloadURL => {
+      // set image url for form
+      document.getElementById('imageLoader').value = `${downloadURL}`;
+      
+      // display image on form
+      document.getElementById('productImage').style.backgroundImage = `url(${downloadURL})`;
+      
+     }).catch(error => {
+        // Use to signal error if something goes wrong.
+        alert(`Failed to upload file and get link - ${error}`);
+     });
+   
+  });
+
+
+
+
+  // get manager
+  let manager 
+  document.getElementById('Manager').addEventListener('change',async (e) =>{
+    
+    const request = await fetch(`/api/v1/employee/${e.target.value}`,{
+      method: 'GET',
+      headers:{"content-type": "application/json"}
+    })
+
+    const response = await request.json()
+    manager = response
+  })
+
+
+
+  // submit employee form
+  const EmployeeForm =  document.getElementById('EmployeeForm')
+  EmployeeForm.addEventListener('submit',async(e) => {
+    e.preventDefault();
+
+    const id = EmployeeForm.id.value
+    const request = await fetch(`/api/v1/employee/Onboard/${id}`,{
+      method: 'PATCH',
+      body: JSON.stringify({
+        firstName: EmployeeForm.firstName.value,
+        lastName: EmployeeForm.lastName.value,
+        Email:EmployeeForm.Email.value,
+        DOB:EmployeeForm.DOB.value,
+        telephone:EmployeeForm.telephone.value,
+        HomeAddress:EmployeeForm.HomeAddress.value,
+        NOK:EmployeeForm.NOK.value,
+        StateOfOringin:EmployeeForm.StateOfOringin.value,
+        LGA:EmployeeForm.LGA.value,
+        EmaergencyContact:EmployeeForm.EmaergencyContact.value,
+        EmaergencyContactNumber:EmployeeForm.EmaergencyContactNumber.value,
+        Gender:EmployeeForm.Gender.value,
+        workLocation:EmployeeForm.workLocation.value,
+        Equiptment:EmployeeForm.Equiptment.value,
+        workEmail:EmployeeForm.workEmail.value,
+        contract:{},
+        Manager:manager,
+        role:EmployeeForm.role.value,
+        staffId:EmployeeForm.staffId.value,
+        jobTittle:EmployeeForm.jobTittle.value,
+        Department:EmployeeForm.Department.value,
+        BVN:EmployeeForm.BVN.value,
+        NIN:EmployeeForm.NIN.value,
+        AccountNumber:EmployeeForm.AccountNumber.value,
+        BankName:EmployeeForm.BankName.value,
+        StartDate:EmployeeForm.StartDate.value,
+        EndDate:EmployeeForm.EndDate.value,
+        firstTimeOnboard:EmployeeForm.firstTimeOnboard.checked,
+        status:EmployeeForm.status.value,
+        Signature:EmployeeForm.Signature.value,
+        Sales_Target:EmployeeForm.Sales_Target.value,
+        Deadline:EmployeeForm.Deadline.value,
+        Target_Start:EmployeeForm.Target_Start.value
+      }),
+      headers:{"content-type": "application/json"}
+    })
+
+    const response = await request.json()
+
+    if(response){
+      alert(response.message || response.error)
+      response.message ? location.reload(): ""
+    }
+    
+
+  });
+
+
+  const Employeestatus = document.getElementById('Employeestatus')
+  Employeestatus.addEventListener('change',async (e) =>{
+    if(e.target.value === 'active'){
+      e.target.value = 'suspended'
+    }else if(e.target.value === 'suspended'){
+      e.target.value = 'active'
+    }
+    alert(`you have set user Access to ${e.target.value}`)
+  })
+
+</script>
+</html>

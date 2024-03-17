@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+    <!-- <link rel="stylesheet" href="/feature.css"> -->
+    <link rel="stylesheet" href="/main.css"/>
+<body >
+    
+    <nav  class="navbar bg-black">
+        <div class="container-fluid">
+            <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+                <img 
+                width="30"
+                hegith="30"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+               </span>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              
+                <h5>
+                    <a class="breadcrumb-item active" aria-current="page" style="color: #fff !important;">New Product</a>
+                </h5>
+             
+              </ul>
+              <%-include('./partials/inactive.ejs')%>
+              <%-include('./partials/USER.ejs')%>
+        </div>
+      </nav>
+
+
+    <div  class="container bg-light  mt-5 justify-content-center shadow ">
+        <!-- main display -->
+             <!-- create product form -->
+    <div  >
+        <div class="d-flex justify-content-end  ">
+            <!-- image upload div -->
+            <input type="file" hidden id="files" name='image' multiple />
+        </div>
+    <form action=""  method="post" id='productForm' class="p-2 ">
+        <input type="text" placeholder="Product Name" name="Name" id="Name" style="width:570px;padding:10px;font-size: x-large;" required/>
+        <div class="d-flex  gap-3 p-5 justify-content-around">
+            <!-- cateory -->
+            <div>
+                <label  for="category" class="d-flex justify-content-between gap-7">Product category </label>
+                 <select class="form-select" id="category" name="Categories" required>
+                    <option>Choose...</option>
+                 <optgroup label="category">
+                    
+                     <%if(productcat.length > 0){%>
+                        <%productcat.forEach((cat)=>{%>
+                          <option value="<%=cat.NAME.toUpperCase()%>"><%=cat.NAME.toUpperCase()%></option>
+                       <%})%>
+                       <%}%>
+                 </optgroup>
+                </select>
+            
+            </div>
+            <!-- image -->
+            <div>
+                <div class="flex flex-col">
+                    <label for="files" id="productImage"></div>
+                    <!-- display progress % for photo upload -->
+                    <!-- <progress value="0" max="100" id="progress"></progress> -->
+                    <input type="url" name="image" disabled id="imageLoader" hidden>
+                    </label>
+            </div>
+        </div>
+        <div class="border-b flex font-bold">
+            <div class="border-end p-1 subs" name="category" title="Double click to show section">Product information</div>
+            <%if(user.role === "Admin" || user.jobTittle === "Accountant" ||user.jobTittle === "CFO"){%> 
+            <div class="border-end p-1 subs" name="category" title="Double click to show section">Product Settings</div>
+            <div class="border-end p-1 subs" name="category" title="Double click to show section">Description</div> 
+            <%}%>
+        </div>
+        <!-- prouct information -->
+            <div class="flex flex-col gap-9 hidden border-b p-5 container-fluid" id="workInfo">
+                <div class="col-md-7">
+                <label class="flex gap-7">Whole-sale Price ₦</label>
+                <input type="number" step="any" class="form-control" name="WareHouse_Price" required placeholder="₦0">
+                </div>
+                <div class="col-md-7">
+                <label class="flex gap-7">Super Market Price ₦</label>
+                    <input type="number" step="any"  class="form-control" name="Market_Price" required placeholder=" ₦0">
+                </div>
+
+                <div class="col-md-7">
+                    <label class="form-label">Van Price ₦ </label>
+                    <input type="number" step="any" name="Van_Price" class="form-control" required placeholder="₦0">
+                </div>
+                <div class="col-md-7">
+                <label for="pricelist" class="form-label">Vendor Price ₦ </label>
+                <input type="number" step="any" class="form-control"  name="vendor_Price" required placeholder="₦0">
+            </div>
+            <%if(user.role === "Admin" || user.jobTittle === "Accountant" ||user.jobTittle === "CFO"){%> 
+            <div class="col-md-7">
+                <label class="form-label">vendor</label>
+                    <select
+                    class="form-select "
+                    name="vendor"
+                    required
+                    id="vendor"
+                  >
+                  <option value="">Choose...</option>
+                        <!-- display options for vendors -->
+                        <%if(vendor){%>
+                           <%vendor.forEach((vendor)=>{%>
+                               <option value="<%=vendor._id%>"><%=vendor.Name%></option>
+                           <%})%>
+                           <%}else{%>
+                            <option value="">No vendor to select</option>
+                            <%}%>
+                    </select>
+                
+                </div>
+                <%}%>
+
+                <label class="flex gap-9 ">
+                   <input type="text" name="Manufacturer"placeholder=' Manufacturer'>
+                </label>
+
+                <label class="flex gap-9 ">
+                    <input type="text" name="ManufacturerCode"placeholder='Manufacturer Code'>
+                </label>
+
+                <label class="flex gap-9 ">
+                    Product Code: <input type="text" name="AdcCode"placeholder='Product Code'id="AdcCode" title="Auto generated code can be edited " required>
+                </label>
+
+                <div class="col-md-7">
+                <label for="Rolls" class="form-label">Number or Rolls in a Carton</label>
+                    <input type="number" class="form-control" name="Rolls" id="Rolls" placeholder=' Define number of rolls in Carton ' title=" Define number of rolls in Carton " required>
+                </div>
+
+            </div>
+            <!-- product settings -->
+            <div id="privateinfo" class="flex flex-col hidden gap-5 p-5 border-b ">
+                <div  class="col-md-7">
+                    <h1 class="font-bold text-xl">Unit of Measure (U.O.M)</h1>
+                    <label for="measure"  class="flex  gap-7">  U.O.M : </label>
+                       
+                        <select id="measure"  class="form-select " name="UMO" required>
+                            <optgroup label="Unit of Measure">
+                                <%if(umo.length > 0){%>
+                                <option>Choose...</option>
+                                <%umo.forEach((umo)=>{%>
+                                  <option value="<%=umo.NAME.toUpperCase()%>"><%=umo.NAME.toUpperCase()%></option>
+                               <%})%>
+                            <%}%> 
+                        </optgroup>
+                       </select>
+                </div>
+                <div  class="col-md-7">
+                    <!-- colors -->
+                    <label for=""  class="flex  gap-7">
+                        Color: <input type="color" name="color">
+                    </label>
+                </div>
+                
+                <!-- activating auto replenish -->
+                <!-- <h1 class="font-bold text-xl">Auto-Replenish Option</h1>
+                <div class="flex gap-7">
+                    Activate Auto-Replenish:
+                    <label class="switch" title="Turning on this Feature will help trigger Purchase Order and Notification according to your defined rule">
+                        <input type="checkbox" id="toggleReplenish"Name="AutoReplenish">
+                        <div class="slider"></div>
+                    </label>
+                </div>
+
+                 CHOSSE replenish mode -->
+                <!-- <label id="mode" class="flex  gap-2 hidden" title="Set rule to trigger auto replenish">
+                    By set Date<input type="radio" name="replenish" value="date" >
+                    By quantity<input type="radio" name="replenish" value="quantity">
+                </label>
+                <!-- auto replenis by quantity -->
+                <!-- <div  id="quantity" class="hidden" title="When product level reaches set Minimum quantity, auto-replenish will trigger">
+                    <label for="" class="gap-3 flex flex-col" >
+                        Min QTY: <input type="number" placeholder="Enter Minimum quantity">
+                        Re-order quantity: <input type="number" placeholder="Enter re-order amount" name="ReplenishQty">
+                    </label>
+                </div> -->
+                <!-- auto replenish by date -->
+                <!-- <div id="date" class="hidden" title="When set date approaches, auto replenish will trigger">
+                    <label for="" class="gap-3 flex flex-col">
+                        Date: <input type="date" name="ReplenishDate">
+                        Re-order quantity: <input type="number" placeholder="Enter re-order amount">
+                    </label>
+                </div> --> 
+                <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%>   
+                <div class="flex gap-7">
+                    Is this product to be sold ? (`Product Activation`)
+                    <label class="switch">
+                        <input type="checkbox" id="ActivateProduct" name="Sellable">
+                        <div class="slider"></div>
+                    </label>
+                </div>
+                <!-- OPTION TO DISPLAY ON eCOMMERCE  -->
+                <div class="flex gap-7">
+                    Sell this product on E-commerce ? 
+                    <label class="switch">
+                        <input type="checkbox" name="Ecom_sale">
+                        <div class="slider"></div>
+                    </label>
+                </div>
+                <%}%>
+                <label class="flex gap-9 ">
+                    VAT: %<input type="number" step="any" name="VAT"placeholder='set Value Added tax on this product ' value=0>
+                </label>
+            </div>
+            <!-- description -->
+            <div id="thirdinfo" class="flex justify-between p-5 hidden border-b">
+                <label class="flex gap-7">
+                    Description:<textarea placeholder='Write decription' class="textBody"  rows="4" cols="50" name="Description" title="please note that description added will reflect on your E-commerce Product Description (EPD). Hence, it should be properly Constructed."></textarea>
+                </label>
+            </div>
+        <%if(user.role === "Admin" || user.jobTittle === "Accountant" ||user.jobTittle === "CFO"){%> 
+         <button>Create New Product</button>
+         <%}%>
+    </form>
+    </div>
+    </div>
+</body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script  src="/Erp.js"></script>
+<script src="/Sale.js" type="module"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</html>

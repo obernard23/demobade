@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/inactive.ejs')%>
+  <%-include('./partials/head.ejs')%>
+<head>
+  <link rel="icon" type="image/png" href="">
+  <link rel="icon" type="image/x-icon" href="">
+  <meta name="theme-color" content="#7fffd4"/>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BADE</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <!-- CSS Files -->
+  <link href="/bootstrap.min.css" rel="stylesheet" />
+  <link href="/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+</head>
+
+<body class="" onload="getData()">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="black" data-active-color="danger" style="overflow-y: hidden;">
+      <div class="logo">
+        
+        <a href="" class="simple-text logo-normal" >
+          <a class="navbar-brand" href="/" title="Apps">
+            <img src="data:image/png;base64,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" width="30" height="30">
+          </a>
+         
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li class="active ">
+            <a href="/api/v1/report">
+              <p>Business At Glance</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/CashFlow/report">
+              <p>Cash Flow Statement</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/Sale/Report">
+              <p>Sales Report</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/dispach/Report">
+              <p>Dispatch Report</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/LPO/Report">
+              <p>LPO Report</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/Debtor/Report">
+              <p>Debtor Reprot</p>
+            </a>
+          </li>
+          <li>
+            <a href="/api/v1/StockReport">
+              <p>Stock Balance </p>
+            </a>
+          </li>
+          
+          <li class="active-pro">
+            <a href="/api/v1/vendor/report">
+              <p>Vendor Transaction</p>
+            </a>
+          </li>
+          <li class="active-pro">
+            <a href="/api/v1/customer/report">
+              <p>Customer Ledger</p>
+            </a>
+          </li>
+          <li class="active-pro">
+            <a href="#">
+              <p>ReOrder Report</p>
+            </a>
+          </li>
+        <li class="active-pro">
+          <a href="/api/v1/Bank/Transaction">
+            <p>Bank Transaction</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Promo item Report</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Creditor Note </p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Debit Note Report</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Sales By customer </p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Sales Rep Report</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="/api/v1/TGT/Achievement">
+            <p>TGT Achievement </p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="/api/v1/Expense/Report">
+            <p>Expense Report</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="/api/v1/SalesDump/Report">
+            <p>Sales Dump </p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="/api/v1/VAT/Reprot">
+            <p>VAT Report</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="#">
+            <p>Growth Analysis</p>
+          </a>
+        </li>
+      </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;">Business At Glance</a>
+          </div>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <form>
+              <div class="input-group no-border">
+                <input type="text" value="" class="form-control" placeholder="Search...">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <img width="24" height="24" src="https://img.icons8.com/material-outlined/24/search--v1.png" alt="search--v1"/>
+                  </div>
+                </div>
+              </div>
+            </form>
+            
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      <div class="content">
+
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6 "> 
+            <div class="card card-stats bg-dark shadow-lg">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4">
+                    <div class="icon-big text-center icon-warning">
+                      <img width="64" height="64" src="https://img.icons8.com/arcade/64/pay.png" alt="pay"/>
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8 text-success">
+                    <div class="numbers">
+                      <p class="card-category">Today's Sales</p>
+                      <p class="card-title"><small>₦<%=TodaySale%></small><p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats text-light">
+                  <i class="fa fa-refresh" onclick="location.reload()"></i>
+                  Update Now
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-sm-6 ">
+            <div class="card card-stats bg-dark shadow-lg">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4">
+                    <div class="icon-big text-center icon-warning">
+                      <img width="48" height="48" src="https://img.icons8.com/external-dygo-kerismaker/48/external-Revenue-analytic-dygo-kerismaker.png" alt="external-Revenue-analytic-dygo-kerismaker"/>
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8 text-warning">
+                    <div class="numbers">
+                      <p class="card-category">Revenue</p>
+                      <p class="card-title"><small>₦<%=Revenue%></small><p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats text-light">
+                  <i class="fa fa-refresh" onclick="location.reload()"></i>
+                   Update Now
+                </div>
+              </div>
+            </div>
+          </div>
+          <%if(debtor){%>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats bg-dark shadow-lg">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4">
+                    <div class="icon-big text-center icon-warning">
+                      <img width="58" height="58" src="https://img.icons8.com/external-filled-color-icons-papa-vector/78/external-Debtor-smart-grid-filled-color-icons-papa-vector.png" alt="external-Debtor-smart-grid-filled-color-icons-papa-vector"/>
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8 text-danger">
+                    <div class="numbers">
+                      <p class="card-category">Top Debtor</p>
+                      <p class="card-title"><small>₦<%=debtor.Debt%></small><p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats text-light">
+                  <i class="fa fa-clock-o"></i>
+                 <a title="<%=debtor.Username%>" href="/api/v1/customer/<%=debtor._id%>/edit" rel="noopener noreferrer"> <%=debtor.Username.substring(0,20)%>...</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%}%>
+          <div class="col-lg-3 col-md-6 col-sm-6 ">
+            <div class="card card-stats bg-dark shadow-lg">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-5 col-md-4">
+                    <div class="icon-big text-center icon-warning">
+                      <img width="48" height="48" src="<%=Bestproduct.image%>" alt="external-Revenue-analytic-dygo-kerismaker"/>
+                    </div>
+                  </div>
+                  <div class="col-7 col-md-8 text-primary">
+                    <div class="numbers">
+                      <p class="card-category">Best Seller</p>
+                      <p class="card-title" title="Total Sold from all location"><%=Bestproduct.TotalSale%><p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                  <i class="fa fa-calendar-o"></i>
+                 <small title="<%=Bestproduct.Name%>"> <a href="/api/v1/Product/<%=Bestproduct._id%>/<%=Bestproduct.Name%>" rel="noopener noreferrer"><%=Bestproduct.Name.substring(0,20)%>...</a></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- starts here -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-header d-flex justify-content-between w-100">
+                <h5 class="card-title">GENERAL SALES MARGIN FOR <script>
+                  document.write(new Date().getFullYear())
+                </script></h5>
+                <p class="card-category">12 Months performance</p>
+              </div>
+              
+              <div class="card-body ">
+                <div id="myPlot" style="width:100%;max-width:100%"></div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                  <P id="currentMonth"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ends here -->
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card ">
+              <div class="card-header ">
+                <!-- <h5 class="card-title">DELIVERY STATISTICS</h5> -->
+                <p class="card-category">Current Campaign Performance</p>
+              </div>
+              <div class="card-body ">
+                <div id="myPlot3" style="width:90%;max-width:700px"></div>
+              </div>
+              <div class="card-footer ">
+                <!-- <div class="legend">
+                  <i class="fa fa-circle text-primary"></i> Opened
+                  <i class="fa fa-circle text-warning"></i> Read
+                  <i class="fa fa-circle text-danger"></i> Deleted
+                  <i class="fa fa-circle text-gray"></i> Unopened
+                </div> -->
+                <hr>
+                <!-- <div class="stats">
+                  <i class="fa fa-calendar"></i> Number of emails sent
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card card-chart">
+              <div class="card-header">
+                <!-- <h5 class="card-title">WARE HOUSE SALES MARGIN</h5> -->
+              </div>
+              <div class="card-body">
+                <div id="PIE" style="width:100%; max-width:600px; height:450px;"></div>
+              </div>
+              <div class="card-footer">
+                <hr />
+                <div class="card-stats">
+                  <i class="fa fa-check"></i> Data collected from work location as per Revenue Generation through Invoices 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-chart p-3" >
+          <div class="card-stats">
+            <h5 class="card-title">
+            <i class="fa fa-check"></i> SALES CHANNEL STATISTICS 
+          </h5>
+          </div>
+          <hr>
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="col-md-2">
+                <label for="pricelist" class="form-label">Start Date</label>
+                <input type="date" name="Startdate" id="Startdate" required class="form-control border" >
+            </div> 
+            <span>
+                <img width="50" height="50" src="https://img.icons8.com/stickers/100/arrow.png" alt="arrow"/>
+            </span>
+            <!-- end date  -->
+            <div class="col-md-2">
+                <label for="pricelist" class="form-label">End Date</label>
+                <input type="date" name="Enddate" id="Enddate" required class="form-control border" >
+            </div>
+          <div class="col-md-4">
+            <label for="pricelist" class="form-label">Select Option To View</label><br>
+          <select class="form-select" id="channel" >
+            <option value="">Choose...</option>
+            <%if(WH){%>
+              <%WH.forEach(location =>{%>
+                <option value="<%=location._id%>"><%=location.WHName%></option>
+             <% })%>
+            <%}%>
+          </select>
+          </div>
+          </div>
+        <!-- FOR SALES BY CHANNEL REPORT -->
+                <div class="card-body ">
+                  <div id="karu" style="width:90%;max-width:700px"></div>
+                </div>
+                <hr>
+              <!-- ends here -->
+            </div>
+      </div>
+
+     
+      <footer class="footer footer-black  footer-black ">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="footer-nav">
+              <ul >
+                <li><a href="/" target="_blank">Home</a></li>
+                <li><a href="#" target="_blank">My Account</a></li>
+              </ul>
+            </div>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>, <i class="fa fa-heart heart"></i> BADE developers
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <div id="dowloadoption" class="modal flex items-center flex-col justify-center gap-3">
+    <div class="modal-body d-flex justify-content-center container">
+      <h6 class="text-light">Please wait...</h6>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+const getData = async ()=>{
+  document.getElementById('dowloadoption').style.display = "block"
+  const d = new Date();
+
+  //display for current mont on ui
+  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  document.getElementById('currentMonth').innerText =`CURRENT MONTH (${ month[d.getMonth()]})`;
+
+        const request = await fetch('/api/v1/Getfulldb',{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+        response ?  document.getElementById('dowloadoption').style.display = "none" : "block"
+        customers = response.customers
+        Employee = response.Employee
+        invoice = response.invoice.sort((a, b) => b.startDate - a.startDate)
+   
+      //  const inv =  invoice.filter(invoice => {return invoice.billStatus === 'Invoice'})
+
+      
+        // get data for pie chart on ware house invoice // PIE CHART
+        const NDxArray = response.WH.map((response) => {return response.WHName})
+        const NDyArray = [];
+
+
+        // get invoice for each warehouse
+        let id = response.WH.map((response) => {return response._id})
+        id.forEach(id=>{
+        bell =   invoice.filter(bill=>{
+            return bill.whId.toString() === id.toString() && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this;
+          }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+           NDyArray.push(bell)
+        })
+
+        
+
+        const NDlayout = {title:"REVENUE GENERATION MARGIN"};
+
+        const SECdata = [{labels:NDxArray, values:NDyArray, type:"pie"}];
+
+        Plotly.newPlot("PIE", SECdata, NDlayout);
+
+        // for sales on sale monthly chart
+        let year = d.getFullYear(); 
+
+        const januaryInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${1}`  && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+        
+        const FebuaryInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${2}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const MarchInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${3}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const AprilInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${4}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const MayInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${5}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const JuneInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${6}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const JulyInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${7}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const AugInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${8}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const SeptemberInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,6) === `${year}-${9}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        const OctoberInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,7) === `${year}-${10}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+
+        
+        const NovemberInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,7) === `${year}-${11}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+        
+        const DecemberInvoice = invoice.filter((bill)=>{
+          return bill.startDate.substring(0,7) === `${year}-${12}` && bill.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this
+        }).map((total)=>{return total.grandTotal }).reduce((total , currentValue) => {return total + currentValue},0)
+        
+
+        const xArray = ["JAN", "FEB", "MAR", "APR", "MAY","JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",];
+        const yArray = [januaryInvoice, FebuaryInvoice, MarchInvoice, AprilInvoice, MayInvoice,JuneInvoice, JulyInvoice, AugInvoice, SeptemberInvoice, OctoberInvoice,NovemberInvoice,DecemberInvoice];
+
+        const data = [{
+          x:xArray,
+          y:yArray,
+          type:"bar",
+          orientation:"v",
+          marker: {color:"#03312e"}
+        }];
+
+        const layout = {title:"Month on Month KPI Performance"};
+
+        Plotly.newPlot("myPlot", data, layout);
+
+// delivery status 
+
+const ydeliveryArray = response.WH.map((response) => {return response.WHName.substring(0,7)});
+
+
+ // get invoice for each warehouse
+ const xdeliveryArray = [];
+  id.forEach(id=>{
+  bell =   invoice.filter(b => {
+      return  moment(b.DELIVERYDATE).format('l') ===  moment(`${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear() }`).format('l') && b.isDelivered  && b.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase();//if report for monthly revenur dont show check this;
+    }).filter(bill=>{
+    return bill.whId.toString() === id.toString();
+  })
+  xdeliveryArray.push(bell.length)
+  })
+
+
+  const delivery = [{
+    x:xdeliveryArray,
+    y:ydeliveryArray,
+    type:"bar",
+    orientation:"h",
+    marker: {color:"rgba(255,0,0,0.6)"}
+  }];
+
+const deliverylayout = {title:`Delivery for ${d.getDate()}/${month[d.getMonth()].substring(0,3)}/${d.getFullYear() }`};
+
+Plotly.newPlot("myPlot3", delivery, deliverylayout);
+
+
+// GETTING CHANNES SALES BY WAREHOUSE
+const channels = document.getElementById('channel').addEventListener('change',(e)=>{
+  const Startdate = document.getElementById('Startdate').value
+  const Enddate = document.getElementById('Enddate').value
+  
+  try {
+   if (Startdate !== '' && Enddate !== "") {
+    const generateDates = (to ,from) => {
+
+const arr = [];
+ 
+ while (from.getTime() <= to.getTime()) {
+arr.push(dayjs(from).format("D-MMM-YYYY"));
+from.setDate(from.getDate() + 1);
+}
+ return arr;
+};
+
+const karuxArray = [];
+const priceList = ['WareHouse_Price','Market_Price','Van_Price']
+const karuyArray =  ['Whole sale','Super Market','Van Price'] 
+
+    priceList.forEach(pricelist =>{
+      const bills = invoice.filter((invoices)=>{
+      const dates = generateDates(new Date(Enddate),new Date(Startdate))
+      const formattedDate = dayjs(invoices.startDate).format("D-MMM-YYYY");
+      return invoices.whId.toString() === `${e.target.value}`  && invoices.billStatus.toLowerCase() !== 'CANCELLED'.toLowerCase() && dates.includes(formattedDate); ;//if report for monthly revenur dont show check this
+    }).filter((invoices)=>{return invoices.priceList === pricelist })
+    .map((total)=>{return total.grandTotal })
+    .reduce((total , currentValue) => {return total + currentValue},0)
+  karuxArray.push(bills)
+})
+
+// get invoice for each warehouse
+
+const channel = [{
+x:karuxArray ,
+y:karuyArray ,
+type:"bar",
+orientation:"h",
+marker: {color:"rgba(255,0,0,0.6)"}
+}];
+
+const karuchannelylayout = {title:`SALES CHANNEL REPORT`};
+
+Plotly.newPlot("karu", channel , karuchannelylayout);
+   } else {
+    throw new Error('Invalid Date parameters Entered')
+   }
+    
+  } catch (error) {
+    alert(error.message)
+  }
+})
+
+
+
+}
+
+</script>
+
+</body>
+
+</html>

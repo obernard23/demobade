@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs')%>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Nova+Square&display=swap" rel="stylesheet">
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      #invoice{
+      font-family: 'Dancing Script', cursive !important;
+      font-family: 'Nova Square', sans-serif !important;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+        color: rgb(0, 0, 0);
+        font-family: 'Dancing Script', cursive;
+        font-family: 'Nova Square', sans-serif;
+        font-weight: bold;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+        font-family: 'Dancing Script', cursive;
+        font-family: 'Nova Square', sans-serif;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 40%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+<%-include('./partials/Notification.ejs')%>
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                      <i style="color: #fff;">
+                          <b><%=wareHouse.WHName.toUpperCase()%> INVOICE</b>
+                      </i>
+                  </h5>
+                  
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+          <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+
+    
+
+     <!-- validation work flow -->
+     <div class="d-flex justify-content-end shadow-sm align-tems-center " style="background-color: rgba(187, 169, 3, 0.575); color:#6d5c5c; padding-right:10px;">
+      <div class="p-2	" style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;" title="Creating"><img width="40" height="40" src="https://img.icons8.com/papercut/60/new.png" alt="new"/></div>
+      <div class="p-2 " title="In payment"><img width="44" height="44" src="https://img.icons8.com/hands/100/experimental-card-in-use-hands.png"  alt="card-in-use"/></div>
+      <div class="p-2 " title="Awaiting Delivery"><img width="44" height="44" src="https://img.icons8.com/stickers/100/data-pending.png" alt="data-pending"/></div>
+      <div class="p-2 " title="Delivered"><img width="44" height="44" src="https://img.icons8.com/cotton/64/delivery.png" alt="delivery"/></div>
+     </div>
+
+          <!-- action buttons -->
+          <div class="p-2">
+            <button type="button" id="submit" class="btn btn-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+              </svg>  
+              Submit 
+            </button>
+            <button type="button" class="btn btn-warning" id="Signature" data-id="<%=user._id%>" onclick="Signature()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fingerprint" viewBox="0 0 16 16">
+                <path d="M8.06 6.5a.5.5 0 0 1 .5.5v.776a11.5 11.5 0 0 1-.552 3.519l-1.331 4.14a.5.5 0 0 1-.952-.305l1.33-4.141a10.5 10.5 0 0 0 .504-3.213V7a.5.5 0 0 1 .5-.5Z"/>
+                <path d="M6.06 7a2 2 0 1 1 4 0 .5.5 0 1 1-1 0 1 1 0 1 0-2 0v.332c0 .409-.022.816-.066 1.221A.5.5 0 0 1 6 8.447c.04-.37.06-.742.06-1.115V7Zm3.509 1a.5.5 0 0 1 .487.513 11.5 11.5 0 0 1-.587 3.339l-1.266 3.8a.5.5 0 0 1-.949-.317l1.267-3.8a10.5 10.5 0 0 0 .535-3.048A.5.5 0 0 1 9.569 8Zm-3.356 2.115a.5.5 0 0 1 .33.626L5.24 14.939a.5.5 0 1 1-.955-.296l1.303-4.199a.5.5 0 0 1 .625-.329Z"/>
+                <path d="M4.759 5.833A3.501 3.501 0 0 1 11.559 7a.5.5 0 0 1-1 0 2.5 2.5 0 0 0-4.857-.833.5.5 0 1 1-.943-.334Zm.3 1.67a.5.5 0 0 1 .449.546 10.72 10.72 0 0 1-.4 2.031l-1.222 4.072a.5.5 0 1 1-.958-.287L4.15 9.793a9.72 9.72 0 0 0 .363-1.842.5.5 0 0 1 .546-.449Zm6 .647a.5.5 0 0 1 .5.5c0 1.28-.213 2.552-.632 3.762l-1.09 3.145a.5.5 0 0 1-.944-.327l1.089-3.145c.382-1.105.578-2.266.578-3.435a.5.5 0 0 1 .5-.5Z"/>
+                <path d="M3.902 4.222a4.996 4.996 0 0 1 5.202-2.113.5.5 0 0 1-.208.979 3.996 3.996 0 0 0-4.163 1.69.5.5 0 0 1-.831-.556Zm6.72-.955a.5.5 0 0 1 .705-.052A4.99 4.99 0 0 1 13.059 7v1.5a.5.5 0 1 1-1 0V7a3.99 3.99 0 0 0-1.386-3.028.5.5 0 0 1-.051-.705ZM3.68 5.842a.5.5 0 0 1 .422.568c-.029.192-.044.39-.044.59 0 .71-.1 1.417-.298 2.1l-1.14 3.923a.5.5 0 1 1-.96-.279L2.8 8.821A6.531 6.531 0 0 0 3.058 7c0-.25.019-.496.054-.736a.5.5 0 0 1 .568-.422Zm8.882 3.66a.5.5 0 0 1 .456.54c-.084 1-.298 1.986-.64 2.934l-.744 2.068a.5.5 0 0 1-.941-.338l.745-2.07a10.51 10.51 0 0 0 .584-2.678.5.5 0 0 1 .54-.456Z"/>
+                <path d="M4.81 1.37A6.5 6.5 0 0 1 14.56 7a.5.5 0 1 1-1 0 5.5 5.5 0 0 0-8.25-4.765.5.5 0 0 1-.5-.865Zm-.89 1.257a.5.5 0 0 1 .04.706A5.478 5.478 0 0 0 2.56 7a.5.5 0 0 1-1 0c0-1.664.626-3.184 1.655-4.333a.5.5 0 0 1 .706-.04ZM1.915 8.02a.5.5 0 0 1 .346.616l-.779 2.767a.5.5 0 1 1-.962-.27l.778-2.767a.5.5 0 0 1 .617-.346Zm12.15.481a.5.5 0 0 1 .49.51c-.03 1.499-.161 3.025-.727 4.533l-.07.187a.5.5 0 0 1-.936-.351l.07-.187c.506-1.35.634-2.74.663-4.202a.5.5 0 0 1 .51-.49Z"/>
+              </svg>
+              Signature
+            </button>
+            <!-- <button type="button" class="btn btn-dark">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-device-ssd-fill" viewBox="0 0 16 16">
+                <path d="M5 8V4h6v4H5Z"/>
+                <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4Zm0 1.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Zm9 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM3.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm9.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM4.75 3h6.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-.75.75h-6.5A.75.75 0 0 1 4 8.25v-4.5A.75.75 0 0 1 4.75 3ZM5 12h6a1 1 0 0 1 1 1v2h-1v-2h-.75v2h-1v-2H8.5v2h-1v-2h-.75v2h-1v-2H5v2H4v-2a1 1 0 0 1 1-1Z"/>
+              </svg>
+              Save to Draft
+            </button> -->
+           </div>
+
+    <div id="invoice" class="shadow-lg m-4 p-3">
+      <div id="pspdfkit-header">
+        <div class="header-columns">
+          <div class="logotype">
+            <img  height="150" width="150" src="/logo.jpg" />
+          </div>
+
+          <div>
+            <input type="hidden" id="whId" value="<%=wareHouse._id%>" hidden class="d-none">
+            <input type="hidden" value="<%=wareHouse.InvoiceNo%>"  id="LocationId" hidden disabled>
+            <h5><%=Business.CompayName%></h5>
+            <p>[<%=Business.email%>]</p>
+            <p><%=Business.Tel%></p>
+            <p><%=Business.Address%></p>
+            <p><%=Business.CompanyCity%></p>
+            <p> wareHouse invoice no:<%=wareHouse.InvoiceNo%></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+        <div>
+          <h2 id="reference"> "Order/-----/<%=wareHouse.InvoiceNo%>"</h2>
+        </div>
+
+        <div class="intro-table">
+          <div class="intro-form  intro-form-item d-flex intro-table-title align-items-start  justify-content-evenly">
+            <h1 class="intro-table-title" id="Username"></h>
+              <h4 class="intro-table-title" id="Address"></h4>
+            <h4 class="intro-table-title" id="Email"></h4>
+            <h4 class="intro-table-title"id="phone"></h4>
+            <h4 class="intro-table-title" id="Debt" style="color: #50e623; font-weight: bolder;"></h4>
+            <h4 class="intro-table-title" id="Cl" style="color: #e63023; font-weight: bolder;"></h4>
+            <h4 id='startdate' class="intro-table-title"></h4>
+          </div>
+
+          <div class="intro-form">
+            <div class="intro-form-item-border d-flex flex-column gap-3">
+
+              <!-- dropdown for customer list -->
+
+              <!-- drop down for pricelist -->
+
+              <div class="col-md-7">
+                <label for="customers" class="form-label">Customer</label>
+                <select
+                  class="form-select "
+                  id="customer"
+                  aria-describedby="validationServer04Feedback"
+                  required
+                >
+                <option value="">Choose...</option>
+                  <!-- display options for Customer -->
+               <%if(Cusomers){%>
+                <%Cusomers.forEach((customer)=>{%>
+                    <option value="<%=customer._id%>"   
+                      <%if(customer.blocked){%>
+                        disabled = true
+                      <%}%>
+                      ><%=customer.Username%></option>
+                <%})%>
+                <%}%>
+                </select>
+                </div>
+
+             <!-- drop down for pricelist -->
+
+             <div class="col-md-7">
+              <label for="pricelist" class="form-label">Costing Method</label>
+              <select
+                class="form-select "
+                id="pricelist"
+                aria-describedby="validationServer04Feedback"
+                required
+              >
+                <option disabled value="">Choose...</option>
+                <!-- <option disabled value="percentage"  >By Discount </option> -->
+                <option  value="priceList">By Defined price List</option>
+                <!-- <option disabled value="Price" >By whole Sale Price</option> -->
+              </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >Avail.Forecast</td>
+              <td  >Batch No:</td>
+              <td  >Measure Scale</td>
+              <td  >Scale</td>
+              <td  >QTY</td>
+              <td  >Promo</td>
+              <td  >VAT</td>
+              <td  >Unit Price</td>
+              <td  >Total</td>
+            </tr>
+            <tbody  class="item" id="item"></tbody>
+            <tbody class="item" id="promosection"></tbody>
+              
+              <tr class="item">
+                <form action="">
+                <td>
+                  
+                    <!-- drop down for pricelist -->
+                  <div class="col-md-6">
+                    <label for="products" class="form-label">Products List </label>
+                    <input type="text" id="products" list="productsACD" name="referenceNo" class="form-control border" placeholder="Search SKU with ACD-Code" required/>
+                    <datalist id="productsACD" >
+                     <!-- display options for Bills -->
+                     <option >choose...</option>
+                     <%products.forEach((products)=>{%>
+                       <%pname = prud.filter(name=>{%>
+                         <% return name._id.toString() === products.productId.toString()%>
+                         <%})%>
+                         <%pname.map(n=>{%>
+                           <option class="bg-warning" <%if(products.currentQty < 1  && products.Rolls < 1 || n.Sellable === false  || products.isActivated === false ){%>
+                             disabled="true"
+                             <%}%> 
+                             value="<%=n.ACDcode%>">
+                             <%=n.Name.substring(0,60)%>
+                             [C:<%=products.currentQty%>, R:<%=products.Rolls%>]
+                           </option>
+                         <%})%>
+                          <%})%>
+                    </datalist>
+                </div>
+                <!-- add this later -->
+                <!--  || products.isActivated === false  -->
+                 
+                  <!-- ENDS HERE--> 
+                
+                <!-- for promotions item selection -->
+
+              <div class="col-md-6">
+                <label for="Promotion" class="form-label">Promotion Item</label>
+                <select
+                  class="form-select "
+                  id="Promotion"
+                  aria-describedby="validationServer04Feedback"
+                  required
+                >
+                  <option value="">Choose...</option>
+                </select>
+                </div>
+                  <button class="btn btn-danger shadow" id="reset"> &times;Reset</button>
+                  <button  class="btn btn-warning shadow " id="promo"> &plus; Promo </button>
+                </td>
+             </form>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-box">
+          <table cellpadding="10" cellspacing="0">
+            <tbody>
+              <tr class="item">
+                <td></td>
+                <td>Subtotal:</td>
+                <td id="Subtotal">₦0.00</td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Discount (₦):</td>
+                <td id="discountinCalc">
+                  <input type="number" class="form-control" id="discount" placeholder="0.00" value="0"  >
+                </td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Tax Rate (V.A.T):</td>
+                <td id="vat">₦0.00</td>
+              </tr>
+
+              <tr class="no-border-item">
+                <td></td>
+                <td>Shipping/Handling (<small>Not added to INV Total</small>):</td>
+                <td>₦0.00 </td>
+              </tr>
+
+              <tr class="total">
+                <td></td>
+                <td>Total Due:</td>
+                <td id="Grandtotal">₦0.00</td>
+              </tr>
+          </table>
+          <p id="words"></p>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+      
+        <div class="page" style="page-break-after: always">
+          <div class="signer">
+            <div class="form signer-item">
+              <label class="border-bottom" for="date" class="label">Terms & Conditions</label>
+                <p>Payment must be made before Sales Order is  issued</p>
+            </div>
+
+            <div class="form signer-item">
+              <label for="signature" class="label" >Raised by: <%=user.firstName.toUpperCase()%> <%=user.lastName.toUpperCase()%></label>
+              <input type="hidden" value="<%=user.firstName%>"  id="raisedBy" hidden disabled>
+              <img class="logo" src=""
+                id="signature"
+              />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="pspdfkit-footer">
+        <div class="footer-columns">
+          <span>SALES ORDER</span>
+        </div>
+      </div>
+    </div>
+    <%-include('./partials/footer')%>
+
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container">
+          <form class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <span title="close" onclick="document.getElementById('myModal').style='none'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+              </svg>
+            </span>
+            <input type="password" name="opsCode" id="opsCodes" class="form-control input-group has-validation" placeholder="Enter operational code" autocomplete="off">
+            <button type="submit" class="btn btn-danger">Action</button>
+          </form>
+        </div>
+      </div>
+  </body>
+    <script>
+      const formatter = new Intl.DateTimeFormat('us-as')
+      //clear billproduct on page reload
+      localStorage.removeItem('bill_products');
+     const submitBtn = document.getElementById('submit')
+      //clear billproduct on page reload
+      window.onload = () => {
+        localStorage.removeItem('bill_products');
+            if(!BillProducts ){
+            submitBtn.style.display = 'none'
+            
+          }
+      }
+
+      let customerPercent
+      //get request for customer
+      const customerInput = document.getElementById('customer')
+      customerInput.addEventListener('change',async(e)=>{
+            const endPoint = `/api/v1/customer/${e.target.value}/search`
+            const res = await fetch(endPoint,{
+                method:'GET',
+                headers:{'Content-Type': 'application/json'}
+            })
+            const data = await res.json()
+            customerPercent = data.item.discount
+            const Username = document.getElementById('Username').innerText = `Billed for: ${data.item.Username.toUpperCase()}`;
+            const Email =  document.getElementById('Email').innerText = `Email: ${data.item.Email}`;
+            const phone = document.getElementById('phone').innerText = `Phone: ${data.item.phone}`;
+            const Address = document.getElementById('Address').innerText = `Address: ${data.item.street}`;
+            const customerDebt = document.getElementById('Debt').innerText = `Customer Balance: ₦${data.item.Debt}`
+            document.getElementById('Cl').innerText = `Credit Limit: ₦${data.item.creditLimit}`
+            BillProducts.customerName = data.item.Username
+            ShowServerResponse(`You are currently raising "${BillProducts.billStatus}/${BillProducts.billReferenceNo}/${BillProducts.invoicelocation}" for ${data.item.Username}`)
+            const d = new Date();
+            BillProducts.startDate = `${d.getFullYear() }-${d.getMonth() + 1}-${d.getDate()}`
+            const startDate = document.getElementById('startdate').innerText = `Order Date: ${BillProducts.startDate}` ;
+            BillProducts.ActivityLog = []
+            BillProducts.orders = []
+            BillProducts.grandTotal = 0
+            BillProducts.subTotal = 0 
+            BillProducts.invoicelocation = `${document.getElementById('LocationId').value}`
+            BillProducts.shippingFee = 0
+            Grandtotal.textContent  = "₦0.00"
+            document.getElementById('Subtotal').innerHTML = "₦0.00"
+            document.getElementById('discount').value = 0
+            BillProducts.customer = data.item._id //assign custom properties
+            BillProducts.RaiseBy = document.getElementById('raisedBy').value
+            BillProducts.salesPerson = data.item.salesPerson
+            BillProducts.discount = 0 
+            BillProducts.priceList = data.item.priceList //assign customizes price list for product for diffrent customer pricelist
+            BillProducts.ActivityLog.push({
+              logMsg:`${BillProducts.RaiseBy } Raised  a new ${BillProducts.billStatus} for ${data.item.Username} on ${d.getFullYear() }-${d.getMonth() + 1}-${d.getDate()}`,
+              status:`${BillProducts.status} and awaiting Action`
+            }) //for activity log
+            saveToLocalStorage(BillProducts);
+            RenderDom(BillProducts)
+            BillProducts.customerCategory =  data.item.category
+            BillProducts.creditLimit =  data.item.creditLimit
+            BillProducts.customerDebt = data.item.Debt;
+            document.getElementById('reference').innerText = `"${BillProducts.billStatus}/${BillProducts.billReferenceNo}/${BillProducts.invoicelocation}"`
+      })
+     
+      //save the data to local storage
+      const saveToLocalStorage = (BillProducts) => {
+        const quoteData = JSON.stringify(BillProducts)
+        localStorage.setItem('bill_products',quoteData)
+        return quoteData;
+      }
+      
+      //get quoat data from local storage
+      const getSaveBill = () =>{
+        const quoteData = localStorage.getItem('bill_products')
+        if(quoteData === null){
+          const d = new Date();
+          return {
+            grandTotal:0,
+          shippingFee:0,
+          subTotal:0,  
+          startDate:formatter.format(new Date()),
+          customer:'',
+          orders:[],
+          promotionItems:[],
+          billStatus:'Order',
+          status:'Locked',
+          discount:0,
+          taxRate:0,
+          whId:'',
+          RaiseBy:'',
+          signatureUrl:'',
+          ActivityLog:[],
+          rejectionReasons:'',
+          id:'',
+          billReferenceNo :`${Math.floor(Math.random() *1000001)}`,
+          registeredBilling:0,
+          registeredBalance:0,
+          PaymentStatus:'',
+          PaymentReference:'',
+          supportDoc:'',
+          priceList:'',
+          customerCategory:'',
+          creditLimit:0,
+          customerDebt:0,
+          DriverNumber:"",
+          DriverName:"",
+          vehicleNumber:"",
+          DeliveryComment:"",
+          DELIVERYDATE:"",
+          isDelivered:false,
+          customerName:"",
+          AccountantName:'',
+          salesPerson:'',
+          invoicelocation:''
+          };
+        }else{
+          return JSON.parse(quoteData)
+        }
+      }
+
+      //discount input
+
+      const discount = document.getElementById('discount')
+        
+          discount.addEventListener('input',(e) =>{
+          value =  parseInt(e.target.value < 1 ? discount.value = 0 : e.target.value )//tenary operator  to avoid overflow or underflow of 0 qty values;
+          BillProducts.discount =  value;
+          BillProducts.grandTotal = parseInt(BillProducts.subTotal) - parseInt(value)
+          Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+          saveToLocalStorage(BillProducts);
+          })
+
+      // for qoutation generation
+      const BillProducts = getSaveBill()
+
+      //get subtotal and assign various feilds to quotation
+      const calculateTotals = async (BillProducts,)=>{
+          setTimeout(async ()=>{
+            const whId = document.getElementById('whId').value;
+          
+          BillProducts.whId = whId;
+          saveToLocalStorage(BillProducts)
+
+          BillProducts.subTotal =  await parseInt(BillProducts.orders.map(item => {return item.total})
+          .reduce((total , currentValue) => {return total + currentValue},0))
+
+          //vat total 
+          BillProducts.taxRate =  await parseInt(BillProducts.orders.map(item => {return (item.total * item.item.VAT.$numberDecimal / 100)})
+          .reduce((total , currentValue) => {return total + currentValue},0))
+
+
+          // let discount = Shipping.value
+          const discount = document.getElementById('discount')
+        
+          discount.addEventListener('input',(e) =>{
+          value =  parseInt(e.target.value < 1 ? discount.value = 0 : e.target.value )//tenary operator  to avoid overflow or underflow of 0 qty values;
+          BillProducts.discount =  value;
+          BillProducts.grandTotal = parseInt(BillProducts.subTotal) - parseInt(value)
+          Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+          saveToLocalStorage(BillProducts);
+        });
+        
+        document.getElementById('Subtotal').innerHTML = `₦${BillProducts.subTotal}`; 
+        document.getElementById('vat').innerHTML = `₦${BillProducts.taxRate}`;
+        },1700)
+      }
+
+      // clear bill order when when costing method is changed
+      const costing = document.getElementById('pricelist')
+      costing.addEventListener('change',(e)=>{
+        BillProducts.orders = [];
+        saveToLocalStorage(BillProducts);
+        RenderDom(BillProducts);
+      })
+
+      // get product for quoatation
+      const products = document.getElementById('products')
+      products.addEventListener('change',async(e)=>{
+        const whId = document.getElementById('whId').value;
+        const endPoint = `/api/v1/product/${e.target.value}/bill/${whId}`
+        const res = await fetch(endPoint,{
+          method:'GET',
+          headers:{'Content-Type': 'application/json'}
+        })
+        const data = await res.json()
+        
+        //get value from billing method 
+        const price = document.getElementById('pricelist').value
+        function priceLists(price){
+          // checks default base wholesale price with defined % on price
+          if(price === 'percentage'){
+
+             //add price list to the list of prices 
+            const percentage =  parseInt(customerPercent) //should return discount% as assigned to the customer 
+            const discountedPrice =  parseInt((data.item.WareHouse_Price * percentage )/ 100)//discounted value as percentage
+            const finalPrice  =  Math.floor(data.item.WareHouse_Price - discountedPrice) //set a base selling  price
+            return finalPrice
+
+          }else if(price ==='priceList'){
+
+              if (BillProducts.priceList === "Van_Price") {
+                getPromo(data.item.VanPromo)
+                return data.item.Van_Price
+              } else if(BillProducts.priceList ==="Market_Price") {
+                getPromo(data.item.MarketPromo)
+                return data.item.Market_Price
+              }else if(BillProducts.priceList ==="WareHouse_Price"){
+                getPromo(data.item.WholesalePromo)
+                return data.item.WareHouse_Price
+              }
+
+              // returns base price list (warehouse_price)
+          }else if (price === 'Price'){
+            return data.item.WareHouse_Price
+          }else if(price === '' || price === undefined || price === null ){
+            ShowServerResponse('Ops select a Customer to sell to and a costing Method');
+            return 0
+          }else{
+            return 0
+          }
+        }
+
+
+        let promotionData
+        // get promotion here
+        getPromo = (promodata)=>{
+          promotionData = promodata
+        }
+        
+        const id = data._id[0];//use store product id to deduct from
+        RId = 0
+        BillProducts.orders.push({...data,Qty:'',total:'',BatchId:data.BatchId,ExpiryDate:data.ExpiryDate ,storeProductId:id,priceListPrice:priceLists(price),scale:'Carton',returnId:RId++,promotionData,CRT:data.CRT,ROL:data.ROL})//returns product, qty to perform and vat and price from custing
+        ShowServerResponse(`You have added ${data.item.Name} to Order`)
+        saveToLocalStorage(BillProducts)
+        RenderDom(BillProducts)
+        e.target.value=''
+      })
+      
+      //Dom manupulation for 
+      RenderDom = (BillProducts)=>{
+        const  body = document.getElementById('item')
+        body.innerHTML = ''
+        BillProducts.orders.forEach(element => {
+          let tr = document.createElement('tr')
+          tr.classList.add('border-bottom')
+
+          let td2 = document.createElement('td')//product name
+          let Forecast = document.createElement('td')//product name
+          let Batch = document.createElement('td')//product name
+          let td8 = document.createElement('td')//product availability
+          let scale = document.createElement('td')
+          scale.style.color = 'purple'
+          scale.style.fontWeight = 'bolder'
+          let td3 = document.createElement('td')// qty
+          let td4 = document.createElement('td')//umo
+          let td5 = document.createElement('td')//vat
+          let td6 = document.createElement('td')//price
+          let td7 = document.createElement('td')//total
+          let promotion = document.createElement('td')//total
+
+          //assign values to each element and input that can stillbe edited
+          td2.innerText = element.item.Name.toUpperCase()
+          Forecast.innerText =`C:${element.CRT}, R:${element.ROL}`
+          promotion.innerText = `₦${element.promotionData}`
+          td2.setAttribute("title", `Double click here to delete ${element.item.Name.toUpperCase()}`)
+          Batch.innerText = element.BatchId.toUpperCase()
+          //remove item from quotation table
+          
+          const deleteItem =()=>{
+            
+            let index =BillProducts.orders.findIndex(item =>{
+              return item === element
+            })
+            if(index > -1){
+            
+              try {
+                BillProducts.orders.splice(index,1)
+                RenderDom(BillProducts)
+
+                //calculate  sum of available prices in orders
+                BillProducts.subTotal = parseInt(BillProducts.orders.map(item => {return item.total})
+                .reduce((total , currentValue) => {return total + currentValue},0))
+
+                //calculate vat
+                BillProducts.taxRate =   parseInt(BillProducts.orders.map(item => {return (item.total * item.item.VAT.$numberDecimal / 100)})
+                .reduce((total , currentValue) => {return total + currentValue},0))
+
+                BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount) 
+                Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+                alert("products removed successfully")
+                saveToLocalStorage(BillProducts)
+                document.getElementById('Subtotal').innerHTML = `₦${BillProducts.subTotal}`; 
+                document.getElementById('vat').innerHTML = `₦${BillProducts.taxRate}`; 
+              } catch (error) {
+                ShowServerResponse(error.message)
+              }
+             
+            }
+          }
+          td2.ondblclick = deleteItem
+
+          //declear qty of products
+          let td3Input = document.createElement('input')
+          td3Input.value = element.Qty  
+
+          //declear SCALE  of products
+          let td4Select = document.createElement('select')
+          
+          let td4optionsCarton = document.createElement('option')
+          td4optionsCarton.innerText = 'Carton'
+          td4optionsCarton.value = 'Carton'
+          let td4optionsRoll = document.createElement('option')
+          td4optionsRoll.innerText = "Roll"
+          td4optionsRoll.value = 'Roll'
+
+          td4Select.style.border = 'none'
+          td4Select.style.width = '120px'
+          td4Select.setAttribute('required', true)
+
+          // ADD Eventlistner for html select
+          td4Select.addEventListener('change',(e)=>{
+            
+            element.scale = e.target.value
+           
+             if(e.target.value === "Carton"){
+                if(BillProducts.priceList === 'Market_Price'){
+                  element.priceListPrice =  element.item.Market_Price
+                  // calculate total
+                  const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+                  const total = parseInt(Math.floor(element.priceListPrice * element.Qty ) + singleVat *  element.Qty )
+                  element.total = total
+                  
+                  //calculate  total sum of available prices in orders
+                  BillProducts.subTotal = parseInt(BillProducts.orders.map(item => {return item.total})
+                  .reduce((total , currentValue) => {return total + currentValue},0))
+                  BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+                  Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+                  saveToLocalStorage(BillProducts)
+                  calculateTotals(BillProducts)
+                 
+                  td7.innerText= `₦${element.total}`
+                  td6.textContent =  `₦${Math.round(element.priceListPrice.toFixed(1))}`
+                }else if(BillProducts.priceList === 'Van_Price'){
+                  element.priceListPrice = element.item.Van_Price
+                   // calculate total
+                   const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+                  const total = parseInt(Math.floor(element.priceListPrice * element.Qty ) + singleVat *  element.Qty )
+                  element.total = total
+                  
+                  //calculate  total sum of available prices in orders
+                  BillProducts.subTotal = parseInt(BillProducts.orders.map(item => {return item.total})
+                  .reduce((total , currentValue) => {return total + currentValue},0))
+                  BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+                  Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+                  saveToLocalStorage(BillProducts)
+                  calculateTotals(BillProducts)
+                 
+                  td7.innerText= `₦${element.total}`
+                  td6.textContent =  `₦${Math.round(element.priceListPrice.toFixed(1))}`
+                }else if(BillProducts.priceList === 'WareHouse_Price'){
+                  element.priceListPrice = element.item.WareHouse_Price
+                   // calculate total
+                   const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+                  const total = parseInt(Math.floor(element.priceListPrice * element.Qty ) + singleVat *  element.Qty )
+                  element.total = total
+                  
+                  //calculate  total sum of available prices in orders
+                  BillProducts.subTotal = parseInt(BillProducts.orders.map(item => {return item.total})
+                  .reduce((total , currentValue) => {return total + currentValue},0))
+                  BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+                  Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+                  saveToLocalStorage(BillProducts)
+                  calculateTotals(BillProducts)
+                 
+                  td7.innerText= `₦${element.total}`
+                  td6.textContent =  `₦${Math.round(element.priceListPrice.toFixed(1))}`
+                }
+             }else if(e.target.value === "Roll"){
+             if (element.Qty > element.item.Rolls){
+              ShowServerResponse(`${element.Qty} is greater than defined ${element.item.Rolls}Rolls on ${element.item.Name}`)
+              deleteItem() // remove the product from the collection
+             }else{
+              const rollsPrice = element.priceListPrice / element.item.Rolls
+              element.priceListPrice = rollsPrice
+              td6.textContent = `₦${Math.round(element.priceListPrice.toFixed(1))-1}`
+                  // calculate total
+                  const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+                  const total = parseInt(Math.floor(element.priceListPrice * element.Qty ) + singleVat *  element.Qty )
+                  element.total = total
+
+                   //calculate  total sum of available prices in orders
+                  BillProducts.subTotal =   parseInt(BillProducts.orders.map(item => {return item.total})
+                  .reduce((total , currentValue) => {return total + currentValue},0))
+                  BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+                  Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+                  saveToLocalStorage(BillProducts)
+                  calculateTotals(BillProducts)
+                  td7.innerText= `₦${element.total}`
+                  td6.textContent = `₦${Math.round(element.priceListPrice.toFixed(1))-1}`//this affects only displayed value and not actual value
+
+             }
+             }
+             scale.innerText = element.scale
+             ShowServerResponse('Scale updated')
+            })
+
+          scale.innerText = element.scale
+
+          td4Select.appendChild(td4optionsCarton)
+          td4Select.appendChild(td4optionsRoll)
+
+          td7.innerText= `₦${element.total}`
+          td3Input.setAttribute('type', 'number')// for qty
+          td3Input.setAttribute('required', 'true')// for qty
+
+          td3Input.addEventListener('input', async (e)=>{
+           if(element.scale === "Carton"){
+             //find index of element to set qty
+             let indexs = BillProducts.orders.findIndex((index)=>{
+              return index === element
+            })
+            //return actual object index
+            if(indexs > -1){
+             let found = BillProducts.orders.find((currentValue, obj, arr)=>{
+                return obj === indexs
+              })
+              const val = parseInt(e.target.value < 1 ? td3Input.value = 1 : e.target.value )//tenary operator  to avoid overflow or underflow of 0 qty values
+              found.Qty = val
+
+              // STOPS OVER BILLING on cartons
+              if(element.CRT < e.target.value){
+                ShowServerResponse(`Sorry we had to Remove ${element.item.Name} because available QTY is ${element.CRT}. You can't sell what you dont have`)
+                td3Input.value = ''
+                deleteItem()
+              }else{
+                 // for carton
+              const promo = element.promotionData * found.Qty
+              const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+              const total = parseInt(Math.floor(element.priceListPrice * found.Qty ) + singleVat *  found.Qty )
+              found.total = total - promo
+              
+              //calculate  total sum of available prices in orders
+              BillProducts.subTotal =  await parseInt(BillProducts.orders.map(item => {return item.total})
+              .reduce((total , currentValue) => {return total + currentValue},0))
+              BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+              Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+              //save to local storage function 
+              calculateTotals(BillProducts)
+              saveToLocalStorage(BillProducts)
+              td7.innerText= `₦${found.total}`
+              }
+              // ends here
+            
+              calculateTotals(BillProducts)
+            }
+           }else if(element.scale === 'Roll'){
+            if(e.target.value > element.item.Rolls) {
+            ShowServerResponse(`${e.target.value} is greater than defined ${element.item.Rolls}Rolls on ${element.item.Name}`)
+            deleteItem() // remove the product from the collection
+           }else{
+             //find index of element to set qty
+             let indexs = BillProducts.orders.findIndex((index)=>{
+              return index === element
+            })
+            //return actual object index
+            if(indexs > -1){
+             let found = BillProducts.orders.find((currentValue, obj, arr)=>{
+                return obj === indexs
+              })
+              const val = parseInt(e.target.value < 1 ? td3Input.value = 1 : e.target.value )//tenary operator  to avoid overflow or underflow of 0 qty values
+              found.Qty = val
+              
+              // for rolls
+              const promo = element.promotionData * found.Qty
+              const singleVat = Math.round(parseInt(element.priceListPrice *  element.item.VAT.$numberDecimal)/100)//find single vat for each product qty to perform
+              const total = parseInt(Math.floor(element.priceListPrice * found.Qty) + singleVat *  found.Qty )
+              found.total = total
+              // console.log(found.total)
+              
+              //calculate  total sum of available prices in orders
+              BillProducts.subTotal =  await parseInt(BillProducts.orders.map(item => {return item.total})
+              .reduce((total , currentValue) => {return total + currentValue},0))
+              BillProducts.grandTotal = BillProducts.subTotal - parseInt(BillProducts.discount)
+              Grandtotal.textContent = `₦${BillProducts.grandTotal}`;
+
+              //save to local storage function 
+              calculateTotals(BillProducts)
+              saveToLocalStorage(BillProducts)
+              td7.innerText= `₦${found.total}`
+              
+            }
+            calculateTotals(BillProducts)
+           }
+           }
+          })
+          calculateTotals(BillProducts)
+
+          td3Input.setAttribute('placeholder','Qty')
+          td3Input.style.width='60px'
+          td3Input.style.fontSize='10 px'
+          td3.appendChild(td3Input)
+
+          // td4.innerText = element.item.UMO
+          td5.textContent = `${element.item.VAT.$numberDecimal}%`
+
+          td6.textContent=  `₦${Math.round(element.priceListPrice.toFixed(1))}`
+
+          //assign class
+          tr.classList.add('item')
+          td3Input.classList.add('itemQty')
+
+          //append to quotation 
+          tr.appendChild(td2)
+          tr.appendChild(Forecast)
+          tr.appendChild(Batch)
+          tr.appendChild(td4Select)
+          tr.appendChild(scale)
+          tr.appendChild(td3)
+          tr.appendChild(promotion)
+          tr.appendChild(td5)
+          tr.appendChild(td6)
+          tr.appendChild(td7)
+          body.appendChild(tr)
+        });
+      }
+
+      //reset billorder button 
+      const reset = document.getElementById('reset');
+      reset.addEventListener('click',()=>{
+        BillProducts.orders = [];
+        BillProducts.subTotal = 0;
+        BillProducts.grandTotal = 0;
+        saveToLocalStorage(BillProducts);
+        RenderDom(BillProducts);
+        document.getElementById('Subtotal').innerHTML = `₦0.00`; 
+        document.getElementById('vat').innerHTML = `₦0.00`;
+        Grandtotal.textContent = `₦0.00`;
+      })
+
+      //add promotion btn
+      const promobtn = document.querySelector('#promo')
+      promobtn.addEventListener('click', () =>{
+        //target the product qouatation and append  the peomo div
+        const  body = document.getElementById('promosection');
+        body.innerHTML = ''
+        const promosection = document.createElement('div');
+        promosection.innerText = 'PROMOTIONS';
+        promosection.style.fontWeight ='bold';
+        promosection.style.borderBottom ='1px solid';
+        body.appendChild(promosection);
+      })
+      
+      //hide submit button pending  signature validation
+      setInterval(() => {
+            if(!BillProducts.signatureUrl ){
+            submitBtn.style.display = 'none'
+          }else{
+                submitBtn.style.display = 'block'
+          }
+      }, 100);
+
+      //submit to the server and get the results
+
+      submitBtn.addEventListener('click',async (e)=>{
+        
+        if(BillProducts.signatureUrl === ''){
+          ShowServerResponse('Bills must contain a signature')
+        }else{
+          if (customerInput.value ==='' ){
+               ShowServerResponse('This qoutation cannot be verified unti a Customer, quotation or signature is provided.')
+               customerInput.style.backgroundColor = 'red';
+            }else{
+              e.preventDefault();
+              BillProducts.grandTotal = BillProducts.subTotal - BillProducts.discount
+              saveToLocalStorage(BillProducts);
+              const modal = document.getElementById('myModal')
+              modal.style.display='block'
+
+              spinner = ()=>{
+                return`
+                <div class="modal-body d-flex justify-content-center container">
+                  <div class="spinner-border" text-info" role="status" style="width: 3rem; height: 3rem;">
+                         <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                      `}
+
+              modal.innerHTML = spinner();
+
+             
+                   // check if customer is a crdit customer  and compare credit limit to bill total to regulate total from customer debt
+           if(BillProducts.customerCategory ==='Credit-Customer' ){
+              try {
+                const customerDebt =  BillProducts.customerDebt
+              const creditLimit = BillProducts.creditLimit
+              const subTotal = BillProducts.subTotal
+              const creditProduct = creditLimit - customerDebt
+              if (customerDebt <= 0){
+                const endpoint = '/api/v1/wareHouse/Bill'
+              const res = await fetch(endpoint,{
+                method:"POST",
+                body: JSON.stringify(BillProducts),
+                headers:{'Content-Type': 'application/json'}
+              })
+
+              const data = await res.json()
+              if (data){
+                ShowServerResponse(data.message || data.error)
+               if(data.message){
+                localStorage.removeItem('bill_products');
+                location.reload();
+               }else if(data.error){
+                ShowServerResponse(data.error)
+                const modal = document.getElementById('myModal')
+                modal.style.display='none';
+               }
+              }
+              
+                }
+                
+                if(customerDebt > 0){
+                  if(subTotal <=  creditProduct ){
+                    const endpoint = '/api/v1/wareHouse/Bill'
+              const res = await fetch(endpoint,{
+                method:"POST",
+                body: JSON.stringify(BillProducts),
+                headers:{'Content-Type': 'application/json'}
+              })
+
+              const data = await res.json()
+              if (data){
+                ShowServerResponse(data.message || data.error)
+               if(data.message){
+                localStorage.removeItem('bill_products');
+                location.assign(location.href);
+               }
+              }
+                  }else{
+                    throw new Error(`This bill total has exceeded the maximum credit limit assigned to the customer. Ask the customer to clear debt on thier account or reduce the quatity of products added to this bill total`)
+                  }
+                  
+                }
+              } catch (error) {
+                ShowServerResponse(error.message)
+                const modal = document.getElementById('myModal')
+                 modal.style.display='none'
+              }
+            } else{
+              const endpoint = '/api/v1/wareHouse/Bill'
+              const res = await fetch(endpoint,{
+                method:"POST",
+                body: JSON.stringify(BillProducts),
+                headers:{'Content-Type': 'application/json'}
+              })
+
+              const data = await res.json()
+              if (data.message){
+                ShowServerResponse( data.message )
+               if(data.message){
+                localStorage.removeItem('bill_products');
+                location.assign(location.href);
+               }
+              }
+
+              if( data.error){
+                ShowServerResponse(data.error)
+                const modal = document.getElementById('myModal')
+                modal.style.display='none';
+              }
+            }
+     
+          return customer  
+        }
+
+        }
+      })
+
+      //appending signature to the quotation
+      const Signature = ()=>{
+        const modal = document.getElementById('myModal')
+        modal.style.display='block'
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+               let opInput = document.querySelector('#opsCode')
+                modal.style.display = "none";
+                opInput.value = ''
+            }
+        }
+
+      }
+
+
+      //ops code form 
+      const opsCodesForm = document.getElementById('opsCode')
+      opsCodesForm.addEventListener('submit', async (e)=>{
+        e.preventDefault()
+        let opInput = opsCodesForm.opsCode.value
+        let user = document.getElementById('Signature')
+        let userId =user.dataset.id
+
+        const request = await fetch(`/api/v1/users/${userId}/${opInput}`,{
+          method:'GET',
+          headers:{'Content-Type': 'application/json'}
+        })
+
+        const response = await request.json()
+        if(response.signature ){
+          const appendSignature = document.getElementById('signature')
+            appendSignature.src = response.signature;
+            BillProducts.signatureUrl = response.signature;
+            saveToLocalStorage(BillProducts)
+            submitBtn.style.display = 'block';
+            document.getElementById('myModal').style.display='none';
+
+            // convert integer for grad total to word count
+            function test(n) {
+              if (n < 0)
+              return false;
+          let single_digit = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
+          let double_digit = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
+          let below_hundred = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+          if (n === 0) return 'Zero'
+          function translate(n) {
+            let word = ""
+            if (n < 10) {
+              word = single_digit[n] + ' '
+            }
+            else if (n < 20) {
+              word = double_digit[n - 10] + ' '
+            }
+            else if (n < 100) {
+              let rem = translate(n % 10)
+              word = below_hundred[(n - n % 10) / 10 - 2] + ' ' + rem
+            }
+            else if (n < 1000) {
+              word = single_digit[Math.trunc(n / 100)] + ' Hundred ' + translate(n % 100)
+            }
+            else if (n < 1000000) {
+              word = translate(parseInt(n / 1000)).trim() + ' Thousand ' + translate(n % 1000)
+            }
+            else if (n < 1000000000) {
+              word = translate(parseInt(n / 1000000)).trim() + ' Million ' + translate(n % 1000000)
+            }
+            // else {
+            // 	word = translate(parseInt(n / 1000000000)).trim() + ' Billion ' + translate(n % 1000000000)
+            // }
+            return word
+          }
+          let result = translate(n) 
+          return result.trim()+'.'
+        }
+        document.getElementById('words').innerHTML = `${test(parseInt(BillProducts.grandTotal))} Naira only.`;
+        ShowServerResponse(`Total for this Order is ${test(parseInt(BillProducts.grandTotal))} Naira only.`)
+                }else{
+                    ShowServerResponse(response.error ? response.error : 'No signature available');
+                    opsCodesForm.reset()
+                    opsCodesForm.opsCode.focus()
+                  }
+                
+              } )
+    </script>
+</html>

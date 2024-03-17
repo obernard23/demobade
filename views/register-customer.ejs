@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+    <%-include('./partials/inactive.ejs')%>
+    <!-- <link rel="stylesheet" href="/feature.css"> -->
+    <link rel="stylesheet" href="/main.css"/>
+<body>
+      <nav class="navbar bg-black">
+        <div class="container-fluid">
+          <span class="navbar-brand" onclick="location.assign('/api/v1/Ecommerce/Customers')" title="Back">
+            <img 
+            width="30"
+            hegith="30"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+           </span>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+  
+                    <h5>
+                      <a
+                      class="nav-link breadcrumb-item active"
+                      aria-current="page"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style="color: #fff !important"
+                    >
+                    Create-new customer
+                    </a>
+                    </h5>
+                  
+                  </li>
+            </ul>
+        </div>
+      </nav>
+
+    
+        <!-- main display -->
+        <div class="container shadow mt-2 bg-light">
+             <!-- create product form -->
+        <div class="flex justify-end  ">
+            <!-- image upload div -->
+                <input type="file" hidden id="files" name='image' multiple />
+        </div>
+    <form action=""  method="post" id='customerForm' class="p-2 "  >
+        <input type="text" placeholder="customer Name" name="Name" style="width:570px;padding:10px;font-size: x-large;" required/>
+        <div class="flex  gap-3 p-5 justify-around">
+            <!-- cateory -->
+            <div>
+                <label  class="flex justify-between gap-7">
+                 customer category
+                 <select id="category" name="Categories">
+                 <optgroup label="category">
+                    <option disabled value="">Choose one</option>
+                    <option selected value='Credit-Customer'>Credit Customer(CC)</option>
+                    <!-- <option disabled value="Pay as Go">Pay as Go (B2B)</option> -->
+                 </optgroup>
+                </select>
+             </label>
+            </div>
+            <!-- image -->
+            <div>
+                <div class="flex flex-col">
+                    <label for="files" id="productImage" style="background-image: url( https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png);"></div>
+                    <!-- display progress % for photo upload -->
+                    <!-- <progress value="0" max="100" id="progress"></progress> -->
+                    <input type="url" name="image" disabled id="imageLoader" class='hidden'>
+                    </label>
+                </div>
+        </div>
+        <div class="border-b flex font-bold">
+            <div class="border p-2 subs" name="category" title="Double click to show section">customer information</div>
+           
+           
+        </div>
+        <!-- customer information -->
+            <div class="flex flex-col gap-9 hidden border-b p-5" id="workInfo">
+                <div class="col-md-4">
+                <label class="flex gap-7"> </label>
+                <input type="tel" name="contact" placeholder="Contact Person">
+
+                </div>
+
+                <div class="col-md-4">
+                <label class="flex gap-7">Phone Number  </label>
+                <input type="tel" required name="customer_tel" placeholder="customer Tel...">
+
+                </div>
+
+                <div class="col-md-4">
+                <label  class="flex gap-7"> Registration Date </label>
+                    <input type="date" class="form-control" name="DOB" placeholder="Date Of Bith">
+
+                </div>
+
+                <div class="col-md-4">
+                <label class="flex gap-7"> Email Address </label>
+                   <input type="email" name="email" required placeholder="Email :Example@xyz.com">
+               
+                </div>
+
+                <div class="col-md-4">
+                 <label class="flex gap-9 "> Address Location</label>
+                    <input type="text" name="Address"placeholder='Branch Address'>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="salesPerson" class="form-label">Sales person</label>
+                    <select name="salesPerson" id="salesPerson" class="form-select" required>
+                        <option >Choose...</option>
+                        <%employees.forEach(employe=>{%>
+                       <option value="<%=employe._id%>"><%=employe.firstName%> <%=employe.lastName%></option>
+                       <% })%>
+                    </select>
+                  </div>
+
+                <div class="col-md-4">
+                  <label for="Debt" class="flex flex-col gap-7">Opening Balance.</label>
+                  <strong>NOTE:  <sub class="text-success">If your business is owing the customer, Kindly register the opening balance in NAGATIVE VALUES (-2000) else in debt register POSITIVE values (2000)</sub></strong>
+                    <input type="number" value= 0 required placeholder="Enter Opening Balance" id="Debt" name="Debt">
+                
+                </div>
+                
+            </div>
+           
+        <button>Rgister New Customer</button>
+    </form>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+<script  >
+    let customerForm = document.getElementById('customerForm')
+    let salesPerson 
+  document.querySelector('#salesPerson').addEventListener('change',async (e)=>{
+    let request = await fetch(`/api/v1/employee/${e.target.value}`,{
+      method: 'GET', 
+      headers:{'content-type': 'application/json'}
+    })
+    response  = await request.json()
+    salesPerson = response._id
+
+  })
+
+
+
+customerForm.addEventListener('submit',async (e)=>{
+    e.preventDefault()
+    
+  
+    const endPoint ='/api/v1/Sales/Register-customer'
+    const res = await fetch(endPoint,{
+        method:'POST',
+        body:JSON.stringify({
+            Username : customerForm.Name.value,
+            Image : customerForm.image.value,
+            contact : customerForm.contact.value,
+            phone : customerForm.customer_tel.value,
+            DOB : customerForm.DOB.value,
+            Email :customerForm.email.value,
+            street : customerForm.Address.value,
+            category : customerForm.Categories.value,
+            status : false,
+            block_customer : true,
+            Debt : customerForm.Debt.value,
+            salesPerson : salesPerson,
+            creditLimit:0,
+            priceList:'',
+            discount:0,
+            NewsFeedSubscription:true,
+            Password:'123456',
+            lastPayDate: customerForm.Debt.value > 0 ? moment().format('l'):'',
+        }),
+        headers:{'Content-Type': 'application/json'}
+    })
+
+    const data = await res.json()
+    if(data.message){
+        alert(data.message)
+        customerForm.reset()
+        location.assign('/api/v1/Ecommerce/Customers')
+    }
+
+    if(data.error){
+        alert(data.error)
+    }
+})
+</script>
+<script  src="/Erp.js"></script>
+<script src="/ImageUpload.js" type="module"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</html>
+

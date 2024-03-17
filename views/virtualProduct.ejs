@@ -1,0 +1,426 @@
+<!-- '/VirtualstorageProduct' -->
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+    <%-include('./partials/inactive.ejs')%>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/icomoon/style.css">
+
+    <link rel="stylesheet" href="/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/bootstrap.min.css">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="/style.css">
+<body>
+    <nav  class="navbar bg-black">
+        <div class="container-fluid">
+          <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+            <img 
+            width="30"
+            hegith="30"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+           </span>
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              
+                  <h5 class="breadcrumb-item " aria-current="page" style="color: #fff !important;">Virtual Store</h5>
+              </ul>
+              <%-include('./partials/USER.ejs')%>
+        </div>
+      </nav>
+      
+      <div class="p-3 bg-success-subtle">
+        <%if(user.role ==="Admin"  ){%>
+          <!-- <a class="btn btn-success m-3" href="/api/v1/Product/Create/new">Create-new Product</a> -->
+          <button class="btn btn-success m-3" onclick="document.getElementById('myModal').style.display='block'">Register WareHouse Product</button>
+          <li class="nav-item dropdown btn btn-success">
+            <label class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="true">
+             Product category
+            </label>
+            <form class="dropdown-menu p-3" id="category" style="overflow-y: scroll; height: 150px;" >
+                <input class="form-control" placeholder="Enter new category" name="categoty" type="text">
+                <li><hr></li>
+                <button class=" btn btn-dark " >Create New</button>
+                <li><hr></li>
+                <%if(productcat.length > 0){%>
+                  <%productcat.forEach((cat)=>{%>
+                    <li class="d-flex justify-content-between">
+                      <%=cat.NAME.toUpperCase()%> <a href="/api/v1/Category/delete/<%=cat._id%>" class="btn btn-warning">Delete</a>
+                    </li>
+                    <li><hr></li>
+                 <%})%>
+                 <%}%> 
+            </form>
+          </li>
+
+          <li class="nav-item dropdown btn btn-success">
+            <label class="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="true">
+              Unit of Measure
+            </label>
+            <form class="dropdown-menu p-3" id="umo" style="overflow-y: scroll; height: 150px;">
+                <input class="form-control" placeholder="Enter new Unit of Measure" name="umo" type="text">
+                <li><hr></li>
+                <button class=" btn btn-dark" >Create New</button><li><hr></li>
+                <%if(umo.length > 0){%>
+                  <%umo.forEach((umo)=>{%>
+                    <li  class="d-flex justify-content-between"><%=umo.NAME.toUpperCase()%> <a href="http://" class="btn btn-warning">Delete</a></li>
+                    <li><hr></li>
+                 <%})%>
+                 <%}%> 
+            </form>
+          </li>
+         
+         <%}%>
+          <div class="table-responsive custom-table-responsive" >
+    
+            <table class="table custom-table" style="font-size: 15px !important;">
+              <thead>
+                <tr>  
+    
+                  <th scope="col">
+                    <label class="control control--checkbox">
+                      <input type="checkbox"  class="js-check-all"/>
+                      <div class="control__indicator"></div>
+                    </label>
+                  </th>
+                  
+                  <th scope="col">ACTIVITY LOG</th>
+                  <th scope="col">QTY SOLD</th>
+                  <th scope="col">PRODUCT ( <%=PurchasedProduct.length%> )</th>
+                  <th scope="col">CATEGORY</th>
+                  <th scope="col">SCALE</th>
+                  <th scope="col">PHOTO DESC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%if(PurchasedProduct.length > 0){%> <%PurchasedProduct.forEach((product)=>{%>
+                  <tr scope="row">
+                    <th scope="row">
+                      <label class="control control--checkbox">
+                        <input type="checkbox"/> 
+                        <div class="control__indicator"></div>
+                      </label>
+                    </th>
+                    <td>
+                      <!-- activity log -->
+                        <div class=" " scope="col">
+                    <!-- Split dropstart button -->
+                  <div class="btn-group dropstart" style="border-right: 1px dotted rgb(190, 190, 190) !important;" role="group">
+                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropstart</span>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAADR0lEQVR4nJ2Vy08TURjF51/Qlf+CS/CFUp6FtrSdvqctbYc+gBYfVJDHQlQkIeIbwfCIC0KCMYrR6MZEKSpEHoIkujAECxsgUCQpAlNYuDjmXqBhBAbKJN9mJvf73Xu+c88wFr6Qs3n8EZvXD85dBK6gEGbeB5PLC4PTA4PDDZ2dB2vjlzUOxxEm0cfmDUQmwmGsr6/vWmtra7RuNzZDwzn8CQPyfYF4o1gstmf1fPwMNefoTRhg9/opQKp5LBZDNLpE5Pqr5rhjCQFsewCqrteh+kad6F39vYdQme1QmWxQGK3I0XOQ6yzIZk3I0pqQoTEgQ61HmkoHmYKdlSlYLWP1FIsAvxcX0dT6BPr8AjrcxpZ2+o586+3rp2BBECQrEongQ+8npCo0MyLAysoKKq/VovBmO4rbhsDd7YW+9A6C1TX029LSEswuL6ZnZiUB8/PzmJqawrlcDRhizS3Al8FhOMvrUNM9Dr5tDLamEZgaeqD1VaJ/YIguvvWgCd2v3x4IcDZHDYb4fgtwvryK+p7Iw9p5aG0uYk2oLQ54LwTp4r6BQQSrrx4OsFcJ2xYvLy/D6PJArjPT4WZqjHS46Xkbw7W6i+KAlJw8MJYEAYIg0Ev39MXLfU9wRp4HhsSCFEDYpcHA8AgCZZWSgMnJSZzOVokBgcsVO7RXbfreXXIp3oA4yuTybMij1lN5ZEoWqUotiCIiAAm1vU4gNcj7j1vQ0fVM+gRZSjBGp+dQgK+jY3CXlEoCTmUpwBi2AYqDV6C1Oqk8eZZ8Ko/SuBELBYGLoiarq6tUDhoLRB6Fll4sM+/dCdgtSfeLA0EQ8Ki1He0dnTvAW4CTmQTgcO8AHKS5IAgY+/4Ddl9A1Hw74ERGLhidnZ//OT5xKMAqkYn3UXnIrSUXy+T0iAEazmlkra653axJtM81SETypvbPX72J7377CZLTc5DQvyNdbTiut/MIhXoQCoVQW9+AQFkFotGoCDA3N7cJkCcGYAhEpR/t7OpCc2sbddGvcBgLCwvxIv8CEhPhcBhJaYcAyFRsqd3np7d95NsYbUZ2+3+9e9+DJFn2dMKAFIXiqEzJ/iGxQHxPhktCjcQC8T2xJtE+OV0+nSSTq/4BNITUZwFW2l8AAAAASUVORK5CYII="
+                    width="20"height="20" >
+                  </button>
+                  <ul class="dropdown-menu ">
+                    <!-- Dropdown menu links -->
+                    <span>History Logs</span>
+                  </ul>
+                  <!--ends here  -->
+                    </td>
+                    <td>
+                   <h6><%=product.TotalSale%></h6>
+                    </td>
+                    <td>
+                         <!-- product name -->
+                 
+                       <a href="/api/v1/Product/<%=product._id%>/<%=product.Name%>" class="form-label"><%=product.Name.toUpperCase()%></a>
+                    <!-- ends here -->
+                    </td>
+                    <td>
+                      <!-- product scale -->
+                   <P><%=product.category.toUpperCase()%></P>
+                    </td>
+                    <td>
+                            <!-- product scale -->
+                         <P><%=product.UMO.toUpperCase()%></P>
+                    </td>
+                    <td>
+                               <!-- product scale -->
+                         <img width="50" height="50" src='<%=product.image%>' alt="photo here" >
+                    </td>
+                  </tr>
+                  <tr class="spacer"><td colspan="100"></td></tr>
+                  <%})%> 
+                  <%}else{%>
+                    <p>Nothin to display</p>
+                <%}%>
+
+              </tbody>
+            </table>
+          </div>
+   <!-- The Modal -->
+
+   <div
+
+   id="myModal"
+
+   class="modal flex items-center flex-col justify-center gap-3"
+
+ >
+
+   <!-- Modal content -->
+
+   <div class="modal-content container p-3">
+
+     <div class="d-flex  justify-content-between container">
+
+       <h5 id="myModalText d-flex align-self-start" class="fw-bolder">New Inventory Product</h5>
+
+       <svg xmlns="http://www.w3.org/2000/svg" title="close Modal" onclick="document.getElementById('myModal').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg  border" viewBox="0 0 16 16">
+
+         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+
+       </svg>
+
+     </div>
+
+     <form action="" id="inventoryForm" method="post">
+
+     <label for="productList" class="form-label fw-bolder"
+
+       >Choose From Product List</label
+
+     >
+
+    
+
+     <select id="productList" class="form-select">
+
+       <option >Choose...</option>
+
+       <!-- display options for product -->
+
+       <%if(PurchasedProduct){%> <%PurchasedProduct.forEach((product)=>{%>
+
+       <option value="<%=product._id%>">
+
+         <%=product.Name%> (<%=product.UMO%>)
+
+       </option>
+
+       <%})%> <%}%>
+
+     </select>
+
+
+
+     <label class="flex flex-row gap-9 justify-around m-2 fw-bolder"
+
+       >Select Location</label
+
+     >
+
+     <!-- display options for product -->
+
+     <%if(wareHouse){%> <%wareHouse.forEach((wareHouse)=>{%>
+
+     <div class="input-group">
+
+       <div class="input-group-text">
+
+         <input
+
+           class="form-check-input mt-0"
+
+           type="radio"
+
+           aria-label="Radio button for following text input"
+
+           id="wareHouse"
+
+           name="wareHouse"
+
+           data-id="<%=wareHouse._id%>"
+
+         />
+
+       </div>
+
+       <input
+
+         type="text"
+
+         class="form-control"
+
+         aria-label="Text input with radio button"
+
+         value="<%=wareHouse.WHName%>"
+
+         disabled
+
+       />
+
+       <%})%> <%}%>
+
+     </div>
+
+   </div>
+
+   <button type="submit" class="btn btn-success">Register Product</button>
+
+ </form>
+
+ </div>
+
+</div>
+
+<!-- first modal ends here  -->
+
+<!-- second modal for product category statrs here -->
+
+<div
+
+id="myModal2"
+
+class="modal flex items-center flex-col justify-center gap-3"
+
+>
+
+<!-- Modal content -->
+
+<div class="modal-content container p-3">
+
+ <div class="d-flex  justify-content-between container">
+
+   <h5 id="myModalText d-flex align-self-start" class="fw-bolder">New Entry</h5>
+
+   <svg xmlns="http://www.w3.org/2000/svg" title="close Modal" onclick="document.getElementById('myModal2').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg  border" viewBox="0 0 16 16">
+
+     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+
+   </svg>
+
+ </div>
+
+ <form action="" id="inventoryForm" method="post">
+
+   kmsddcjdsncdcjsdcd
+
+ </form>
+
+</div>
+
+
+
+   <script src="/jquery-3.3.1.min.js"></script>
+
+ <script src="/popper.min.js"></script>
+
+ <script src="/bootstrap.min.js"></script>
+
+ <script src="/main.js"></script>
+
+ <script>
+
+    //get value for selected ware House
+
+ const inventoryForm = document.getElementById('inventoryForm')
+
+
+
+inventoryForm.addEventListener('submit',async function (e){
+
+e.preventDefault()
+
+const wareHouseId = document.querySelectorAll('#wareHouse');
+
+let  wareHouse
+
+
+
+for(let i=0;i < wareHouseId.length; i++) {
+
+   if (wareHouseId[i].checked){
+
+     wareHouse =  wareHouseId[i].dataset.id;
+
+   }
+
+  
+
+ }
+
+
+
+const product = inventoryForm.elements.productList.value;
+
+const endPoint = `/api/v1/wareHouseToTransfer/${wareHouse}`
+
+
+
+const request = await fetch(endPoint,{
+
+ method:'POST',
+
+ body: JSON.stringify({WHIDS:wareHouse,productId:product}),
+
+ headers: {"Content-Type": 'application/json'}
+
+})
+
+
+
+const response = await request.json()
+
+response.message? alert(response.message) : alert(response.Errormessage)
+
+response.message? inventoryForm.reset() : ""
+
+// location.reload();
+
+})
+
+const  categoryForm = document.getElementById('category')
+categoryForm.addEventListener('submit',async (e)=>{
+  e.preventDefault()
+const endPoint ="/api/v1/Category/create"
+const request = await fetch(endPoint,{
+
+method:'POST',
+
+body: JSON.stringify({NAME:categoryForm.categoty.value}),
+
+headers: {"Content-Type": 'application/json'}
+
+})
+
+const response = await request.json()
+
+response.message? alert(response.message) : alert(response.error)
+
+response.message? inventoryForm.reset() : ""
+
+categoryForm.reset()
+})
+
+// create umo
+const umoForm = document.getElementById('umo')
+umoForm.addEventListener('submit',async (e)=>{
+  e.preventDefault()
+  const endPoint ="/api/v1/umo/create"
+const request = await fetch(endPoint,{
+
+method:'POST',
+
+body: JSON.stringify({NAME:umoForm.umo.value}),
+
+headers: {"Content-Type": 'application/json'}
+
+})
+
+const response = await request.json()
+
+response.message? alert(response.message) : alert(response.error)
+
+response.message? inventoryForm.reset() : ""
+
+umoForm.reset()
+})
+
+ </script>
+
+</body>
+
+</html>

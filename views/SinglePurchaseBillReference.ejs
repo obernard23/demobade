@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+  </head>
+  <%-include('./partials/inactive.ejs')%>
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    href="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  GRN/<%=Singlebill.billReferenceNo%>/<%=vendor.Name.substring(0,3).toUpperCase()%>
+                  </a>
+                  </h5>
+                
+                </li>
+          </ul>
+      </div>
+    </nav>
+
+    
+    <div id="invoice" class="shadow-lg m-4 p-3">
+        <div class="logotype ms-5 p-2">
+            
+            <img class="logo ms-5" src="/logo.jpg" alt="No logo found"/>
+           
+          </div>
+
+      <div class="page" style="page-break-after: always">
+        <div class="d-flex justify-content-between">
+          <h2>" GRN/<%=Singlebill.billReferenceNo%>/<%=vendor.Name.substring(0,3).toUpperCase()%>"</h2>
+        </div>
+        <%if(Singlebill.status !== 'Declined' || !Singlebill.StoreKeeperConfirmation){%>
+         
+          <%if( user.jobTittle === "CFO" && Singlebill.status !== 'POSTED TO WAREHOUSE' ){%>
+            <button class="btn btn-dark"  onclick="document.getElementById('myModal').style.display='block'">CFO ACTION </button>
+          <%}%> 
+        <div class="d-flex justify-content-between">
+          <%if( user._id.toString() === WH.StoreKeeper._id.toString() && Singlebill.paymentStatus ==="Paid" && !Singlebill.StoreKeeperConfirmation ){%>
+            <button class="btn btn-success" id="StoreApproveBtn"  onclick="StoreApprove()">STORE KEEPER APPROVAL</button>
+            <button class="btn btn-danger"  onclick="StoreDeclined()">STORE KEEPER REJECT</button>
+          <%}%> 
+        </div>
+
+        <!-- <%if(user.role === "Admin" ||user.jobTittle === "CFO" ){%>
+        <div class="d-flex justify-content-between">
+          <%if(Singlebill.StoreKeeperConfirmation ){%>
+            <button class="btn btn-warning"  onclick="">Cancel LPO</button>
+            <%}%> 
+        </div>
+        <%}%>  -->
+
+        <%}%>
+        <div class="form-label bg-warning text-dark translate-end badge rounded-pill shadow w-contain start-50">
+           <b><%=Singlebill.status%></b>
+        </div>
+        <!-- show to only listed users -->
+        <%if(user.role === "Admin" ||user.jobTittle === "CFO" || user.jobTittle === "Invoicer"){%>
+        <div class="intro-table">
+ 
+          <div class="intro-form  intro-form-item d-flex intro-table-title align-items-start  justify-content-evenly">
+            <h1 class="intro-table-title" >NAME:<%=vendor.Name %></h>
+            <h4 class="intro-table-title" >ADDR: <%=vendor.Address %></h4>
+            <h4 class="intro-table-title" >TEL: <%=vendor.vendor_tel%></h4>
+            <h4 class="intro-table-title">EMAIL: <%=vendor.email %></h4>
+          </div>
+
+          <div class="intro-form">
+            <div class="intro-form-item-border d-flex flex-column gap-3">
+              <!-- recived date -->
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Recived Date</label>
+                <input
+                  type="date"
+                  class="form-control border"
+                  id="RecievedDate"
+                  aria-describedby="validationServer05Feedback"
+                  disabled
+                  value="<%=Singlebill.recievedDate%>"
+                />
+              </div>
+              <!-- ends here -->
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Amount Paid to vendor (₦)</label>
+                <h6 class="from-text">₦<%=Singlebill.AmountPaid%></h6>
+              </div>
+
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Bank Jornal</label>
+                <h6 class="from-text"><%=Singlebill.bankAccount%></h6>
+              </div>
+
+              <div class="col-md-7 ">
+                <label for="PaymentDate" class="form-label">Payment Date</label>
+                <h6 class="from-text"><%=Singlebill.PaymentDate%></h6>
+              </div>
+             
+              <div class="col-md-7 ">
+                <label for="PaymentDate" class="form-label">P/O for </label>
+                <h6 class="from-text"><%=WH.WHName%></h6>
+              </div>
+              
+                <div class="col-md-4">
+                  <label for="Attachment" class="form-label"></label>
+                  <a href="<%=Singlebill.Attachment%>" target="_blank" id="Attachment" rel="noopener noreferrer">See Attachment</a>
+              </div> 
+            </div>
+            
+          </div>
+        </div>
+        <%}%>
+        <!-- ends here -->
+       
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >QTY</td>
+              <td  >Scale</td>
+              <td  >Expiration date</td>
+              <td  >Unit Price</td>
+              <td  >Batch No:</td>
+              <td  >Total</td>
+            </tr>
+            <tbody  >
+                <% Singlebill.orders.forEach(bill=>{%>
+              <tr class="item">
+                <td  ><%=bill.item.Name ? bill.item.Name :bill.item.productName%></td>
+                <td  ><%=bill.Qty%></td>
+                <td  ><%=bill.item.UMO ? bill.item.UMO :bill.item.UOM%></td>
+                <td  ><%=bill.ExpDate%></td>
+                <td  >₦<%=bill.item.vendor_Price ? bill.item.vendor_Price :bill.item.VendorPrice%></td>
+                <td  ><%=bill.BatchNo%></td>
+                <td  >₦<%=bill.total%></td>
+              </tr>
+              <%})%>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-box">
+          <table cellpadding="10" cellspacing="0">
+            <tbody>
+              <tr class="item">
+                <td></td>
+                <td>Subtotal:</td>
+                <td id="Subtotal">₦<%=Singlebill.subTotal%></td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Discount:</td>
+                <td id="discountinCalc"><%=Singlebill.discount%>%</td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Tax Rate:</td>
+                <td>0</td>
+              </tr>
+
+              <tr class="no-border-item">
+                <td></td>
+                <td>Shipping/Handling:</td>
+                <td>₦<%=Singlebill.shippingFee%> </td>
+              </tr>
+              <tr class="no-border-item" style="font-weight:bold ;">
+                <td></td>
+                <td>Return Value</td>
+                <td id="Grandtotal">₦<%=Singlebill.ReturnQty%></td>
+              </tr>
+              <tr class="no-border-item" style="font-weight:bold ;">
+                <td></td>
+                <td>Remarks</td>
+                <td id="Grandtotal">
+                  <p ><%=Singlebill.Remarks%></p>
+                </td>
+              </tr>
+              <tr class="total  bg-success-subtle" style="font-weight:bold ;">
+                <td></td>
+                <td>Total Due:</td>
+                <td id="Grandtotal">₦<%=Singlebill.grandTotal%></td>
+                <input type="text" name="Accountatnt" value="<%=user.firstName%> <%=user.lastName%>" hidden disabled >
+              </tr>
+             
+          </table>
+          <input type="text" id="BillId" value="<%=Singlebill._id%>" hidden disabled >
+        </div>
+      </div>
+
+      
+        </div>
+        
+      </div>
+
+     
+    </div>
+    <%-include('./partials/footer')%>
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div id="modal_body" class="modal-body d-flex justify-content-center container ">
+          <div>
+            <button class="btn btn-primary mt-1 col-md-12"  onclick="document.getElementById('myModal').style.display='none'">CLOSE</button>
+          </div>
+          <div class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <label for="opsCodes" class="form-label">The Operation you are about to process is sensitive</label>
+            <form  id="Approve" data-user="<%=user.firstName%> <%=user.lastName%>">
+              <div class="col-md-12 ">
+                <label for="AccountNumber" class="form-label">Amount Paid to vendor (₦)</label>
+                <input
+                  type="number"
+                  class="form-control border"
+                  id="RecievedDate"
+                  name="Amount"
+                  aria-describedby="validationServer05Feedback"
+                  placeholder="Record Payment"
+                  required
+                  value="<%=Singlebill.grandTotal%>"
+                />
+              </div>
+
+              <div class="col-md-12 bg">
+                <label for="bankAccount" class="form-label">Bank journal</label>
+                <select required id="AccountNumber" class="form-select" name="bankAccount" >
+                  <option value="">Choose...</option>
+                  <%if(Acconuts.length > 0){%>
+                    <%Acconuts.forEach((account)=>{%>
+                      <option value="<%=account.bankCode%>"><%=account.bankCode%> ₦<%=account.Balance%></option>
+                    <%})%>
+                    <%}%>
+                 </select>
+              </div>
+
+              <div class="col-md-12 ">
+                <label for="PaymentDate" class="form-label">Payment Date</label>
+                <input
+                  type="date"
+                  class="form-control border"
+                  id="PaymentDate"
+                  aria-describedby="validationServer05Feedback"
+                  name="PaymentDate"
+                  required
+                  
+                />
+              </div>
+
+              <div class="col-md-12 ">
+                <label for="PaymentRef" class="form-label">Payment RefNo</label>
+                <input
+                  type="text"
+                  class="form-control border"
+                  id="PaymentRef"
+                  aria-describedby="validationServer05Feedback"
+                  name="PaymentRef"
+                  required
+                  placeholder="Enter Payment referenceNo"
+                />
+              </div>
+              <button type="submit"  class="btn btn-success mt-1 col-md-12">APPROVE REQUEST</button>
+
+            </form>
+            <button type="button" id="Decline" data-user="<%=user._id%>" class="btn btn-danger  mt-1 col-md-12">REJECT / DELETE REQUEST</button>
+          </div>
+         
+        </div>
+      </div>
+      <!-- the end -->
+
+  </body>
+    <script>
+  // get form elements
+      const ApproveForm = document.getElementById('Approve')
+      ApproveForm.addEventListener('submit',async (event) => {
+        event.preventDefault();
+        const BillId = document.getElementById('BillId').value
+        const url =`/api/v1/Vendor/Bill/${BillId}`
+        const request = await fetch(url,{
+          method: 'PATCH',
+          body:JSON.stringify({
+            AmountPaid:ApproveForm.Amount.value,
+            CFO:ApproveForm.dataset.user,
+            PaymentDate:ApproveForm.PaymentDate.value, 
+            bankAccount:ApproveForm.bankAccount.value,
+            status:'Approved',
+            paymentStatus:'Paid',
+            PaymentRef:ApproveForm.PaymentRef.value
+          }),
+          headers:{'content-type': 'application/json'},
+        })
+
+        const response = await request.json()
+        alert(response.message || response.error)
+        location.reload()
+      })
+
+
+
+  const Decline = document.getElementById('Decline')
+  Decline.addEventListener('click',async (e)=>{
+   display =  document.getElementById('opsCode')
+   display.innerHTML = ''
+   const textArea = document.createElement('textarea')
+   const submitBtn = document.createElement('button')
+
+   submitBtn.innerText = 'Submit'
+   submitBtn.classList.add('btn')
+   submitBtn.classList.add('btn-warning')
+
+
+   textArea.placeholder = 'Describe Rejection Reason Here'
+   textArea.classList.add("form-control")
+   textArea.rows="4"
+   textArea. cols="50"
+   display.append(textArea)
+   display.append(submitBtn)
+
+
+   submitBtn.addEventListener("click", async ()=>{
+    const BillId = document.getElementById('BillId').value
+    const userId = Decline.dataset.user
+    const request = await fetch(`/api/v1/Vendor/Bill/${BillId}`,{
+      method:'PATCH',
+      body: JSON.stringify({
+        status:'Declined',
+        RejectionReason:textArea.value
+      }),
+      headers:{"content-type": "application/json"}
+    })
+
+    const response = await request.json()
+        alert(response.deleteMessage || response.error)
+        if(response.deleteMessage){
+          location.assign(`/api/v1/404`)
+          location.reload()
+        }
+   })
+    
+    
+  });
+
+
+
+  async function StoreApprove(){
+   BTN = document.getElementById('StoreApproveBtn').disabled = true;
+   
+    document.getElementById('myModal').style.display = 'block'
+    display =  document.getElementById('modal_body')
+   display.innerHTML = ''
+    const BillId = document.getElementById('BillId').value
+    const request = await fetch(`/api/v1/Vendor/Bill/${BillId}`,{
+      method:'PATCH',
+      body:JSON.stringify({StoreKeeperConfirmation:true,status:'POSTED TO WAREHOUSE'}),
+      headers:{'Content-Type':'application/json'}
+    })
+
+    const response = await request.json()
+    alert(response.message || response.error)
+    location.reload()
+  }
+
+
+
+  const StoreDeclined = async()=>{
+    const BillId = document.getElementById('BillId').value
+    const request = await fetch(`/api/v1/Vendor/Bill/${BillId}`,{
+      method:'PATCH',
+      body:JSON.stringify({StoreKeeperConfirmation:false,status:'Declined By StoreKeeper'}),
+      headers:{'Content-Type':'application/json'}
+    })
+
+    const response = await request.json()
+    alert(response.message || response.error)
+    location.reload()
+  }
+    </script>
+</html>

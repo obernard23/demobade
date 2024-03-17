@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="hidden" id="user" value="<%=user._id%>"/>
+
+
+
+    <div id="status" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <div class="modal-body d-flex justify-content-center container">
+        <p id='text' class="font-bold text-light"></p>
+      </div>
+    </div>
+
+    <!-- <div id="Battery" class="modal flex  items-center flex-col justify-center gap-3 shadow">
+      <div class="modal-body d-flex  justify-content-center container">
+        <img width="100" height="100" src="https://img.icons8.com/stickers/100/charge-battery.png" alt="charge-battery"/>
+      </div>
+    </div> -->
+
+  </body>
+    <!-- inactive -->
+    <script>
+      const user = document.getElementById('user').value
+      let inactivityTime = function() {
+      let time;
+      window.onload = resetTimer;
+      document.onmousemove = resetTimer;
+      document.onkeypress = resetTimer;
+      function logout() {
+        // alert("You have been inactive for 5min. Logging out.")
+        location.assign(`/api/v1/logout/${user}`)
+      }
+      function resetTimer() {
+        clearTimeout(time);
+        time = setTimeout(logout, 300000)
+      }
+    };
+    window.onload = inactivityTime();
+
+
+    // network status
+   const status = document.getElementById('status');
+  window.onload =  handleNetworkChange = () => {
+    if (navigator.onLine) {
+      status.style.display = 'none';
+      
+    } else {
+      status.style.display = 'block';
+      document.getElementById('text').innerText='Seems Your Internet connection is Poor';
+    }
+  };
+
+  window.addEventListener('online', handleNetworkChange);
+  window.addEventListener('offline', handleNetworkChange);
+
+// let batteryIsCharging = false;
+
+// navigator.getBattery().then((battery) => {
+//   batteryIsCharging = battery.charging;
+//   const Battery = document.getElementById('Battery');
+//    if (battery.charging) {
+//     Battery.style.display = 'block';
+//     setTimeout(() => {Battery.style.display = 'none'},2000)
+//     } 
+
+//   battery.addEventListener("chargingchange", () => {
+//     batteryIsCharging = battery.charging;
+//   });
+// });
+
+
+  </script>

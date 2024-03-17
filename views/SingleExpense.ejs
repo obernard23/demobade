@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+  </head>
+  <%-include('./partials/inactive.ejs')%>
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    href="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  EXP/<%=expense.category%>/<%=expense.refNo%>/<%=expense.Date%>
+                  </a>
+                  </h5>
+                
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+
+    
+    <div id="invoice" class="shadow-lg m-4 p-3">
+        <form  class="row g-3 needs-validation" id="form" >
+            <div class=" d-flex justify-content-between">
+              
+                  <!-- <h5>Register Payment</h5> -->
+                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAABj0lEQVR4nO2VwUrDQBCG9yWqb9DePSkIveyAh14Ec9jVi2QOPof2abx7KkJt00KCVqF489CTJLlZe3YlpVuWGLBNmo2t88MPYQd25tuZ3TBGIpH+nzw/9IZByM213ui95gXh7bqxRP3H6Njzow6zpUEQqcSeH3aHQdwc+rEz8KNYr68cC+Jm8q3XrQNs2owAVhR1IKARKiZ9gs3Tu5WcdeJZcWZLWwcAF1d7ILHNhfvMBc7KusRc4Awkjrhwb5Kcmyleug4XOAWJSrssADByzHOe41nh4kHil7mxCbDu2Pw2QpDKM8+dFyJpYfrkKwBQXODHiXNZy3H62M7a0NYIgQkh8XptAC7wJb1R/eBw7rIA6ov9MyBGOTrgfv4VAC5wmgPgZyt1grINGbkJACo228QIEYCsuANPb0dWDATAqAOKRkjSJcbK336gH5ncsR/Z/YOnJpPJ0p1uv3Dstd5Sap8vPW60ygMwi9AuGlNG8doEsLMd6HT7qVnuFY6NGxbvwNa/QkAAaK8DJBKJbYW+AX7aIYn4KzT3AAAAAElFTkSuQmCC"
+                 width="40"
+                 height="40"
+                 >
+
+               <h5> Status :<%=expense.status%></h5>
+               
+              </div>
+
+              <div class="col-md-4">
+                <label for="billreferenceNo" class="form-label">EXPENSE TYPE</label>
+                <p class="form-control"><%=expense.category%></p>
+            </div>
+
+          <div class="col-md-4">
+              <label for="billreferenceNo" class="form-label">Raised By</label>
+              <p class="form-control"><%=expense.initiatorId%></p>
+          </div>
+           
+            <%if(expense.status === "pending" &&  user.jobTittle === "CFO"){%> 
+            <div class="col-md-4">
+                <label for="BankAccount" class="form-label">DEBIT JOURNAL POSTING</label>
+                <select id="BankAccount" required class="form-select border" name="BankAccount">
+                  <%if(Accounts.length > 0){%>
+                  <option value="" >Choose...</option>
+                  <%Accounts.forEach(account =>{%>
+                    
+                    <option value="<%=account.bankCode%>"><%=account.bankCode%></option>
+                  <%})%>
+
+                  <%}%>
+                </select>
+            </div>
+            <%}%>
+            <!-- show if payment isnt registered  -->
+
+            <div class="col-md-4">
+              <label for="date" class="form-label">PAYMENT DATE</label>
+              <h5 class="form-text"><%=expense.paymentDate%></h5>
+            </div>
+            
+            <%if(expense.status === "pending" && user.jobTittle === "CFO"){%> 
+              <div class="col-md-4">
+                <label for="date" class="form-label">PAYMENT DATE</label>
+                <input type="date" name="paymentDate" required id="date" class="form-control border" >
+              </div>
+              <div class="col-md-4">
+                <label for="date" class="form-label">PAYMENT RefNo</label>
+                <input type="text" name="PaymentRef" required id="date" class="form-control border" >
+              </div>
+            <%}%>
+           
+            <div class="col-md-4">
+              <label for="PAYEE" class="form-label">PAYEE</label>
+              <p class="form-control"><%=expense.payee%></p>
+          </div>
+
+          <div class="col-md-4">
+            <label for="BankAccount" class="form-label">CREDIT ACCOUNT NUMBER</label>
+            <p class="form-control"><%=expense.payeebankAccount%></p>
+        </div>
+
+        <div class="col-md-4">
+          <label for="BankName" class="form-label">BANK </label>
+          <p class="form-control"><%=expense.payeeBankName%></p>
+      </div>
+          <div class="col-md-4">
+            <label for="DriverNumber" class="form-label">ATTACHMENT</label>
+            <a href="<%=expense.Attachment%>" target="_blank" rel="noopener noreferrer">See Attachment</a>
+        </div>
+        <div class="col-md-4">
+          <label for="Amount" class="form-label">AMOUNT </label>
+          <p class="form-control">₦<%=expense.Amount%></p>
+        </div>
+           <div class="col-md-4">
+            <label for="remark" class="form-label">REMARKS</label>
+            <p class="form-text" ><%=expense.remarks%></p>
+        </div>
+
+        <div class="col-md-4">
+          <label for="BankAccount" class="form-label">DEBIT ACCOUNT</label>
+          <p class="form-control"><%=expense.BankAccount%></p>
+      </div>
+
+      <div class="col-md-4">
+        <label for="BankAccount" class="form-label">APPROVAL OFFICER</label>
+        <p class="form-control"><%=expense.Accountant%></p>
+    </div>
+
+          <%if(user.jobTittle === "CFO" && expense.status !== "Approved"){%> 
+              <div class="col-md-4 d-flex justify-content-between flex-column p-2">
+                <label for="InvoiceNo" class="form-label "> All done!</label>
+                <input type="hidden" name="billId" value="<%=expense._id%>" hidden>
+                <input type="hidden" id="ACCOUNT" value="<%=user.firstName%> <%=user.lastName%>">
+                <button type="submit" class="btn btn-dark form-control" > POST EXPENSE</button>
+              </div>
+            <%}%>
+
+          </form>
+     
+          <%-include('./partials/footer')%>
+    </div>
+
+  </body>
+    <script>
+         const form = document.getElementById('form');
+         form.addEventListener('submit', async(event) => {
+          event.preventDefault();
+         const AccountatntId =  document.getElementById('ACCOUNT').value
+            const request =  await fetch( `/api/v1/Expense/edit/${form.billId.value}/${AccountatntId}`,{
+            method: 'PATCH',
+            body:JSON.stringify({
+              Accountant:AccountatntId,//cfo id
+              BankAccount:form.BankAccount.value,
+              status:'Approved',
+              paymentDate:form.paymentDate.value,
+              PaymentRef:form.PaymentRef.value
+            }),
+            headers:{'Content-Type': 'application/json'}
+          })
+
+          const response = await request.json()
+          alert(response.message || response.error)
+
+          response.message? location.reload() : ''
+
+         })
+    </script>
+</html>

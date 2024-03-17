@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    href="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  SCRP/<%=scrap.wareHouse.toUpperCase().substring(0,4)%>/<%=scrap.ADC_CODE%>/<%=scrap.SERIALnUMBER%>
+                  </a>
+                  </h5>
+                
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+          <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+
+    
+    <div id="invoice" class="shadow-lg m-4 p-3">
+        <div  class="row g-3 needs-validation" id="form" data-id="<%=scrap._id%>" >
+            <div class=" d-flex justify-content-between">
+              
+                
+                 <img src="data:image/png;base64,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"
+                  width="40"
+                  height="40"
+                  >
+
+               <h5>Status: <%=scrap.status.toUpperCase()%></h5>
+                <svg xmlns="http://www.w3.org/2000/svg" onclick="history.back()" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                  </svg>
+              </div>
+
+              <div class="col-md-4">
+                <label for="Manager" class="form-label">PRODUCT</label>
+                <h6  class="form-control "><%=products.Name%></h6>
+              </div>
+
+            <div class="col-md-4">
+                <label for="customer" class="form-label">RAISED BY</label>
+                <input id="customer" class="form-control border" name="manager" value="<%=scrap.wareHouse.toUpperCase()%> " disabled>
+              </div>
+
+            <div class="col-md-4">
+                <label for="date" class="form-label">ADC CODE</label>
+                <input type="text" placeholder="ADC CODE" required class="form-control border" id="date" value="<%=scrap.ADC_CODE%>"/>
+            </div>
+            <div class="col-md-4">
+              <label for="SERIALnUMBER" class="form-label">PRODUCT SERIAL NUMBER</label>
+              <h5  class="form-control border"><%=scrap.SERIALnUMBER%></h5>
+          </div>
+
+          <div class="col-md-4">
+            <label for="REASON" class="form-label">SCRAP REASON</label>
+            <h5 class="form-select"> <%=scrap.REASON%></h5>
+        </div>
+        <div class="col-md-4">
+          <label for="DriverNumber" class="form-label">ATTACHMENT</label>
+          <a href="<%=scrap.Attachment1%>" target="_blank" rel="noopener noreferrer">See Attachment</a>
+      </div>
+           <div class="col-md-4">
+            <label for="remark" class="form-label">REMARKS</label>
+            <textarea type="text" id="remark"  name="remark"  class="form-control" autocomplete="off" autocapitalize="on" placeholder="Remark" ><%=scrap.remarks%></textarea>
+          </div>
+          <%if(scrap.status.toLowerCase() === 'pending' && user.role === "Admin" ||user.jobTittle === "CFO"){%>
+            <div class="col-md-4  ">
+              <label for="InvoiceNo" class="form-label"> All done!</label>
+                <button class="btn btn-dark form-control" onclick="document.getElementById('myModal').style.display='block'"> VALIDATE SCRAP REQUEST</button>
+            </div>
+          <%}%>
+          </div>
+     
+          <%-include('./partials/footer')%>
+    </div>
+
+       <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div id="modal_body" class="modal-body d-flex justify-content-center container">
+          <div class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <label for="opsCodes" class="form-label">The Operation you are about to process is sensitive</label>
+            <button type="submit" id="Approve" class="btn btn-success">APPROVE REQUEST</button>
+            <button type="submit" id="Decline" class="btn btn-danger">REJECT REQUEST</button>
+            <button class="btn btn-primary"  onclick="document.getElementById('myModal').style.display='none'">CLOSE MODAL</button>
+          </div>
+        </div>
+      </div>
+      <!-- the end -->
+
+  </body>
+    <script>
+      const Scrapform = document.getElementById('form');
+      const modal_body = document.getElementById('modal_body');
+         const Approve = document.getElementById('Approve')
+         Approve.addEventListener('click', async (e)=>{
+          modal_body.innerHTML = `
+          <div class=" modal-content container" style=" background-color: transparent !important; border: none !important;">
+          <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden"></span>
+          </div>
+          </div>
+          `
+          const ID = Scrapform.dataset.id;
+          const request = await fetch(`/api/v1/scrap/${ID}`,{
+            method:'PATCH',
+            body: JSON.stringify({status:'Approved'}),
+            headers:{'Content-Type': 'application/json'},
+          })
+          // get response from server
+          const response = await request.json()
+          if(response.message){
+            alert(response.message )
+            document.getElementById('myModal').style.display='none'
+            location.reload()
+          }else if (response.error){
+            alert( response.error)
+            document.getElementById('myModal').style.display='none'
+            location.reload()
+          }
+         })
+
+
+        //  for reject button
+        const Decline = document.getElementById('Decline')
+        Decline.addEventListener('click', async (e)=>{
+          modal_body.innerHTML = `
+          <div class=" modal-content container" style=" background-color: transparent !important; border: none !important;">
+          <div class="spinner-border text-info" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden"></span>
+          </div>
+          </div>
+          `
+          const ID = Scrapform.dataset.id;
+          const request = await fetch(`/api/v1/scrap/${ID}`,{
+            method:'PATCH',
+            body: JSON.stringify({status:'Declined'}),
+            headers:{'Content-Type': 'application/json'},
+          })
+          // get response from server
+          const response = await request.json()
+          if(response.message){
+            alert(response.message )
+            document.getElementById('myModal').style.display='none'
+            location.reload()
+          }else if (response.error){
+            alert( response.error)
+            document.getElementById('myModal').style.display='none'
+            location.reload()
+          }
+         })
+    </script>
+</html>

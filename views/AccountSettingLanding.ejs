@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs')%>
+  <%-include('./partials/inactive.ejs')%>
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()"  title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <h5>
+              <a
+                class="nav-link breadcrumb-item active"
+                aria-current="page"
+                href="/"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: #fff !important"
+              >
+              Revenue Center
+              </a>
+            </h5>
+          </li>
+        </ul>
+        <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+     <!--bread crum div -->
+     <%if(user.role === "Admin" || user.jobTittle === "CFO"){%>
+     <div class="d-flex justify-content-between p-2 m-1 bg-success-subtle ">
+    <button class="btn btn-dark" onclick="document.getElementById('myModal').style.display='block'">REGISTER NEW ACCOUNT</button>
+    <button class="btn btn-dark" onclick="document.getElementById('myModal2').style.display='block'">TRANSFER PAYMENT</button>
+    </div>
+    <%}%>
+
+    <!-- show all account here -->
+    <div class="container overflow-hidden flex-wrap d-flex">
+    <%if(account.length > 0){%>
+      <%account.forEach((account)=>{%>
+        <div class="card m-1 mb-3 shadow-sm" style="width:13rem;" title="Balance ₦<%=account.Balance%>" >
+          <div class="card-img-top justify-content-center d-flex p-2">
+              <img src="<%if(account.logo){%>
+                  <%= account.logo %>
+                  <%}else{%>
+                      data:image/png;base64,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
+                  <%}%>
+                  " alt="No Photo uploaded"  width=100 height="100">
+          </div>
+      
+          <div class="card-body" style="overflow:hidden;
+          white-space:nowrap;
+          text-overflow:ellipsis;
+          max-width:150px;">
+              <h5 class="card-title"><%= account.bankName.toUpperCase() %></h5> 
+              <p><%=account.bankCode%></p>
+          </div>
+          <a href='' class="btn btn-dark">See Postings</a>
+      </div>
+        <%})%>
+    <%}else{%>
+      <p>No account registered yet</p>
+    <%}%>
+  </div>
+
+   <!-- The Modal -->
+   <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+    <!-- Modal content -->
+    <div class="modal-body modal-content container">
+        <form  class="row g-3 needs-validation" id="AccountForm">
+            <div class=" d-flex justify-content-between">
+              
+                  <!-- <h5>Register Payment</h5> -->
+                  <img width="60" height="60" src="data:image/png;base64,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">
+                <h6>REGISTER NEW ACCOUNT</h6>
+                <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('myModal').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                  </svg>
+              </div>
+              <p id="words" style="color:#ecb265" ></p>
+              <div class="col-md-4">
+                  <label for="customer" class="form-label"></label>
+                  <input type="text" name="NAME" id="" class="form-control border" placeholder="Account Name">
+              </div>
+
+              <div class="col-md-4">
+                <label for="validationCustom01" class="form-label"> </label>
+                <input type="text" list="pickManager" name="AccountType" required class="form-control border" placeholder="Select Account Type" required/>
+                <datalist id="pickManager">
+                    <option >Choose...</option>
+                    <option value="Assets">Assets</option>
+                    <option value="Liabilities">Liabilities</option>
+                    <option value="Equity">Equity</option>
+                    <option valu="Expenses">Expenses</option>
+                    <option value="Income">Income</option>
+                </datalist>
+            </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label"></label>
+                <input type="text"   class="form-control" name="AccountNum" placeholder="Account Number"/>
+               
+            </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label"> </label>
+                <input type="text"   class="form-control" name="bankName" placeholder="Bank Name"/>
+               
+            </div>
+
+
+            <div class="col-md-4">
+                <label for="supportDoc" class="form-label">UPLOAD LOGO </label>
+                <input type="file"  class="form-control"  id="supportDoc" name="logo"/>
+            </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label"> Begining Balance</label>
+                <input type="number"   class="form-control" name="Balance" value="0" placeholder="Opening Balance"/>
+            </div>
+
+            <div class="col-md-4">
+              <label for="locationOfUse" class="form-label">Location Of Use</label>
+             <select name="locationOfUse" id="locationOfUse" class="form-select" required>
+              <option value="">Choose...</option>
+              <%if(WHous.length > 0){%>
+                <%WHous.forEach((WHous)=>{%>
+                  <option value="<%=WHous._id%>"><%=WHous.WHName%></option>
+                  <%})%>
+                  <%}%>
+
+             </select>
+          </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inactive" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                 Activate ths Account
+                </label>
+              </div>
+
+
+            <div class="col-md-4  ">
+              <label for="InvoiceNo" class="form-label"> All done!</label>
+                <button class="btn btn-success form-control" id="submit" >Create Account</button>
+            </div>
+            
+            <%-include('./partials/footer.ejs')%>
+          </form>
+    </div>
+</div>
+
+<!-- transfet to bank modal -->
+
+ <!-- The Modal -->
+ <div id="myModal2" class="modal flex items-center flex-col justify-center gap-3 shadow">
+  <!-- Modal content -->
+  <div class="modal-body modal-content container">
+      <form  class="row g-3 needs-validation" id="fundsTransfer">
+          <div class=" d-flex justify-content-between">
+            
+                <!-- <h5>Register Payment</h5> -->
+                <img width="48" height="48" src="https://img.icons8.com/color/48/data-in-both-directions.png" alt="data-in-both-directions"/>
+              <h6>INTER BANK TRANSFER FORM</h6>
+              <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('myModal2').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </div>
+            <p id="words" style="color:#ecb265" ></p>
+            <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">FUNDS TRANSFER FROM</label>
+              <input type="text" list="tansferfrom" name="TRANSFER" required class="form-control border" placeholder="Select Account Type" required/>
+              <datalist id="tansferfrom">
+                <%if(account.length > 0){%>
+                  <%account.forEach((account)=>{%>
+                    <option value="<%=account.bankCode%>">Ava Bal.( ₦<%=account.Balance%>)</option>
+                    <%})%>
+                    <%}%>
+              </datalist>
+          </div>
+
+            <div class="col-md-4">
+              <label for="tansferTo" class="form-label"> RECIEVING ACCOUNT</label>
+              <input type="text" list="tansferTo" name="RECIEVING" required class="form-control border" placeholder="Select Account Type" required/>
+              <datalist id="tansferTo">
+                <%if(account.length > 0){%>
+                  <%account.forEach((account)=>{%>
+                    <option value="<%=account.bankCode%>">Ava Bal.(₦<%=account.Balance%>)</option>
+                    <%})%>
+                    <%}%>
+              </datalist>
+          </div>
+
+          <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">Transfer Amount (₦)</label>
+              <input type="number"   class="form-control" name="Amount" placeholder="Account Number"/>
+          </div>
+
+          <div class="col-md-4">
+            <label for="validationCustom01" class="form-label">Initiator</label>
+            <input type="text"   class="form-control" name="Initiator" disabled value="<%=user.firstName%> <%=user.lastName%>"/>
+            <input type="text"   class="form-control" name="BillNo" disabled hidden value="<%=user._id%>"/>
+        </div>
+
+          <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">Transfer Date  </label>
+              <input type="date"   class="form-control" name="Date"/>
+          </div>
+
+
+          <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">Transaction Reference</label>
+              <textarea name="paymentReferenceNo" id="" cols="30" rows="10" class="form-control" placeholder="Type a discription"></textarea>
+          </div>
+
+
+          <div class="col-md-4  ">
+            <label for="InvoiceNo" class="form-label"> All done!</label>
+              <button class="btn btn-success form-control" id="submit" >TRANSFER</button>
+          </div>
+          
+          <%-include('./partials/footer.ejs')%>
+        </form>
+  </div>
+</div>
+
+
+
+<!-- stop dobule action modal -->
+ <!-- The Modal -->
+ <div id="action" class="modal flex items-center flex-col justify-center gap-3 shadow">
+  <!-- Modal content -->
+  <div class=" container d-flex justify-content-center" >
+    <h6 class="text-light">Please Wait</h6>
+  </div>
+ </div>
+<!-- ends here  -->
+
+    </body>
+    <script>
+       //get form element from fromn
+        const AccountForm = document.getElementById('AccountForm');
+        AccountForm.addEventListener('submit',async function(e) {
+           e.preventDefault();
+
+           const request = await fetch('/api/v1/Bank/Account/create',{
+            method: 'POST',
+            body: JSON.stringify({
+                NAME:AccountForm.NAME.value,
+                AccountType:AccountForm.AccountType.value,
+                AccountNum:AccountForm.AccountNum.value,
+                bankName:AccountForm.bankName.value,
+                logo:AccountForm.logo.value,
+                Balance:AccountForm.Balance.value,
+                inactive:AccountForm.inactive.checked,
+                bankCode:`ACD${AccountForm.bankName.value.substring(0,4)}${AccountForm.AccountNum.value.substring(2,5)}`,
+                locationOfUse:AccountForm.locationOfUse.value,
+            }),
+            headers:{'Content-Type': 'application/json'},
+           })
+
+        //    get response from server
+        const response = await request.json()
+        if(response.message) {
+          alert(response.message)
+          AccountForm.reset()
+        }else{
+          alert(response.error)
+        }
+        } );
+
+        // fundsTransfer
+        const fundsTransfer =  document.getElementById('fundsTransfer')
+        fundsTransfer.addEventListener('submit',async(e)=>{
+          e.preventDefault()
+          document.getElementById('action').style.display = 'block'
+          const request = await fetch(`/api/v1/Bank/${fundsTransfer.TRANSFER.value}/BalanceTransfer`,{
+            method:'PATCH',
+            body: JSON.stringify({
+              TRANSFER : fundsTransfer.TRANSFER.value,
+              RECIEVING : fundsTransfer.RECIEVING.value,
+              Amount : fundsTransfer.Amount.value,
+              Initiator : fundsTransfer.Initiator.value,
+              date : fundsTransfer.Date.value,
+              paymentReferenceNo:fundsTransfer.paymentReferenceNo.value,
+              BillNo:fundsTransfer.BillNo.value
+            }),
+            headers: {'Content-Type': 'application/json'},
+          })
+
+          const response = await request.json()
+          alert(response.message || response.error)
+          fundsTransfer.reset()
+          location.reload()
+          
+        })
+    </script>
+</html>
+

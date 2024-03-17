@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/inactive.ejs')%>
+  <%-include('./partials/head.ejs')%>
+  <%-include('./partials/Notification.ejs')%>
+  <body onload="getData()">
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()"  title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <h5>
+              <a
+                class="nav-link breadcrumb-item active"
+                aria-current="page"
+                href="/"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: #fff !important"
+              >
+             Vendor Payments
+              </a>
+            </h5>
+          </li>
+        </ul>
+        <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+     <!--bread crum div -->
+     <%if(user.jobTittle === "Accountant" || user.role === "Admin" || user.jobTittle === "CFO"){%>
+     <div class="d-flex justify-content-between p-2 m-1 bg-success-subtle ">
+         <button class="btn btn-dark" onclick="document.getElementById('myModal3').style.display='block'">Pay Customer Incentive</button>
+         <button class="btn btn-dark" onclick="document.getElementById('myModal').style.display='block'" >Register Vendor Payment</button>
+        </div>
+      <%}%> 
+     <div class="h-59 p-1 d-flex flex-column" >
+        <%if(VendorReports.length > 0){%>
+            <%VendorReports.sort((a,b)=>{return b.createdAt - a.createdAt}).forEach(Payment=>{%>
+              <span  class="list-group position-relative mb-2" title=" <%=Payment.PaymentDate%>" onclick="showSingle()" id="reverseID"  data-reverse="<%=Payment._id%>">
+                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="rev" >
+                    <small class="position-absolute top-0  start-50 translate-middle badge rounded-pill bg-warning"title='grand total of this bill'>
+                      <span class="badge bg-secondary">
+                          ₦<%=Payment.Amount%>
+                        </span>
+                    </small>
+                       
+                      <div>
+                           
+                            <a  class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="javascript:void(0)"><%if(Payment.cr){%>
+                              CR
+                              <%}else{%>
+                              DR
+                              <%}%>  
+                              /<%=Payment.billReferenceNo%>/<%=Payment.PaymentDate%></a>    
+                      </div>
+                      <div>
+                      </div>
+                     <small class="<%if(Payment.status === 'Posted'){%>
+                      bg-success
+                      <%}else{%>
+                        bg-secondary
+                     <%}%> text-light p-1 rounded shadow"> <%=Payment.status%></small>
+                    </div> 
+                </span>
+            <%})%>
+        <%}else{%>
+        <div class="container">
+            <p>No Payment Registered yet..!!</p>
+        </div>
+        <%}%>
+    </div>
+
+
+
+     <!-- The Modal -->
+     <div id="ReversePayment" class="modal flex items-center flex-row justify-center gap-3 shadow">
+      
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container bg-dark">
+          <span title="close" class="text-danger" onclick="document.getElementById('ReversePayment').style.display='none'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+            </svg>
+          </span>
+          <div  class="text-light container row g-3 needs-validation">
+            <div class="col-md-4">
+              <label for="customer" class="form-label">COLLECTION </label>
+              <h6 id="Customer" class="form-input"></h6>
+            </div>
+            <div class="col-md-4">
+              <label for="customer" class="form-label">POSTED BY</label>
+              <h6 id="Accountant" class="form-input"></h6>
+            </div>
+            <div class="col-md-4">
+              <label for="customer" class="form-label">AMOUNT</label>
+              <h6 id="drAmount" class="form-input"></h6>
+            </div>
+            <div class="col-md-4">
+              <label for="customer" class="form-label">DATE</label>
+              <h6 id="Date" class="form-input"></h6>
+            </div>
+            <div class="col-md-4">
+              <label for="customer" class="form-label">REF NO:</label>
+              <h6 id="paymentReference" class="form-input"></h6>
+            </div>
+            <div class="col-md-4">
+              <label for="customer" class="form-label">STATUS</label>
+              <h6 id="STATS" class="form-input"></h6>
+            </div>
+           
+            <%if(user.role === "Admin" || user.jobTittle === "CFO"){%>
+              <div class="col-md-4">
+                <label class="form-label"> <sub>Performing this action would also Reverese  payment on corresponding Ledger Report in case of customers or vendors</sub></label>
+              <button class="btn btn-warning" onclick="document.getElementById('ReverseModal').style.display='block';document.getElementById('StoreApproveBtn').disabled = true"  id="StoreApproveBtn"> Reverse Payment</button>
+              </div>
+              <%}%>
+          </div>
+        </div>
+     </div>
+
+
+
+
+     <!-- for signature -->
+    <div id="ReverseModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container">
+          <form class="bg-light gap-3 p-3 rounded shadow  flex-column d-flex" id="opsCode" >
+            <span title="close" onclick="document.getElementById('ReverseModal').style.display='none'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+              </svg>
+            </span>
+            <input type="hidden" hidden value="<%=user.Signature%>" id="Signature" data-id="<%=user._id%>">
+            <input type="password" name="opsCode" id="opsCodes" class="form-control input-group has-validation" required placeholder="Enter operational code" autocomplete="off">
+            <button type="submit" class="btn btn-danger">Proceed with Reverse</button>
+          </form>
+        </div>
+    </div>
+
+   <!-- The Modal -->
+   <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+    <!-- Modal content -->
+    <div class="modal-body modal-content container">
+        <form  class="row g-3 needs-validation" id="paymentForm">
+            <div class=" d-flex justify-content-between">
+              
+                  <!-- <h5>Register Payment</h5> -->
+                  <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('myModal').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                    <h6>NEW PAYMENT</h6>
+                    <img width="60" height="60" src="data:image/png;base64,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">
+                  </div>
+              <p id="words" style="color:#ecb265" ></p>
+              <div class="col-md-4">
+                  <label for="VENDOR" class="form-label">VENDOR CODE</label>
+                  <input type="text" id="VENDOR" list="vendorList" class="form-control border"  name="VENDOR" required placeholder="Search Customers"/>
+                  <datalist  id="vendorList">
+                    <option value="">Choose...</option>
+                    <%if(VENDOR.length > 0){%>
+                        <%VENDOR.forEach((VENDOR)=>{%>
+                            <option value="<%=VENDOR._id%>"><%=VENDOR.Name%></option>
+                        <%})%>
+                    <%}%>   
+                  </datalist>
+              </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">DATE</label>
+                <input type="date" required  class="form-control" name="DATE"/>
+               
+            </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">ACCOUNTANT</label>
+                <h5><%=user.firstName.toUpperCase()%> <%=user.lastName.toUpperCase()%></h5>
+                <input type="text"  value="<%=user.firstName%> <%=user.lastName%>" Name="Accountant" hidden  disabled>
+            </div>
+
+            <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">Payment RefNo</label>
+              <input type="text"  Name="PaymentRef" class="form-control" placeholder="Enter Payment Refrence" required>
+          </div>
+
+            <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">Vendor Name</label>
+              <h5 id="Vendor"></h5>
+          </div>
+
+            <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">TRANSACTION TYPE</label>
+              <select class="form-select" name="TRANSACTION" required>
+                <option value="">Choose...</option>
+                <option selected value="DR">INCENTIVE</option>
+                <!-- <option selected value="CR">REMBUSMENT</option> -->
+              </select>
+          </div>
+
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">AMOUNT  </label>
+                ₦<input type="number" placeholder="Amount Paid " required class="form-control border" id="VENDORAmount" name="Amount"/>
+            </div>
+
+            <div class="col-md-4">
+                <label for="InvoiceNo" class="form-label">VENDOR BALANCE</label>
+               <h5 id="Balance" style="color: red;"></h5>
+            </div>
+
+            <div class="col-md-4  ">
+              <label for="InvoiceNo" class="form-label"> ALL DONE!</label>
+                <button class="btn btn-success form-control" id="VENDORsubmit" >Confirm Payment</button>
+            </div>
+            
+            <%-include('./partials/footer.ejs')%>
+          </form>
+    </div>
+</div>
+
+
+
+
+<!-- modal for incentive -->
+ <!-- The Modal -->
+ <div id="myModal3" class="modal flex items-center flex-col justify-center gap-3 shadow">
+  <!-- Modal content -->
+  <div class="modal-body modal-content container">
+      <form  class="row g-3 needs-validation" id="DisbursepaymentForm">
+          <div class=" d-flex justify-content-between">
+            
+                <!-- <h5>Register Payment</h5> -->
+                <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('myModal3').style.display='none'" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+                <h6>CUSTOMER INCENTIVE DISBURSMENT PAYMENT PORTAL</h6>
+                <img width="60" height="60" src="data:image/png;base64,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">
+            </div>
+            <p id="words" style="color:#ecb265" ></p>
+            <div class="col-md-4">
+                <label for="customerList" class="form-label">CUSTOMER</label>
+                <select  id="customerList" name="customerList" class="form-select" required>
+                  <%if(customers.length > 0){%>
+                    <option value="">Choose...</option>
+                      <%customers.forEach((customer)=>{%>
+                          <option value="<%=customer._id%>"><%=customer.Username%></option>
+                      <%})%>
+                  <%}%>   
+                </select>
+            </div>
+
+            <div class="col-md-4">
+              <label for="vendorLists" class="form-label">VENDOR</label>
+              <select  id="vendorLists" name="vendorLists" class="form-select" required>
+                <%if(VENDOR.length > 0){%>
+                  <option value="">Choose...</option>
+                    <%VENDOR.forEach((VENDOR)=>{%>
+                        <option value="<%=VENDOR._id%>"><%=VENDOR.Name%></option>
+                    <%})%>
+                <%}%>   
+              </select>
+          </div>
+
+          <div class="col-md-4">
+              <label for="validationCustom01" class="form-label" >DATE</label>
+              <input type="date" required  class="form-control" name="Date"/> 
+          </div>
+
+          <div class="col-md-4">
+              <label for="validationCustom01" class="form-label">ACCOUNTANT</label>
+              <h5><%=user.firstName.toUpperCase()%> <%=user.lastName.toUpperCase()%></h5>
+              <input type="text"  value="<%=user.firstName%> <%=user.lastName%>" Name="Accountant" hidden  disabled>
+          </div>
+
+          <div class="col-md-4">
+            <label for="PaymentRef" class="form-label">Payment RefNo</label>
+            <input type="text"  Name="PaymentRef" class="form-control" placeholder="Enter Payment Refrence" autocomplete="off" required>
+        </div>
+
+          <div class="col-md-4">
+            <label for="customerName" class="form-label">CUSTOMER BALANCE</label>
+            <h5 id="customerBal"></h5>
+        </div>
+
+          <div class="col-md-4">
+            <label for="validationCustom01" class="form-label">TRANSACTION TYPE</label>
+            <select class="form-select" name="TRANSACTION" required>
+              <option selected value="INCENTIVE">INCENTIVE DISBURSMENT</option>
+            </select>
+        </div>
+
+          <div class="col-md-4">
+              <label for="Amount" class="form-label">REIMBURSED AMOUNT  </label>
+              ₦<input type="number" placeholder="Amount Paid " required class="form-control border" id="Amount" name="Amount"/>
+          </div>
+
+          <div class="col-md-4">
+              <label for="vendorBal" class="form-label">VENDOR BALANCE</label>
+             <h5 id="vendorBal"></h5>
+          </div>
+
+          <div class="col-md-4">
+            <label for="validationCustom01" class="form-label">REMARKS</label>
+            <textarea type="text"  name="remarks" required class="form-control" autocomplete="off" autocapitalize="on"></textarea>
+        </div>
+
+          <div class="col-md-4  ">
+            <label for="InvoiceNo" class="form-label"> </label>
+              <button class="btn btn-dark form-control" id="submit" >Confirm Payment</button>
+          </div>
+          
+          <%-include('./partials/footer.ejs')%>
+        </form>
+  </div>
+</div>
+
+<!-- ends here -->
+
+<!-- loader  -->
+<div id="loader" class="modal flex items-center flex-col justify-center gap-3">
+  <div class="modal-body d-flex justify-content-center container">
+    <h6 class="text-light">PLEASE WAIT...</h6>
+  </div>
+</div>
+<!-- loder ends here -->
+
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+let payment
+let customers
+let LPO
+
+const getData = async ()=>{
+
+  const loader = document.getElementById('loader')
+  loader.style.display ='block'
+        const request = await fetch('/api/v1/Getfulldb',{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+        response ?  loader.style.display ='none' : loader.style.display ='block'
+
+            const currency = (Amount)=>{
+                f = new Intl.NumberFormat(undefined,{
+                  currency:"NGN",
+                  style:"currency"
+                })
+                return f.format(Amount)
+            }
+
+      //get customer details
+        const customer = document.getElementById('customerList').addEventListener('change',async function(e){
+            const endpoint = `/api/v1/customer/${e.target.value}/search`
+            const request = await fetch(endpoint,{
+                method: 'GET',
+                headers:{'content-type': 'application/json'},
+            })
+            // document.getElementById('PaymentAccount').innerText = PaymentAccount
+            const responses = await request.json()
+
+             // show customer Balance
+            document.getElementById('customerBal').innerHTML = currency(responses.item.Debt)
+           
+        })
+          let vendorBalance
+
+        // GET VENDOR BALANCE
+        document.getElementById('vendorLists').addEventListener('change',async function(e){
+           // show customer Balance
+          let selectedVendor =  response.vendor.filter(vendor => {
+            return vendor._id === e.target.value;
+           })
+           //currency symbol
+           vendorBalance = selectedVendor[0].Balance
+           document.getElementById('vendorBal').innerHTML = `${currency(selectedVendor[0].Balance)}`
+        })
+        
+     
+        
+        let Amount = document.getElementById('Amount').addEventListener('change',(e)=>{
+          return parseInt(e.target.value < 0 ? e.target.value = 1 : e.target.value )
+        })
+
+        const DisbursepaymentForm = document.getElementById('DisbursepaymentForm')
+        DisbursepaymentForm.addEventListener('submit',async(e) => {
+            e.preventDefault()
+            document.getElementById('submit').setAttribute('disabled',true)
+          
+            try {
+
+              if(vendorBalance >= document.getElementById('Amount').value){
+                let user = document.getElementById('Signature')
+                let userId = user.dataset.id
+                const PaymentRequest = await fetch(`/api/v1/Pay_Vendor_incentive/${userId}`,{
+                method:"POST",
+                body: JSON.stringify({
+                    customer:DisbursepaymentForm.customerList.value,
+                    Vendor : DisbursepaymentForm.vendorLists.value,
+                    PaymetDate:DisbursepaymentForm.Date.value,
+                    Accountant:DisbursepaymentForm.Accountant.value,
+                    remarks:DisbursepaymentForm.remarks.value,
+                    TRANSACTION:DisbursepaymentForm.TRANSACTION.value,
+                    INCENTIVE:DisbursepaymentForm.Amount.value,
+                    paymentReferenceNo:DisbursepaymentForm.PaymentRef.value,
+                }),
+                headers:{'Content-Type': 'application/json'}
+               })
+
+               const PaymentResponse = await PaymentRequest.json()
+               ShowServerResponse(PaymentResponse.message || PaymentResponse.error)
+               if(PaymentResponse.message){
+                location.reload()
+               }
+              }else{
+                throw new Error(`Vendor Balance (${currency(vendorBalance)}) must be Greater than ${currency(document.getElementById('Amount').value)} `)
+              }
+            } catch (error) {
+              error ? document.getElementById('submit').removeAttribute('disabled') : ''
+              ShowServerResponse(error.message)
+            }
+
+          
+       });
+
+
+
+      //get paymentForm for nendor balance
+      const VENDOR=document.getElementById("VENDOR")
+      VENDOR.addEventListener("change",(e)=>{
+        const selectedVENDOR = response.vendor.filter(vendor =>{return vendor._id === e.target.value})
+        document.getElementById('Vendor').innerText = `${selectedVENDOR[0].Name}`
+        document.getElementById('Balance').innerText = `${selectedVENDOR[0].Balance}`
+      })
+
+
+       const paymentForm = document.getElementById('paymentForm')
+       paymentForm.addEventListener('submit',async (e)=>{
+        e.preventDefault() 
+        document.getElementById('VENDORsubmit').setAttribute('disabled',true)
+
+        try {
+
+          if( paymentForm.Amount.value !== ''){
+            let user = document.getElementById('Signature')
+            let userId = user.dataset.id
+            const PaymentRequest = await fetch(`/api/v1/vendor_balance/${userId}`,{
+            method:"PATCH",
+            body: JSON.stringify({
+            
+                Vendor : paymentForm.VENDOR.value,
+                PaymetDate:paymentForm.DATE.value,
+                Accountant:paymentForm.Accountant.value,
+                TRANSACTION:paymentForm.TRANSACTION.value,
+                INCENTIVE:paymentForm.Amount.value,
+                paymentReferenceNo:paymentForm.PaymentRef.value,
+            }),
+            headers:{'Content-Type': 'application/json'}
+          })
+
+          const PaymentResponse = await PaymentRequest.json()
+          ShowServerResponse(PaymentResponse.message || PaymentResponse.error)
+          if(PaymentResponse.message){
+            paymentForm.reset()
+            location.reload()
+          }
+          }else{
+            throw new Error(` ${currency(paymentForm.Amount.value)} can not be empty`)
+          }
+          } catch (error) {
+          error ? document.getElementById('VENDORsubmit').setAttribute('disabled',false) : ''
+          error ? document.getElementById('submit').removeAttribute('disabled') : ''
+          ShowServerResponse(error.message)
+          }
+       })
+
+       
+       let  logId
+
+       //SHOW SIGLE POSTING
+       showSingle = ()=>{
+        const currency = (Amount)=>{
+                f = new Intl.NumberFormat(undefined,{
+                  currency:"NGN",
+                  style:"currency"
+                })
+                return f.format(Amount)
+            }
+
+      
+          const reverseID = document.querySelectorAll('#reverseID')
+          for (let index = 0; index < reverseID.length; index ++) {
+            const element = reverseID[index].addEventListener('click',e =>{
+
+              item =  reverseID[index].dataset.reverse
+              logId =  reverseID[index].dataset.reverse
+
+              document.getElementById('ReversePayment').style.display = 'block'
+
+          const log = response.vendorBill.filter((SinglePay)=>{
+            return SinglePay._id.toString() === item.toString()
+          })
+          document.getElementById('Customer').innerText = log[0].dr ? 'TTC-PAYMENT' : 'VENDOR PAYMENT'
+          document.getElementById('Accountant').innerText = log[0].AccountatntId
+          document.getElementById('drAmount').innerText = currency(log[0].Amount)
+          document.getElementById('Date').innerText = log[0].PaymentDate
+          document.getElementById('paymentReference').innerText = log[0].billReferenceNo
+          document.getElementById('STATS').innerText = log[0].status
+
+            })
+
+            
+          }
+
+      }
+
+        // for for opsCode
+        const opsForm = document.getElementById('opsCode')
+          opsForm.addEventListener('submit',async (e)=>{
+            e.preventDefault();
+
+            let opInput = opsForm.opsCode.value
+            let userSignature = document.getElementById('Signature').value
+            let user = document.getElementById('Signature')
+            let userId = user.dataset.id
+
+              const request = await fetch(`/api/v1/users/${userId}/${opInput}`,{
+              method:'GET',
+              headers:{'Content-Type': 'application/json'}
+            })
+            const appendSignature = document.getElementById('signature')
+
+            const client = await request.json()
+
+            if(client.signature === userSignature){
+                    //ask user to wait till request is complete 
+                    loader.style.display ='block'
+                    const serverRequest = await fetch(`/api/v1/Reverse/Balance/${userId}/${logId}`,{
+                      method: 'PATCH',
+                      body:JSON.stringify({date:moment().format('l'),id:userId}),
+                      headers:{'Content-Type': 'application/json'},
+                    })
+
+                  const clientResponse = await serverRequest.json()
+                    if(clientResponse.message){
+                      ShowServerResponse(clientResponse.message )
+                      setTimeout(()=>{
+                        location.reload()
+                      },5000)
+                    }else{
+                      ShowServerResponse(clientResponse.error)
+                      setTimeout(()=>{
+                        location.reload()
+                      },5000)
+                    }
+            }else{
+              ShowServerResponse(client.error)
+            }
+
+              })
+          // ends here
+
+  
+      }
+        
+    </script>
+</html>

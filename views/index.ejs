@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('./partials/head.ejs')%>
+<body class="relative">
+     <!-- top nv -->
+     <%-include('./partials/Nav.ejs')%>
+     <!-- display for Ads -->
+     <div class="contain" id="Ads">
+        <div class="flex items- justify-around " >
+            <div class="flex flex-col justify-around gap-7 p-4" >
+                <h1 class="font-bold text-white text-2xl">The center for Women Fashion <br> and trending clothes in <br>the world.</h1>
+                <p>Shop with us today and be trendyly in style <br>... Catch exciting deals and promotions</p>
+               
+            </div>
+            <div class="fixed">
+                <img src="istockphoto-1209951015-170667a-removebg-preview.png" alt=""  class="imageSmalls " id="toSet" width="250">
+            </div>
+            <div class="flex items-center ">
+               <div>
+                <!-- color scheme -->
+                <p>Select to view</p>
+                <div class="flex gap-1 imageSmall justify-end">
+                <img src="1000_F_358099748_eSyEKWQIW0MwkW44KACOzu7RmVxehJxC-removebg-preview.png" class="p-1 images" style="border-radius:  50px;width: 95px;height: 100px;" data-mode="green" ></img>
+                <img src="excited-young-woman-dancing-wearing-wireless-headphones_116547-17500-removebg-preview.png" class="p-1 images" style="border-radius: 50px;width: 95px;height: 100px;" data-mode="black" ></img>
+                <img src="1000_F_401686788_cFnRUMFut4qKE2abRUn1zA1AbEBVdBb5-removebg-preview.png" class="p-1 images" style="border-radius: 50px;width: 95px;height: 100px;" ></img>
+                <img src="istockphoto-1209951015-170667a-removebg-preview.png" class="p-1 images" style="border-radius: 50px;width: 95px;height: 100px;" data-mode="hotpink"></img>
+                <img src="1000_F_402712932_lihkhRyQeHW129TRZyV3gICU3eGnwkQY-removebg-preview.png" class="p-1 images" style="border-radius: 50px;width: 95px;height: 100px;" data-mode="hotpink"></img>
+                </div>
+                <small>Your settings will be saved for feature visits.</small>
+               </div>
+            </div>
+        </div>
+     </div>
+
+     <!-- sign up or in -->
+     <%- include('./partials/Login.ejs') %>
+
+     <!-- display products here -->
+     <div class="flex p-3 bg-[rgba(0, 0, 0, 0.718)]">
+         <!-- product card starts here -->
+      
+      <div class="card">
+        <div class="imgBx">
+          <img
+            src="https://i.pinimg.com/564x/3e/b2/f7/3eb2f70bbd7cbc175f2ae3ffa7a6486d.jpg"
+            alt=""
+          />
+        </div>
+        <div class="details">
+          <h3>Nike Air Max<br /><span>Men's Shoe</span></h3>
+          <h4>Products Details</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus,
+            atque.
+          </p>
+          <h4>Size</h4>
+          <ul class="size">
+            <li>36</li>
+            <li>38</li>
+            <li>40</li>
+            <li>42</li>
+            <li>44</li>
+          </ul>
+          <div class="group">
+            <h2>$199<small>.99</small></h2>
+            <a href="#">Buy Now</a>
+          </div>
+        </div>
+      </div>
+         <!-- product card ends here -->
+
+     </div>
+     <!-- footer -->
+     <%- include('./partials/footer.ejs') %>
+</body>
+<script>
+  let loginDiv = document.querySelector('.login')
+let RemoveLogin = document.querySelector('#LoginCancel')
+const loginBtn = document.getElementById('showLogin')
+
+//show login display
+loginBtn.addEventListener('click',()=>{loginDiv.classList.remove('hidden');})
+
+//remove loging display
+RemoveLogin.addEventListener('click',()=>{loginDiv.classList.add('hidden');})
+
+// change image on landing page
+let themeDots = document.querySelectorAll('.images');//for imges to display in the middle
+function setImge(url) {
+    let mainImage = document.getElementById('toSet');
+    mainImage.src = url;
+}
+
+//return random image url 
+function RandomSrc(themeDots) {
+     let url = themeDots[Math.floor(Math.random()*themeDots.length)]
+    return url.src
+}
+
+//set random image url automtically 
+let autoDisplay = setInterval(() => {
+    setImge(RandomSrc(themeDots))
+}, 10000);
+
+
+for (var i=0; themeDots.length> i; i++){
+    themeDots[i].addEventListener('click', function(){
+        let url= this.src;
+        setTimeout(() => {
+            setImge(url);// set url for main display
+            clearInterval(autoDisplay)//stop dispay of random images 
+        }, 2000);
+    });
+}
+
+// to togglr pane
+let pane = document.getElementById('pane')
+pane.addEventListener('click',()=>{
+  
+  let AdPabe = document.getElementById('Ads')
+  AdPabe.classList.toggle('hidden')
+})
+</script>
+<script src="App.js"></script>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 50%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+
+                  <h5>
+                    <a
+                    class="nav-link breadcrumb-item active"
+                    aria-current="page"
+                    href="/"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style="color: #fff !important"
+                  >
+                  <%=transferLog.billReferenceNo%>/<%=Whouse.WHName.substring(0,5).toUpperCase()%>/<%=transferLog.transferedDate%>
+                  </a>
+                  </h5>
+                
+                </li>
+          </ul>
+          <%-include('./partials/USER.ejs')%>
+          <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+
+    
+    <form id="invoice" class="shadow-lg m-4 p-3" >
+      <span id="download-button" onclick="generatePdf()" data-id="<%=transferLog._id%>" type="button" title="download as Pdf file" >
+        <img src="data:image/png;base64,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"
+        height="40"
+        width="40"
+        >
+      </span>
+
+      <%if ( transferLog.status !== "posted to ware house" ){%>
+      <div class="page" style="page-break-after: always" id="id" data-id="<%=transferLog._id%>">
+        <%if(transferLog.cfoApproval && user.workLocation.toString() === transferLog.to.toString() && transferLog.status !== "Store Rejected"  ){%>
+          <div class="d-flex justify-content-between" >
+            <button class="btn btn-dark shadow" onclick="StoreDone()">StoreKeeper Confirm Recieved Batch</button>
+          </div>
+          <%}%>
+
+        <%if(transferLog.cfoApproval && user.workLocation.toString() === transferLog.to.toString() && transferLog.status !== "Store Rejected" ){%>
+          <div class="d-flex justify-content-between">
+            <button onclick="StoreRejected()" class="btn btn-danger shadow">StoreKeeper Reject Recieved Batch</button>
+          </div>
+          <%}%>
+
+          <%}%>
+
+        <%if(!transferLog.cfoApproval && user.jobTittle === 'CFO' && transferLog.status !== "CFO canceled"){%>
+          <div class="d-flex justify-content-between">
+            <button onclick="CFOApproved()" class="btn btn-success shadow">CFO Approve</button>
+          </div>
+          <%}%>
+
+          <%if(!transferLog.cfoApproval && user.jobTittle === 'CFO' && transferLog.status !== "CFO canceled"){%>
+            <div class="d-flex justify-content-between">
+              <button type="button" onclick="CFORejected()" class="btn btn-danger shadow">Cancel Batch Entry</button>  
+            </div>
+            <%}%>
+
+        <div class="intro-table">
+                
+          <div class="intro-form  intro-form-item d-flex intro-table-title align-items-start  justify-content-evenly">
+            
+            <%=transferLog.billReferenceNo%>/<%=Whouse.WHName.substring(0,4).toUpperCase()%>/<%=transferLog.transferedDate%>
+            <input type="hidden" disabled  id="ref" value="<%=transferLog.billReferenceNo%>/<%=Whouse.WHName.substring(0,4).toUpperCase()%>/<%=transferLog.transferedDate%>">
+            <input type="hidden" disabled id="rec" value="<%=to.WHName%>">
+          </div>
+
+          <div class="intro-form">
+            <div class="intro-form-item-border d-flex flex-column gap-3">
+              
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Recieved Date</label>
+                <input
+                  type="text"
+                  class="form-control border"
+                  id="RecievedDate"
+                  name="Amount"
+                  aria-describedby="validationServer05Feedback"
+                  disabled
+                  value="<%=transferLog.recievedDate%>"
+                />
+              </div>
+              
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Transfer Request Status</label>
+                <p><%=transferLog.status%></p>
+              </div>
+
+              <div class="col-md-7 ">
+                <label for="AccountNumber" class="form-label">Transfer To </label>
+                <p><%=to.WHName%></p>
+              </div>
+               
+            </div>
+
+          </div>
+        </div>
+
+        <div class="table-box pb-3">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >QTY</td>
+              <td  >Scale</td>
+              <td  >Batch</td>
+            </tr>
+            <tbody  >
+                <% transferLog.orders.forEach(bill=>{%>
+              <tr class="item">
+                <td  ><%=bill.item.productName%></td>
+                <td  ><%=bill.Qty%></td>
+                <td  ><%=bill.item.UOM%></td>
+                <td  ><%=bill.item.BatchNo%></td>
+              </tr>
+              <%})%>
+
+            </tbody>
+          </table>
+        </div>
+
+        </div>
+        
+      </div>
+
+      <%-include('./partials/footer')%>
+     
+    </form>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+        <div class="modal-body d-flex justify-content-center container">
+         <h6 class="text-light" id="responseData">Please wait...</h6>
+        </div>
+      </div>
+
+  </body>
+  <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    //generate pdf
+    const  generatePdf = async  function  (){
+      const ref = document.getElementById('ref').value
+      const rec =  document.getElementById('rec').value
+ const billId =  document.getElementById("download-button")
+const id = billId.dataset.id
+ const request = await fetch(`/api/v1/Getfulldb`,{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+        // response ? document.getElementById('loading').style.display='none' :''
+        const Transfer = await response.Transfer.filter(Transfer=>{
+          return Transfer._id.toString() === id.toString()
+        })
+        
+var pdfObject = await jsPDFInvoiceTemplate.default( {
+        outputType: jsPDFInvoiceTemplate.OutputType.Save,
+        returnJsPDFDocObject: true,
+        fileName: `${Transfer[0].billReferenceNo}`,
+        orientationLandscape: false,
+        compress: true,
+        logo: {
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 26.66, //aspect ratio = width/height
+        height: 26.66,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        stamp: {
+        inAllPages: true, //by default = false, just in the last page
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 20, //aspect ratio = width/height
+        height: 20,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        business: {
+        name: "ALL CHANNELS DISTRIBUTORS NIG LTD",
+        address: "CM/104 COMPLEX KARU NEW MARKET, KARU ABUJA ,",
+        email: "(+234) 08158491682, ALLCHANNELDISTRIBUTION@YAHOO.COM",
+        phone: "Group 3 Plaza, UK Bello Road, kasuwar gwari, Minna Niger State."
+        },
+        contact: {
+        label:`Status: ${Transfer[0].status.toUpperCase()} `,
+        name: `Transfered to ${rec}`,
+        address: `Recived DATE: ${Transfer[0].recievedDate}`,
+        phone: `StoreKeeper confirmation Approval: ${Transfer[0].storeKeeperApproval ? 'Approved':'Declined'}`,
+        email: ``,
+        otherInfo:``,
+        },
+        invoice: {
+        label:`${ref}`,
+        num: `.` ,
+        invDate: `Transfer Date: ${Transfer[0].transferedDate}`,
+        invGenDate: `CFO Approval: ${Transfer[0].cfoApproval ? 'Approved':'Declined'}`,
+        headerBorder: true,
+        tableBodyBorder: true,
+        header: [
+          {
+            title: "#",
+            style: {
+              width: 10
+            }
+          },
+          {
+            title: "Product",
+            style: {
+              width: 50
+            }
+          },
+          { title: "Qty"},
+          {title:'Scale'},
+          {title:'Batch'},
+        ],
+        table: Transfer[0].orders.map((ord,index)=>{
+          return [index +1, ord.item.productName ? ord.item.productName:'',ord.Qty ? ord.Qty :0,'CARTON', ord.item.BatchNo?ord.item.BatchNo:'' ]
+        })
+         ,
+        additionalRows: [{
+            col1: 'Total:',
+            col2: "145678",
+            col3: '',
+            style: {
+                fontSize: 14 //optional, default 12
+            }
+        },
+        {
+            col1: 'VAT:',
+            col2: "20",
+            col3: '%',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        },
+        {
+            col1: 'SubTotal:',
+            col2: "116199.90",
+            col3: 'ALL',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        }],
+        invDescLabel: ``,
+        invDesc: ``,
+        invTotal: "",
+        },
+        footer: {
+        text: "Powered by BADE",
+        },
+        pageEnable: true,
+        pageLabel: "BADE",
+        }); //returns number of pages created
+  }
+
+
+    const responseData = document.getElementById('responseData')
+    const invoice = document.getElementById('invoice')
+    myModal = document.getElementById('myModal')
+    const id = document.getElementById('id')
+    ID = id.dataset.id
+   StoreDone = async ()=>{
+    myModal.style.display = 'block'
+    invoice.addEventListener('submit',(e)=>{e.preventDefault()})
+    const server =  await fetch(`/api/v1/Transfer/${ID}`,{
+    method:'PATCH',
+    body:JSON.stringify({recievedDate:moment().format('l'),storeKeeperApproval:true,status:"posted to ware house"}),
+    headers:{'Content-Type': 'application/json'}
+   })
+    const response = await server.json()
+    responseData.innerText = response.message || response.error
+    setTimeout(()=>{
+      location.reload()
+    },2000)
+   }
+
+   StoreRejected = async ()=>{
+    myModal.style.display = 'block'
+    invoice.addEventListener('submit',(e)=>{e.preventDefault()})
+    const server = await fetch(`/api/v1/Transfer/${ID}`,{
+    method:'PATCH',
+    body:JSON.stringify({status:"Store Rejected"}),
+    headers:{'Content-Type': 'application/json'}
+   })
+
+    const response = await server.json()
+    responseData.innerText = response.message || response.error
+    setTimeout(()=>{
+      location.reload()
+    },2000)
+   }
+
+   CFORejected = async ()=>{
+    myModal.style.display = 'block'
+    invoice.addEventListener('submit',(e)=>{e.preventDefault()})
+    const server = await fetch(`/api/v1/Transfer/${ID}`,{
+    method:'PATCH',
+    body:JSON.stringify({cfoApproval:false,status:"Rejected"}),
+    headers:{'Content-Type': 'application/json'}
+   })
+
+    const response = await server.json()
+    responseData.innerText = response.message || response.error
+    setTimeout(()=>{
+      location.reload()
+    },2000)
+   }
+
+   CFOApproved = async ()=>{
+    myModal.style.display = 'block'
+    invoice.addEventListener('submit',(e)=>{e.preventDefault()})
+    const server = await fetch(`/api/v1/Transfer/${ID}`,{
+    method:'PATCH',
+    body:JSON.stringify({cfoApproval:true}),
+    headers:{'Content-Type': 'application/json'}
+   })
+
+    const response = await server.json()
+    responseData.innerText = response.message || response.error
+    setTimeout(()=>{
+      location.reload()
+    },2000)
+   }
+  </script>
+
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs')%>
+  <%-include('./partials/inactive.ejs')%>
+  <style>
+    h3 {
+  color: #262626;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+p {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666666;
+
+  &.small {
+    font-size: 14px;
+  }
+}
+
+.go-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  background-color: #00838d;
+  border-radius: 0 4px 0 32px;
+}
+
+.go-arrow {
+  margin-top: -4px;
+  margin-right: -4px;
+  color: white;
+  font-family: courier, sans;
+}
+
+.card1 {
+  display: block;
+  position: relative;
+  max-width: 262px;
+  background-color: #f2f8f9;
+  border-radius: 4px;
+  padding: 32px 24px;
+  margin: 12px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    right: -16px;
+    background: #00838d;
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    transition: transform 0.25s ease-out;
+  }
+
+  &:hover:before {
+    transform: scale(21);
+  }
+}
+
+.card1:hover {
+  p {
+    transition: all 0.3s ease-out;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  h3 {
+    transition: all 0.3s ease-out;
+    color: #ffffff;
+  }
+}
+
+/* card 2 */
+.card2 {
+  display: block;
+  top: 0px;
+  position: relative;
+  max-width: 262px;
+  background-color: #f2f8f9;
+  border-radius: 4px;
+  padding: 32px 24px;
+  margin: 12px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+  border: 1px solid #f2f8f9;
+
+  &:hover {
+    transition: all 0.2s ease-out;
+    box-shadow: 0px 4px 8px rgba(38, 38, 38, 0.2);
+    top: -4px;
+    border: 1px solid #cccccc;
+    background-color: white;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    right: -16px;
+    background: #00838d;
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    transform: scale(2);
+    transform-origin: 50% 50%;
+    transition: transform 0.15s ease-out;
+  }
+
+  &:hover:before {
+    transform: scale(2.15);
+  }
+}
+
+  </style>
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()"  title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <h5>
+              <a
+                class="nav-link breadcrumb-item active"
+                aria-current="page"
+                href="/"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: #fff !important"
+              >
+              Finance & Operations
+              </a>
+            </h5>
+          </li>
+        </ul>
+        <%-include('./partials/USER.ejs')%>
+      </div>
+    </nav>
+
+    <div class=" p-2  flex-wrap d-flex">
+
+        <a class="card1" href="/api/v1/CFO/EXPENSE/<%=user._id%>"  title="EXPENSE">
+          <h3>Expense</h3>
+          <p class="small">Manage all Expense from diffrent work location. </p>
+          <div class="go-corner"  href="/api/v1/CFO/EXPENSE/<%=user._id%>">
+            <div class="go-arrow">
+              →
+            </div>
+          </div>
+        </a>
+
+        <a class="card2" href="/api/v1/Sales/Payment/<%=user._id%>">
+          <h3>Customer Invoice</h3>
+          <p class="small">Manage All your Sales Order or Invoice.</p>
+          
+          <div class="go-corner" href="/api/v1/Sales/Payment/<%=user._id%>">
+            <div class="go-arrow">
+              →
+            </div>
+          </div>
+        </a>
+
+
+
+
+
+    <%if(user.role ==='Admin' || user.jobTittle === 'CFO'){%>
+
+      <a class="card2" href="/api/v1/CFO/Returns/<%=user._id%>" title="Cancelled Customer Invoice">
+        <h3>Credit Note</h3>
+        <p class="small">Manage All Credit Note request from all work location.</p>
+        
+        <div class="go-corner" href="/api/v1/CFO/Returns/<%=user._id%>">
+          <div class="go-arrow">
+            →
+          </div>
+        </div>
+      </a>
+  <%}%>
+  <!-- ENDS HERE  -->
+
+  <a class="card1"href="/api/v1/Credit/customers/<%=user._id%>"  title="Customer Payments">
+    <h3> Payments</h3>
+    <p class="small">Manage customer Payments and transction logs here. </p>
+    <div class="go-corner" href="/api/v1/Credit/customers/<%=user._id%>">
+      <div class="go-arrow">
+        →
+      </div>
+    </div>
+  </a>
+
+
+    
+  <%if(user.role ==='Admin' || user.jobTittle === 'CFO'){%>
+
+    <a class="card1" href="/api/v1/Vendor/Bills/<%=user._id%>" title="Vendor Bills">
+      <h3>Vendor Bills</h3>
+      <p class="small">Post payment to vendor ledger and manage all vendor bill. </p>
+      <div class="go-corner" href="/api/v1/Vendor/Bills/<%=user._id%>">
+        <div class="go-arrow">
+          →
+        </div>
+      </div>
+    </a>
+
+    
+  <%}%>
+  <!-- ENDS HERE  -->
+
+  <%if(user.role ==='Admin' || user.jobTittle === 'CFO'){%>
+
+  <a class="card2" href="/api/v1/asset/<%=user._id%>" title="Assets & Depreciation">
+    <h3>Assets Register</h3>
+    <p class="small">Manage Your Businesses Assets and depreciation schedul</p>
+    
+    <div class="go-corner"href="/api/v1/AccountSettingLanding/<%=user._id%>">
+      <div class="go-arrow">
+        →
+      </div>
+    </div>
+  </a>
+
+  <a class="card1" href="/api/v1/Profit&lost/<%=user._id%>"  title="Profit and Lost">
+    <h3>P&L</h3>
+    <p class="small">We simplified and Automated P&L Report for your Business</p>
+    <div class="go-corner"  href="/api/v1/Profit&lost/<%=user._id%>">
+      <div class="go-arrow">
+        →
+      </div>
+    </div>
+  </a>
+
+  <a class="card2" href="/api/v1/AccountSettingLanding/<%=user._id%>" title="Revenue Center">
+    <h3>Revenue Center</h3>
+    <p class="small">Manage,View Account ledgers and post Bank transaction..</p>
+    
+    <div class="go-corner"href="/api/v1/AccountSettingLanding/<%=user._id%>">
+      <div class="go-arrow">
+        →
+      </div>
+    </div>
+  </a>
+
+  <a class="card1" href="/api/v1/Pay_Vendor/<%=user._id%>"  title="Vendor Payment">
+    <h3>Vendor Payment</h3>
+    <p class="small">Keep Record of Payments to vendor for your Business Purchase</p>
+    <div class="go-corner"  href="/api/v1/Pay_Vendor/<%=user._id%>">
+      <div class="go-arrow">
+        →
+      </div>
+    </div>
+  </a>
+  <%}%>
+  
+ 
+<!-- ENDS HERE  -->
+
+</div>
+    
+   
+  </body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs')%>
+  <body>
+    <div class="flex justify-center items-center">
+      <div
+        class="w-fit gap-2 items-center flex flex-col m-3 p-4 rounded shadow border"
+      >
+        <a href="/" class="flex items-center gap-1">
+          <img src="/BADES.jpg" alt="" width="50px" />
+        </a>
+        <h1 class="font-bold text-white text-xl">Password reset</h1>
+        <div class="text-success">
+          <h5 id="emailerror"></h5>
+        </div>
+        <!-- <label class="flex flex-col  gap-2">
+                    Registered Email<input type="text" placeholder="Example@xyz.com" id="Email" name="Email" required>
+                    <h1 class="email found font-bold" style="color:rgb(117, 25, 140)"></h1>
+                </label> -->
+
+        <div class="col-md-3" id="options">
+          <h1
+            class="email found font-bold"
+            style="color: rgb(117, 25, 140)"
+          ></h1>
+          <label for="StartDate" class="form-label"> Registered Email</label>
+          <input type="email" class="form-control" id="Email" name="Email" />
+        </div>
+
+        <!-- for security reset -->
+
+        <div class="col-md-3" id="options">
+          <label for="StartDate" id="provide" class="form-label">
+           Ensure Email to recieve OTP is a registered Email</label
+          >
+          <input
+            type="password"
+            class="form-control"
+            id="resetOtp"
+            name="resetOption"
+          />
+          <button class="btn btn-dark mt-2 mb-2" type="button" id="OTP">Check OTP</button>
+        </div>
+
+        <!-- form for patch request for new password -->
+        <form action="patch" id="passwordForm">
+          <div class="col-md-3">
+            <label for="StartDate" class="form-label "> New Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="StartDate"
+              name="password"
+            />
+          </div>
+
+          <button class="btn btn-dark mt-2">Reset-password</button>
+        </form>
+        <!-- <a href="/api/v1/SignIn" class="btn btn-success mt-2 mb-2" style="color:#ffff;text-decoration: wavy;">
+          Try Login</a
+        > -->
+        <%- include('./partials/footer.ejs') %>
+      </div>
+    </div>
+    <!-- footer -->
+  </body>
+  <script>
+    const passwordForm = document.getElementById("passwordForm");
+    passwordForm.style.display = "none";
+    const resetOtp = document.getElementById("resetOtp");
+    let errorMessage = document.querySelector("#emailerror");
+    let ResetEmail = document.getElementById("Email");
+    const OTPBtn = document.getElementById("OTP");
+    ResetEmail.addEventListener("input", async function (e) {
+      let otp;
+      let id;
+      const provideOTPLabel = document.getElementById("provide").textContent = `Provide OTP sent to '${e.target.value}'`
+      const EmailTOreset = e.target.value;
+      errorMessage.innerText = "";
+      const res = await fetch(`/api/v1/Reset/account/${EmailTOreset}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      //check if error message
+      data?.err
+        ? (errorMessage.innerText = data.err)
+        : (errorMessage.innerText = `${data.data.firstName.toUpperCase()} ?`);
+      otp = data.otp;
+      id = data.data._id;
+
+      resetOtp.addEventListener("change", (e) => {
+        if (e.target.value === otp) {
+          passwordForm.style.display = "block";
+          resetOtp.setAttribute("disabled", true);
+          ResetEmail.setAttribute("disabled", true);
+          OTPBtn.setAttribute("disabled", true);
+        } else {
+          alert("Please Provide Correct Credentials");
+        }
+      });
+
+      passwordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+          // FORM INPUT FOR PASSWORD
+          const password = passwordForm.password.value;
+          const endPoint = `/api/v1/Reset-password/${id}/Security`;
+          const res = await fetch(endPoint, {
+            method: "PATCH",
+            body: JSON.stringify({ password }), //use bcrypt and salt from frontend before you save
+            headers: { "Content-Type": "application/json" },
+          });
+          // check for stsus of pass word
+          const data = await res.json();
+          if (data.Newcustomer) {
+            alert("PASSWORD RESET COMPLETE");
+            passwordForm.reset();
+            passwordForm.style.display = "none";
+            resetOtp.value = "";
+            this.value = "";
+            location.assign(`/api/v1/SignIn`);
+            // location.assign(`/Dashboard/${data.Newcustomer}`);
+          } else {
+            alert(data.error);
+          }
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    });
+    // location.assign()
+  </script>
+  <!-- <script src="App.js"></script> -->
+</html>

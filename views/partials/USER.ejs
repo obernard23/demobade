@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+   <div class="d-flex justify-content-between flex-wrap d-flex gap-3 align-items-center"  style="color: rgb(163, 163, 91);">
+    <img class="rounded shadow" width="30" height="30" src="
+    <%if(user.image){%>
+        <%= user.image %>
+        <%}else{%>
+            https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_640.png
+        <%}%>
+    "  alt="display photo" srcset="" title="<%=user.firstName.toUpperCase().charAt(0)%><%=user.firstName.substring(1,20)%> <%=user.lastName.toUpperCase().charAt(0)%><%=user.lastName.substring(1,20)%>">
+
+    <img width="30" height="30" 
+    src="https://img.icons8.com/color/48/appointment-reminders--v1.png" alt="appointment-reminders--v1" 
+    title="<%=user.Notification.length%> Notification for <%=user.firstName%>"
+    />
+    <img width="30" height="30"
+     src="https://img.icons8.com/fluency/48/messaging-.png" alt="messaging-"
+     title="Conversations"
+     />
+</div>
+</body>
+<script>
+
+</script>
+</html>
+

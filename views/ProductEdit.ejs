@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+    <%-include('./partials/inactive.ejs')%>
+    <!-- <link rel="stylesheet" href="/feature.css"> -->
+    <link rel="stylesheet" href="/main.css"/>
+<body >
+    <nav  class="navbar bg-black">
+        <div class="container-fluid">
+            <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+                <img 
+                width="30"
+                hegith="30"
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+               </span>
+               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                <h5>
+                    <a
+                      class="nav-link breadcrumb-item active"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style="color: #fff !important"
+                    >
+                    <%=product.Name%>
+                    </a>
+                  </h5>
+                </li>
+              </ul>
+              <%-include('./partials/USER.ejs')%>
+        </div>
+      </nav>
+      <div class="container p-3 bg-light  mt-5 justify-content-center shadow ">
+        
+        <input type="file" name="" hidden id="files">
+        <form action=""  method="patch" id='form' class="p-2   " >
+            <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%> 
+               
+                <div class="d-flex justify-content-between">
+                    <span title="Click to Duplicate <%=product.Name%> " onclick=";location.assign('/api/v1/Clone/Product/<%=product._id%>')">
+                        <img width="35" height="35" src="https://img.icons8.com/fluency/48/duplicate.png" alt="duplicate"/>
+                    </span>
+                    
+                    <span id="downloadBTN" onclick="getData()"  title="Download <%=product.Name%> to Pdf">
+                        <img width="28" height="28" src="https://img.icons8.com/color/48/download--v1.png" alt="download--v1"/>
+                      </span>
+
+                <%if(!product.Sellable && user.jobTittle === "CFO"){%> 
+                    <span title="Delete  <%=product.Name%>"  onclick=";location.assign('/api/v1/Delete/<%=product._id%>')">
+                        <img width="30" height="30" src="https://img.icons8.com/fluency/48/delete-sign.png" alt="delete-sign"/>
+                    </span>
+                    <%}%>
+               </div>
+               <%}%>
+            <input type="text" placeholder="Product Name" name="Name" value="<%=product.Name%>" id="Name" style="width:570px;padding:10px;font-size: x-large;" required/>
+            <div class="d-flex  gap-3 p-5 justify-content-around">
+                <!-- cateory -->
+                <div>
+                    <label  class="d-flex justify-content-between gap-7" for="category">Product category</label>
+                     <select id="category" class="form-select" name="Categories">
+                     <optgroup label="category">
+                         <option  class="bg-warning" value="<%=product.category%>"><%=product.category%></option>
+                         <%if(productcat.length > 0){%>
+                            <%productcat.forEach((cat)=>{%>
+                              <option value="<%=cat.NAME.toUpperCase()%>"><%=cat.NAME.toUpperCase()%></option>
+                           <%})%>
+                           <%}%> 
+                     </optgroup>
+                    </select>
+                 
+                </div>
+                <!-- image -->
+                <div>
+                    <label for="files" class="flex flex-col">
+                        <div id="productImage" <%if(product.image){%>
+                            style="background-image: url('<%=product.image%>');filter: drop-shadow(3px 1px 4px black);transition: 0.5s;"
+                        <%}%>
+                        ></div>
+                        <!-- display progress % for photo upload -->
+                        <!-- <progress value="0" max="100" id="progress"></progress> -->
+                        <input type="url" name="image" value="<%=product.image%>"  id="imageLoader" hidden>
+                    </label>
+                </div>
+            </div>
+            <div class="border-b flex font-bold">
+                <div class="border-end p-1 subs" name="category" title="Double click to show section">Product information</div>
+                <%if(user.role === "Admin"  ||user.jobTittle === "CFO"){%>  
+                <div class="border-end p-1 subs" name="category" title="Double click to show section">Product Settings</div>
+                <div class="border-end p-1 subs" name="category" title="Double click to show section">Description</div> 
+                <%}%> 
+            </div>
+            <!-- prouct information -->
+                <div class="flex flex-col gap-9 hidden border-b p-5" id="workInfo">
+                    <div class="input-group mb-3">
+                    <span class="input-group-text">Whole-sale Price: ₦</span>
+                        <input type="number" name="WareHouse_Price" step="any" value="<%=product.WareHouse_Price%>" placeholder="Eg ₦10.00">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"> Super Market price ₦</span>
+                        <input type="number" name="Market_Price" step="any"  value="<%=product.Market_Price%>" placeholder="Eg ₦10.00">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"> Van price ₦</span>
+                        <input type="number" name="Van_Price" step="any"  value="<%=product.Van_Price%>" placeholder="Eg ₦10.00" >
+                    </div>
+
+                    <div class="col-md-7">
+                        <label for="Rolls" class="form-label">Number or Rolls in a Carton</label>
+                            <input type="number" class="form-control" name="Rolls" id="Rolls" value="<%=product.Rolls%>" placeholder=' Define number of rolls in Carton ' title=" Define number of rolls in Carton " required>
+                    </div>
+
+                    <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%> 
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"> Vendor price ₦</span>
+                        <input type="number" step="any" name="vendor_Price"  value="<%=product.vendor_Price%>" placeholder="Eg ₦10.00" >
+                    </div>
+
+                    <div class="col-md-7">
+                        <label for="pricelist" class="form-label">vendor</label>
+                        <select
+                          class="form-select "
+                          name="vendor"
+                          aria-describedby="validationServer04Feedback"
+                          required
+                          id="vendor"
+                        >
+                        <% vend = vendor.filter(vendor=>{%>
+                            <%return vendor._id.toString() === product.Vendor.toString()  %>
+                            <%})%>
+                            <%vend.map(name=>{%>
+                                <option class="bg-warning" value="<%=product.Vendor%>" ><%=name.Name%></option>
+                                <%})%>
+                        
+                        <%if(vendor){%>
+                          <%vendor.forEach((vendor)=>{%>
+                              <option value="<%=vendor._id%>"
+                              <%if(vendor.block_vendor){%>
+                                disabled="true"
+                              <%}%>
+                              ><%=vendor.Name%></option>
+                          <%})%>
+                          <%}%>
+                        </select>
+                        </div>
+                        <%}%>
+
+                    <label class="flex gap-9 ">
+                        Manufacturer: <input type="text"  value="<%=product.Manufacturer%>"  name="Manufacturer"placeholder='Name of Manufacturer'>
+                    </label>
+    
+                    <label class="flex gap-9 ">
+                        Manufacturer Code: <input type="text"  value="<%=product.Manufacture_code%>"  name="ManufacturerCode"placeholder='Name of Manufacturer'>
+                    </label>
+    
+                    <label class="flex gap-9 ">
+                        Product Code: <input type="text" required value="<%=product.ACDcode%>"  name="AdcCode"placeholder='Name of Manufacturer'id="AdcCode" data-id='<%=product._id%>' >
+                    </label>
+    
+                </div>
+                <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%>   
+                <!-- product settings -->
+                <div id="privateinfo" class="flex flex-col hidden gap-5 p-5 border-b ">
+                    <div  class="col-md-7">
+                        <h1 class="font-bold text-xl">Unit of Measure (U.O.M)</h1>
+                        <label  class="flex  gap-7">U.O.M :</label>
+                            <select id="measure" class="form-select" name="UMO">
+                            <optgroup label="current">
+                                <option class="bg-warning" value="<%=product.UMO%>"><%=product.UMO%></option>
+                            </optgroup>
+                            <optgroup label="Unit of Measure">
+                                <%if(umo.length > 0){%>
+                                    <%umo.forEach((umo)=>{%>
+                                    <option value="<%=umo.NAME.toUpperCase()%>"><%=umo.NAME.toUpperCase()%></option>
+                                <%})%>
+                                <%}%>
+                            </optgroup>
+                           </select>
+                    </div>
+
+                    <div>
+                        <!-- colors -->
+                        <label for=""  class="flex  gap-7">
+                            Color: <input type="color" value="<%=product.color%>" name="color">
+                        </label>
+                    </div>
+                    <div class="flex gap-7">
+                        Sell <%=product.Name%> in Ware House ?
+                        <label class="switch">
+                            <input type="checkbox"  id="ActivateProduct" name="Sellable" 
+                            <%if(product.Sellable){%>
+                                checked
+                            <%}%>
+                            >
+                            <div class="slider"></div>
+                        </label>
+                    </div>
+                    <!-- OPTION TO DISPLAY ON eCOMMERCE  -->
+                    <div class="flex gap-7">
+                        Sell this product on E-commerce ? 
+                        <label class="switch">
+                            <input type="checkbox" name="Ecom_sale" <%if(product.Ecom_sale){%>
+                                checked
+                            <%}%>>
+                            <div class="slider"></div>
+                        </label>
+                    </div>
+            
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">VAT</span>
+                        <input type="text" class="form-control" placeholder='set Value Added tax on this product' step="any" name="VAT" value='<%=product.VAT.$numberDecimal ? product.VAT.$numberDecimal : product.VAT%>'  aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Van Promotion</span>
+                        <input type="number" class="form-control" placeholder='set Promotion Amount on this product' name="VanPromo" value=<%=product.VanPromo%> aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">₦</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Market Promotion</span>
+                        <input type="number" class="form-control" placeholder='set Promotion Amount on this product' name="MarketPromo" value=<%=product.MarketPromo%> aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">₦</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Whole-sale Promotion</span>
+                        <input type="number" class="form-control" placeholder='set Promotion Amount on this product' name="WholesalePromo" value=<%=product.WholesalePromo%> aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">₦</span>
+                    </div>
+                </div>
+                <%}%> 
+                <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%>   
+                <!-- description -->
+                <div id="thirdinfo" class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a discription here" rows="4" cols="50" name="Description" id="floatingTextarea" title="please note that description added will reflect on your E-commerce Product Description (EPD). Hence, it should be properly Constructed."><%=product.Description%></textarea>
+                        <label for="floatingTextarea">Description</label>
+                </div>
+                <%}%> 
+
+            <%if(user.role === "Admin" ||user.jobTittle === "CFO"){%> 
+            <button  type="submit">Update <%=product.Name%> </button>
+            <%}%> 
+        </form>
+      </div>
+</body>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
+<script type="module" src="/ImageUpload.js"></script>
+<script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+<script src="/filesaver.js" type="module"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js" integrity="sha512-42PE0rd+wZ2hNXftlM78BSehIGzezNeQuzihiBCvUEB3CVxHvsShF86wBWwQORNxNINlBPuq7rG4WWhNiTVHFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script  src="/Erp.js"></script>
+<script>
+     const getData = async ()=>{
+     const product = document.getElementById('AdcCode')
+     productId = product.dataset.id
+        const request = await fetch('/api/v1/Getfulldb',{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+       data =  response.Products.filter(product => {
+            return product._id === productId
+        
+        })
+
+
+        // download set up
+        var pdfObject = await jsPDFInvoiceTemplate.default( {
+        outputType: jsPDFInvoiceTemplate.OutputType.Save,
+        returnJsPDFDocObject: true,
+        fileName: `${data[0].Name}`,
+        orientationLandscape: false,
+        compress: true,
+        logo: {
+        src: `/preview.png`,
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 26.66, //aspect ratio = width/height
+        height: 26.66,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        stamp: {
+        inAllPages: true, //by default = false, just in the last page
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 20, //aspect ratio = width/height
+        height: 20,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        business: {
+        name: `${data[0].Name}`,
+        address: `${data[0].ACDcode}`,
+        email:  `Unit of Measure: ${data[0].UMO}`,
+        phone: "",
+        },
+        contact: {
+        label: `Category: ${data[0].category}`,
+        name: `${data[0].Name}`,
+        address: ``,
+        phone: ``,
+        email: ``,
+        otherInfo:``,
+        },
+        invoice: {
+        label:``,
+        num: `` ,
+        invDate: `Download date : ${moment().format('l')}`,
+        invGenDate: ``,
+        headerBorder: true,
+        tableBodyBorder: true,
+        header: [
+          {
+            title: "#",
+            style: {
+              width: 10
+            }
+          },
+          {
+            title: "ADC Code",
+          },
+          {
+            title: "Market Price",
+          },
+          {
+            title: "Van Price",
+          },
+          {
+            title: "Wholesale Price",
+          },
+          {
+            title: "Qty sold",
+          },
+          {
+            title: "Description",
+          },
+          
+        ],
+        table: data.map((product,index)=>{
+          return [index +1,product.ACDcode,product.Market_Price,product.Van_Price,product.WareHouse_Price,product.TotalSale,product.Description]
+        })
+         ,
+        additionalRows: [{
+            col1: 'Total:',
+            col2: "145678",
+            col3: '',
+            style: {
+                fontSize: 14 //optional, default 12
+            }
+        },
+        {
+            col1: 'VAT:',
+            col2: "20",
+            col3: '%',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        },
+        {
+            col1: 'SubTotal:',
+            col2: "116199.90",
+            col3: 'ALL',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        }],
+        invDescLabel: ``,
+        invDesc: ` `,
+        // invTotal: `TOTAL DEBT :NGN${data.map(bill => {return bill.AMOUNT}).reduce((total , currentValue) => {return total + currentValue},0)}`,
+        },
+        footer: {
+        text: "Powered by BADE",
+        },
+        pageEnable: true,
+        pageLabel: "BADE ",
+        }); //returns number of pages created
+}
+
+    const productcode = document.getElementById('Name').value
+
+    const vendor = document.getElementById('vendor').addEventListener('input', function(e){
+    const value = e.target.value
+    const ACDcode = `${productcode.substring(0,4)}-${value.charAt(0)}${value.charAt(1)}${value.charAt(2)}`
+    document.getElementById('AdcCode').value = ACDcode
+    });
+
+    const ProductForm = document.getElementById('form');
+    ProductForm.addEventListener('submit',async (e)=>{
+        e.preventDefault();
+   
+   const Name = ProductForm.Name.value;
+   const category = ProductForm.category.value;
+   const WareHouse_Price = ProductForm.WareHouse_Price.value;
+   const Market_Price = ProductForm.Market_Price.value;
+   const Van_Price = ProductForm.Van_Price.value;
+   const Vendor = ProductForm.vendor.value;
+   const vendor_Price = ProductForm.vendor_Price.value;
+   const UMO = ProductForm.UMO.value;
+   const color = ProductForm.elements.color.value;
+   const Description = ProductForm.Description.value;
+   const ACDcode = ProductForm.AdcCode.value;
+   const Sellable =  ProductForm.Sellable.checked;
+   const Ecom_sale = ProductForm.Ecom_sale.checked;
+   const Manufacturer = ProductForm.Manufacturer.value;
+   const Manufacture_code = ProductForm.ManufacturerCode.value;
+   const VAT = ProductForm.VAT.value;
+   const Rolls = ProductForm.Rolls.value;
+   const image = ProductForm.image.value;
+   const productId = document.getElementById('AdcCode')
+   id = productId.dataset.id
+   const WholesalePromo = ProductForm.WholesalePromo.value;
+   const VanPromo = ProductForm.VanPromo.value;
+   const MarketPromo = ProductForm.MarketPromo.value;
+
+   const endPoint= `/api/v1/Products/${id}/edit`;
+   const update = {Name,
+           category,
+           WareHouse_Price,
+           Market_Price,
+           Van_Price,
+           vendor_Price,
+           Vendor,
+           UMO,
+           color,
+           Description,
+           Sellable,
+           Ecom_sale,
+           Manufacturer,
+           Manufacture_code,
+           ACDcode,
+           Rolls,
+           VAT,image,WholesalePromo,VanPromo,MarketPromo}
+
+   const res = await fetch(endPoint,{
+       method:'PATCH',
+       body:JSON.stringify(update),
+       headers:{'Content-Type': 'application/json'}
+   })
+
+   const data = await res.json()
+   data?.result ? alert(data.result) : alert(data.error)
+   location.reload()                
+    })
+
+</script>
+</html>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%-include('./partials/head.ejs')%>
+<head>
+    <style>
+
+        /* activitiy modal */
+
+        .sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav p {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 15px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav p:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#pspdfkit-header {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav p {font-size: 18px;}
+}
+
+
+      /* ends here  */
+
+      .itemQty:focus{
+        outline: none;
+      }
+
+      /* #item :nth-child(odd){
+        background-color: #999a9c86;
+        font-weight: bolder;
+        font-size: '15px';
+      } */
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("Inter-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Space Mono";
+        src: url("SpaceMono-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      #invoice {
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        color: #000000;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      #pspdfkit-header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        color: #717885;
+        margin-top: 2.5rem;
+        margin-bottom: 2.5rem;
+        width: 100%;
+      }
+
+      .header-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .logo {
+        height: 3rem;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      .logotype {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      h2{
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+
+      h4 {
+        font-family: "Space Mono", monospace;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+
+      .page {
+        margin-left: 5rem;
+        margin-right: 5rem;
+      }
+
+      .intro-table {
+        display: flex;
+        justify-content: space-between;
+        margin: 3rem 0 3rem 0;
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #000000;
+        width: 50%;
+      }
+
+      .intro-form:last-child {
+        border-right: none;
+      }
+
+      .intro-table-title {
+        font-size:1rem;
+        margin: 0;
+      }
+
+      .intro-form-item {
+        padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+      }
+
+      .intro-form-item:first-child {
+        padding-left: 0;
+      }
+
+      .intro-form-item:last-child {
+        padding-right: 0;
+      }
+
+      .intro-form-item-border {
+        padding: 1.25rem 0 0.75rem 1.5rem;
+        border-bottom: 1px solid #000000;
+      }
+
+      .intro-form-item-border:last-child {
+        border-bottom: none;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 6rem;
+      }
+
+      .no-border {
+        border: none;
+      }
+
+      .border {
+        border: 1px solid #000000;
+      }
+
+      .border-bottom {
+        border: 1px solid #000000;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+      }
+
+      .signer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        margin: 2rem 0 2rem 0;
+      }
+
+      input {
+        font-family: "Space Mono", monospace;
+        text-align: center;
+        margin-top: none;
+        box-sizing: border-box;
+        text-align: left;
+        border:none !important;
+      }
+
+      input#signature {
+        height: 8rem;
+      }
+
+      .intro-text {
+        width: 60%;
+      }
+
+      .table-box table,
+      .summary-box table {
+        width: 100%;
+        font-size: 0.625rem;
+      }
+
+      .table-box table {
+        padding-top: 2rem;
+      }
+
+      .table-box td:first-child,
+      .summary-box td:first-child {
+        width: 40%;
+      }
+
+      .table-box td:last-child,
+      .summary-box td:last-child {
+        text-align: right;
+      }
+
+      .table-box table tr.heading td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .table-box table tr.item td,
+      .summary-box table tr.item td {
+        border-bottom: 1px solid #d7dce4;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.no-border-item td {
+        border-bottom: none;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.total td {
+        border-top: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        height: 1.5rem;
+      }
+
+      .summary-box table tr.item td:first-child,
+      .summary-box table tr.total td:first-child {
+        border: none;
+        height: 1.5rem;
+      }
+
+      #pspdfkit-footer {
+        font-size: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+        color: #717885;
+        margin-top: 2.5rem;
+        bottom: 2.5rem;
+        position: absolute;
+        width: 100%;
+      }
+
+      .footer-columns {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+
+      .signer-item img {
+        margin:10px;
+      }
+          .box {
+      position: relative;
+    }
+    .ribbon {
+      position: absolute;
+      right: -5px; top: -5px;
+      z-index: 1;
+      overflow: hidden;
+      width: 75px; height: 75px;
+      text-align: right;
+    }
+    .ribbon span {
+      font-size: 10px;
+      font-weight: bold;
+      color: #FFF;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      width: 100px;
+      display: block;
+      background: #79A70A;
+      background: linear-gradient(#9BC90D 0%, #79A70A 100%);
+      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+      position: absolute;
+      top: 19px; right: -21px;
+    }
+    .ribbon span::before {
+      content: "";
+      position: absolute; left: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid #79A70A;
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #79A70A;
+    }
+    .ribbon span::after {
+      content: "";
+      position: absolute; right: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid transparent;
+      border-right: 3px solid #79A70A;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #79A70A;
+    }
+
+    /* for canceled bill */
+    .CANCELLED {
+      position: absolute;
+      right: -5px; top: -5px;
+      z-index: 1;
+      overflow: hidden;
+      width: 75px; height: 75px;
+      text-align: right;
+    }
+    .CANCELLED span {
+      font-size: 10px;
+      font-weight: bold;
+      color: #FFF;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      width: 100px;
+      display: block;
+      background: #c5160a;
+      background: linear-gradient(#df3e0c 0%, #df3e0c 100%);
+      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+      position: absolute;
+      top: 19px; right: -21px;
+    }
+    .CANCELLED span::before {
+      content: "";
+      position: absolute; left: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid #df3e0c;
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #df3e0c;
+    }
+    .CANCELLED span::after {
+      content: "";
+      position: absolute; right: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid transparent;
+      border-right: 3px solid #df3e0c;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #df3e0c;
+    }
+
+        </style>
+  </head>
+
+  <body>
+    <nav class="navbar bg-black">
+      <div class="container-fluid">
+        <span class="navbar-brand" onclick="history.back()" href="/" title="Back">
+          <img 
+          width="30"
+          hegith="30"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEgklEQVR4nO2a/U/VVRzH31xEbjxEQmjYAobWUkdYIiYxYYg8c+/9HrqUhAaFbvaE60lnOVzTrRbFMCZjNkmvGV6433NjjY2W1WzrgVHNkq0VtkxXZmqaUwyBTzv0Zd01TO4ZP3zP5b628we8vp/z9P5+DhAkSJAgUw1RyPpWCsN0wOmmUI1TK+Pkzf6IZiCQcbpppqZTO+NEYmicXPX1ZEEgUtpFEYxT97isz2hGoOF0UxTjdGgC2fFKb0Og4HRTLOP0xbVkfcYzUB3NQwmM07eTkCWm0yjj9ChUhXVSisbp2KRk/53aw5pOTqiGndNiptMpf2R9pLdDJRw6ZTBOZ2Rkcxu+PAhAnQuJ5qFcjdNFv2V1Gl2+me8FsBpAJlTAoZNd4zTo9xTWR0bS6/a1GLI2ANEwO4zTGqbTVb9lPcNDd9U2vW7IlgCIgNnROD1pHCl+yTo6hwYXVr60w5AtABAOs6Nx2iSzOdk7rlycX/b0VkN2pfk3KqIQplOjjKyt/dIfibk1zxuyKwCEwuzxjum0R0a27O0LpxMy7Bt9dmNzJ6XCbgpnnDwysqWucyfjFq14zJBNBxACM1PVQ5GM0/sysiV7Tw/EJKetM2TTYHZK3qNZjNNnMrJFu0/0R8xJqTFkF8DsON10i6bTERnZgpZjfdbo+LUAHgQwD2bHzilZ0+kHGdm8nf2fWKyRVQAeAJAIs+P00kJNp5MysrkNfT0WS1glgAoACTA75V5KZzr9LiObveNwl7FeywHEw+yUc8phOv0plXi2dLkMWQ3ALJgdxqlMNvEsrXO1GrJ2JRLPFAmrkXh8CE2rbdro6PhrUGZK29svizuyUtwtpuW84sdfcBwc9H8d/yP+MhQiFECOkE7MrnrW9s6ls1LSnJpVaqFYANwnpOcsKX6qdP952b+PLpWaZSEAlgrpuDsyN5TsO3Nccnq/+3AbWaEQi4V0VOKi2uK2X6WumJpOH9q8pMYxZbBQSEfE31ZduPv4N5JrutehUxwUYr5IPGHRsWvzd33fK1npfpuX5kIhkkTysYRZH1rZeORjSekfHTqZPyb6ICpUAYulMueVzydqbk9m/GLnlAqFmA3gfrGuM7d2H5A8ss5qHroXChErrt5Cetkmz1syP+LHelBeyoNC3Ggko9VLntizS9NHhiXO6Sual0SUVIZI8V5FSKc+0tjg8Fwdkqi0+FDVUAgrgCIhfWdF/XbRM5Ko9CjTqQ4KMRPAKiGdUlr3ot096H+PWMGkNWM8aSXlr99sb798fjo8ebAAyBLSCem2urIDF36bDo9aQgBkjCWtBVkbSl3nfp7sOl72XMcbyvwPm4B7hHRMYuq6krZTA9cTXr6la79Sbzz+P2kl1RS9eeLotWSztn3Qacjmm785fn1uF0krPHZudWHrT1//Vzbn1d4eQ7ZYiWcPkyR5LF5G3LRmVfN3n47L5jUdPWy0ZMoA3IAA41aRtES8zH3tq0MFLQN9RrPNASAKAcrssaRlsVSGWaOrjP6T+VsyU5S0RGfxZkwTYoxqBwkC//gbNIgEXXRi6msAAAAASUVORK5CYII=">
+         </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <h5>
+              <a
+                class="nav-link breadcrumb-item active "
+                aria-current="page"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: #fff !important"
+              >
+              <%=Singlebill.billStatus.toUpperCase()%>/<%=Singlebill.billReferenceNo%>/<%=Singlebill.invoicelocation%>
+              </a>
+            </h5>
+          </li>
+        </ul>
+        <%-include('./partials/USER.ejs')%>
+        <%-include('./partials/inactive.ejs')%>
+      </div>
+    </nav>
+   
+    <!-- approve and reject buttons -->
+   <div class="">
+    <%if(Singlebill.status ==="developer" ){%>
+      <button type="button" class="btn btn-success" id="approved" data-id="<%=Singlebill._id%>" onclick="apporved()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
+          <path d="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l7-7zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0z"/>
+          <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
+        </svg>
+        Approve
+      </button>
+    <button type="button" class="btn btn-danger">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-octagon" viewBox="0 0 16 16">
+        <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+      </svg>
+      Refuse
+    </button>
+    <%}%>
+   </div>
+     <!-- validation work flow -->
+     <div class="d-flex justify-content-end shadow-sm align-tems-center " style="background-color: rgba(187, 169, 3, 0.575); color:#6d5c5c; padding-right:10px;">
+      <div class="p-2	" title="Creating"><img width="40" height="40" src="https://img.icons8.com/papercut/60/new.png" alt="new"/></div>
+      <div class="p-2 " title="In Payment"  <%if(Singlebill.status ==="Locked"){%>
+        style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+        <%}%>><img width="44" height="44" src="https://img.icons8.com/hands/100/experimental-card-in-use-hands.png"  alt="card-in-use"/></div>
+      <div class="p-2 " title="Awaiting delivery"  <%if(Singlebill.status==="Approved" && !Singlebill.isDelivered){%>
+        style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+        <%}%>><img width="44" height="44" src="https://img.icons8.com/stickers/100/data-pending.png" alt="data-pending"/></div>
+        <div class="p-2 " title="Delivered"  <%if(Singlebill.isDelivered){%>
+          style="background-color:#fff;box-shadow: inset 1px 2px 4px 1px silver;"
+          <%}%> ><img width="44" height="44" src="https://img.icons8.com/cotton/64/delivery.png" alt="delivery"/></div>
+     </div>
+     
+   </div>
+    <div  class="shadow-lg m-4 p-3 box ">
+      
+      
+        <div class=" <%if(Singlebill.billStatus.toUpperCase() === 'CANCELLED'){%>
+          CANCELLED
+          <%}else{%>
+            ribbon
+          <%}%>
+            "><span><%=Singlebill.billStatus%></span></div>
+      <div id="pspdfkit-header">
+
+        <span style="font-size:20px;cursor:pointer" onclick="
+        document.getElementById('mySidenav').style.width = '250px';
+        document.getElementById('main').style.marginLeft = '250px';
+        document.body.style.backgroundColor = 'rgba(0,0,0,0.4)';">&#9776; See ActivityLog</span>
+
+          <!-- action buttons -->
+     <div class="p-2" >
+      <span id="download-button" onclick="generatePdf()" data-id="<%=Singlebill._id%>" type="button" title="download <%=Singlebill.billStatus%> as Pdf file" >
+        <img src="data:image/png;base64,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"
+        height="40"
+        width="40"
+        >
+      </span>
+      <%if(Singlebill.billStatus.toUpperCase() !== 'CANCELLED'){%>
+      <%if(Singlebill.isDelivered === true && user._id.toString() === warehouse.StoreKeeper._id.toString() || user.role === "Admin"){%>
+      <button type="button" class="btn btn-info" id="Mail" data-id="<%=Singlebill._id%>" onclick="MailBtn()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-at-fill" viewBox="0 0 16 16">
+          <path d="M2 2A2 2 0 0 0 .05 3.555L8 8.414l7.95-4.859A2 2 0 0 0 14 2H2Zm-2 9.8V4.698l5.803 3.546L0 11.801Zm6.761-2.97-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 9.671V4.697l-5.803 3.546.338.208A4.482 4.482 0 0 1 12.5 8c1.414 0 2.675.652 3.5 1.671Z"/>
+          <path d="M15.834 12.244c0 1.168-.577 2.025-1.587 2.025-.503 0-1.002-.228-1.12-.648h-.043c-.118.416-.543.643-1.015.643-.77 0-1.259-.542-1.259-1.434v-.529c0-.844.481-1.4 1.26-1.4.585 0 .87.333.953.63h.03v-.568h.905v2.19c0 .272.18.42.411.42.315 0 .639-.415.639-1.39v-.118c0-1.277-.95-2.326-2.484-2.326h-.04c-1.582 0-2.64 1.067-2.64 2.724v.157c0 1.867 1.237 2.654 2.57 2.654h.045c.507 0 .935-.07 1.18-.18v.731c-.219.1-.643.175-1.237.175h-.044C10.438 16 9 14.82 9 12.646v-.214C9 10.36 10.421 9 12.485 9h.035c2.12 0 3.314 1.43 3.314 3.034v.21Zm-4.04.21v.227c0 .586.227.8.581.8.31 0 .564-.17.564-.743v-.367c0-.516-.275-.708-.572-.708-.346 0-.573.245-.573.791Z"/>
+        </svg>
+        Mail <%=Singlebill.billStatus%> to <%=cust.Username%>
+      </button>
+
+      <%}%>
+      <%}%>
+     </div>
+
+     <div id="invoice" class="logotype ms-5 border-top border-bottom p-2">
+      <img  height="150" width="150" src="/logo.jpg" /> 
+    </div>
+     <div class="header-columns d-flex justify-content-between ">
+      <div class="ms-5">
+        <h5><%=Business.CompayName%></h5>
+            <p>[<%=Business.email%>]</p>
+            <p><%=Business.Tel%></p>
+            <p><%=Business.Address%></p>
+            <p><%=Business.CompanyCity%></p>
+            <h5 class="font-bold <%if(Singlebill.billStatus.toUpperCase() === 'CANCELLED'){%>
+              text-danger
+              <%}%>
+                "><%=Singlebill.billStatus%>/<%=Singlebill.billReferenceNo%>/<%=Singlebill.invoicelocation%></h5>
+      </div>
+
+      <div class="me-5">
+        <h5><%=cust.Username%></h5>
+        <p ><%=cust.phone%></p>
+        <p ><%=cust.Email%></p>
+        <p> <%=Singlebill.startDate.toLocaleString()%></p>
+      </div>
+          
+        </div>
+      </div>
+
+      <div class="page" >
+        <div>
+         
+          <h2><%=Singlebill.WayBillNo%></h2>
+        </div>
+
+        <div class="table-box">
+          <table cellpadding="0" cellspacing="0">
+            <tr class="heading font-bold">
+              <td  >Product</td>
+              <td  >Photo Desc</td>
+              <td  >ExpiryDate</td>
+              <td  >BatchId No</td>
+              <td  >Promo</td>
+              <td  >QTY</td>
+              <td  >Scale</td>
+              <td  >VAT</td>
+              <!-- <td  >Unit Price (₦)</td> -->
+              <td  >Total (₦)</td>
+            </tr>
+            <tbody  class="item" id="item">
+             
+              <!-- define all ites in orders here -->
+              <%if(Singlebill.orders.length > 0){%>
+                <%if(Singlebill.orders.map(bill=>{%>
+                  <tr class="heading font-bold" title="<%=bill.item.Description%>">
+                    <td  ><%=bill.item.Name%></td>
+                    <td  ><%if(bill.item.image){%>
+                      <img src="<%=bill.item.image%>" alt="" srcset="" width="30" height="30">
+                    <%}else{%>
+                      <img width="30" height="30" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD9UlEQVR4nO2dT08TQRiHl8QvoNGEbbbtxXD2b2IFCREUbxrxAMabeG27RDi0BvkAJEakKibtzcgFL8aDiRdSh6MpR++WwIHYmXBS4TVTaWxaSmfLru8Cv1/yXtvkefad2c40M5aFIAiCIAiCIAiCIPtFKXVNSrkopSxLKX8rpQiljBloZlLK71LKd0qpvo6fNiI6IaV8BfjK1wdQSpnTbD0LgQwV2EhQLpcLnocpdIYKdGguFArjlmV1mXbHIoSoQIWsrpa+RKPRS6ZCyo0fkHu+REP9Lg0kkqiEOQPNLDe31CRkY2Nj03Hsse7u7jMmQprepiAj2fGDeKN/oklIpVLZ1kJischVkzmk6QPQGckDMdiLqRbiOPadAwsh4aJEewZmQiKjECL+zwNl2CFjECIg5FgOcQPoEJddAoQIfvAQIvhhQ4jgBwwhgh8qhAh+kBASAngEIfzA6KgIqdVgX5Kyj1L0eT6Nmk9TdjxVZeJxcbG9ECnlT9Pl98HeJGTM/30gr/d6Wn7f8dIh35o2qOZab1ChQ9JVBq02qF6+eL/XBtUPL0LettuCxHK863nOaNzCNV5+39raOiel3IEQ19dJvL4mJycyxhtUu10yCyFuIEKKxeUPteHKaAtXh4i6lFLPpJTbGLJcX4ToibxYLH6Mx537/4TETlpeUqlULkOI64uQqanH2ZoIXfF45LwnGXXDFyZ14d8PQT2Rx2L2hY5kQIjr+y9zx3FOdSyDQ8ivZZdeZ1I0ctP/P+WNDKdoIZOufkdol0rCJmQhs/ePLD9LfweEGAoZCaAzGuvucApCjIUMpwIXcu+W/52NISvRuZA3WXSIp0l9IZMOpFMwqR+jGjiqb1l0SAtCBL8ECBH84CFE8MOGEMEPGEIEP1QICQFIghB+eAQh/MAIQvghEYTwgyEI4YdBISgsnQh+CRAi+MFDiOCHDSGCHzCECH6oEBICkAQh/PAIQviBEYTwQyII4QdDEMIPg0JQWDoR/BIgRPCDhxDBDxtCBD9gCBH8UCEkBCAJQvjhEYTwAyMI4YdEEMIPhiCEHwaFoLB0IvglQIjgBw8hgh/2oRKCSjYxCFQILglL+nYJmF9Cyl5OKT3ONdTiFNL19fVNP4Xoi3XbHuyIUi0ZlEpfzU8hNRBypd0ppSi1L4OZmemnWkg0at8+sJBdKTlAVx09eCsrK5/qzllM+CJEXzm9traWhxTlWUZPz9kHNSFGV616ST6ff1gqlYSepPSbAwSpprcpzUafXD09/aQ6TNUdCXvRCiBd+pbj+i9C2W0Z7Mowu667k+jW06cy60lKvzlAit0gITKq2WhGtm2fDkwEgiAIgiAIgliHLn8AKSCcApR8l94AAAAASUVORK5CYII=" alt="" srcset="">
+                    <%}%></td>
+                    <td  ><%=bill.ExpiryDate%></td>
+                    <td  ><%=bill.BatchId%></td>
+                    <td  >₦<%=bill.promotionData ? bill.promotionData : 0%></td>
+                    <td  ><%=bill.Qty%></td>
+                    <td  ><%=bill.scale%></td>
+                    <td  ><%=bill.item.VAT.$numberDecimal ? bill.item.VAT.$numberDecimal : bill.item.VAT%></td>
+                    <!-- <td  >₦<%=bill.priceListPrice%></td> -->
+                    <td  >₦<%=bill.total%></td>
+                  </tr>
+                <%})){%>
+                <%}%>
+              <%}%>
+            </tbody>
+            <tbody class="item" id="promosection"></tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="summary-box">
+          <table cellpadding="10" cellspacing="0">
+            <tbody>
+              <tr class="item">
+                <td></td>
+                <td>Subtotal:</td>
+                <td id="Subtotal">₦<%=Singlebill.subTotal%></td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Discount:</td>
+                <td>₦<%=Singlebill.discount%></td>
+              </tr>
+
+              <tr class="item">
+                <td></td>
+                <td>Tax Rate:</td>
+                <td>₦<%=Singlebill.taxRate%></td>
+              </tr>
+
+              <tr class="no-border-item">
+                <td></td>
+                <td>Shipping/Handling:</td>
+                <td>₦<input type="number" name="" id="Shipping" placeholder="0.00" style="width:50px"value="<%=Singlebill.shippingFee%>" disabled> </td>
+              </tr>
+
+              <tr class="total">
+                <td></td>
+                <td>Total Due:</td>
+                <td >₦ <%=Singlebill.grandTotal%></td>
+               
+              </tr>
+
+              <tr class="total">
+                <td></td>
+                
+              </tr>
+          </table>
+          <input type="hidden" id="Grandtotal" value="<%=Singlebill.grandTotal%>" hidden>
+          <p>Total in words:</p>
+          <p id="words"></p>
+        </div>
+      </div>
+
+      <div class="page" style="page-break-after: always">
+      
+        <div class="page" style="page-break-after: always">
+          <div class="signer">
+            <div class="form signer-item">
+              <label class="border-bottom" for="date" class="label">Terms & Conditions</label>
+                <small>WE DON'T ACCEPT CASH,ONLY TRANSFER OR Issue CHEQUE TO ALL CHANNEL DISTRIBUTORS NIG</small>
+            </div>
+
+            <div class="form signer-item">
+              <label for="signature" class="label">Issued by: <%=Singlebill.RaiseBy%></label>
+              <img class="logo" style="width: 150px; height: 150px;" src="<%=Singlebill.signatureUrl%>"
+                id="signature"
+              />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div id="pspdfkit-footer" >
+        <div class="footer-columns">
+          <span>"<%=Singlebill.billStatus%> #S<%=Singlebill.billReferenceNo%>"</span>
+        </div>
+      </div>
+    </div>
+    
+
+     <!-- The Modal -->
+     <div id="myModal" class="modal flex items-center flex-col justify-center gap-3 shadow">
+      <!-- Modal content -->
+      <div class="modal-body modal-content w-50 justify-content-center align-tems-center d-flex flex-column">
+         <div class="card-image">
+          <img src="data:image/png;base64,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"alt="" srcset="">
+          <h6 id="myModalText"></h6>
+         </div>
+      </div>
+  </div>
+
+
+    <!-- activities on bills modal -->
+    <div id="mySidenav" class="sidenav">
+      <p href="javascript:void(0)" class="closebtn" onclick="document.getElementById('mySidenav').style.width = '0';
+      document.getElementById('main').style.marginLeft= '0';
+      document.body.style.backgroundColor = 'white';
+    ">&times;</p>
+      <h5>Logged Activities</h5>
+      <div class="">
+       <%Singlebill.ActivityLog.sort().map(log=>{%>
+         <div class=" border-bottom">
+           <p><b>Log: </b> <%=log.logMsg%></p>
+           <p><b>Status: </b> <%=log.status%></p>
+         </div>
+       <%})%>
+      </div>
+      
+    </div>
+    <!-- ends here  -->
+
+
+
+    <%-include('./partials/footer')%>
+  </body>
+  
+  <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+  <script>
+
+let Inwords
+//    /the button
+const  generatePdf = async  function  (){
+ const billId =  document.getElementById("download-button")
+const id = billId.dataset.id
+ const request = await fetch(`/api/v1/invoice/${id}`,{
+        method:'GET',
+        headers:{'Content-Type': 'application/json'},
+    })
+        const response = await request.json()
+        // response ? document.getElementById('loading').style.display='none' :''
+    // console.log(response);
+var pdfObject = await jsPDFInvoiceTemplate.default( {
+        outputType: jsPDFInvoiceTemplate.OutputType.Save,
+        returnJsPDFDocObject: true,
+        fileName: `${response.bill.customerName}`,
+        orientationLandscape: false,
+        compress: true,
+        logo: {
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 26.66, //aspect ratio = width/height
+        height: 26.66,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        stamp: {
+        inAllPages: true, //by default = false, just in the last page
+        src: "/logo.jpg",
+        type: 'JPG', //optional, when src= data:uri (nodejs case)
+        width: 20, //aspect ratio = width/height
+        height: 20,
+        margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0 //negative or positive num, from the current position
+        }
+        },
+        business: {
+        name: "ALL CHANNELS DISTRIBUTORS NIG LTD",
+        address: "CM/104 COMPLEX KARU NEW MARKET, KARU ABUJA ,",
+        email: "(+234) 08158491682, ALLCHANNELDISTRIBUTION@YAHOO.COM",
+        phone: "Group 3 Plaza, UK Bello Road, kasuwar gwari, Minna Niger State."
+        },
+        contact: {
+        label:`Invoicer : ${response.bill.RaiseBy}`,
+        name: `${response.bill.customerName.toUpperCase()}`,
+        address: `${response.customers.street ? response.customers.street :""}`,
+        phone: `(+234)${response.customers.phone ? response.customers.phone : ''}`,
+        email: `${response.customers.Email ? response.customers.Email : ""}`,
+        otherInfo:``,
+        },
+        invoice: {
+        label:`${response.bill.billStatus.toUpperCase().substring(0,3)}/${response.bill.billReferenceNo}/${response.bill.invoicelocation}/`,
+        num: `${response.bill.WayBillNo ? response.bill.WayBillNo : '' }` ,
+        invDate: `Order Date: ${response.bill.startDate}`,
+        invGenDate: `Invoice Date: ${response.bill.DELIVERYDATE ? response.bill.DELIVERYDATE.substring(0,10) : ''}`,
+        headerBorder: true,
+        tableBodyBorder: true,
+        header: [
+          {
+            title: "#",
+            style: {
+              width: 10
+            }
+          },
+          {
+            title: "Product",
+            style: {
+              width: 50
+            }
+          },
+          {title:'Exp'},
+          // {title:'Batch'},
+          { title: "Promo"},
+          { title: "P-Sum"},
+          { title: "Price"},
+          { title: " Qty "},
+          { title: "Unit"},
+          { title: "Vat"},
+          { title: "Total"}
+        ],
+        table: response.bill.orders.map((ord,index)=>{
+        
+          return [index +1, ord.item.Name,ord.ExpiryDate ? ord.ExpiryDate :'',ord.promotionData ? ord.promotionData :0,ord.promotionData ? ord.promotionData * ord.Qty :0,ord.priceListPrice, ord.Qty, ord.scale , ord.item.VAT.$numberDecimal  ? ord.item.VAT.$numberDecimal : ord.item.VAT , ord.total ]
+        }),
+        additionalRows: [{
+            col1: 'Total:',
+            col2: "145678",
+            col3: '',
+            style: {
+                fontSize: 14 //optional, default 12
+            }
+        },
+        {
+            col1: 'VAT:',
+            col2: "20",
+            col3: '%',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        },
+        {
+            col1: 'SubTotal:',
+            col2: "116199.90",
+            col3: 'ALL',
+            style: {
+                fontSize: 10 //optional, default 12
+            }
+        }],
+        invDescLabel: `TOTAL :NGN${response.bill.grandTotal}`,
+        invDesc: `(${Inwords})   SubTotal: NGN${response.bill.subTotal},    VAT TOTAL:NGN${0},   Invoice-Discount :NGN${response.bill.discount}, Sum on SKU Promo: NGN${response.bill.orders.map(promo =>{return promo.promotionData * promo.Qty}).reduce((total , currentValue) => {return total + currentValue},0)}`,
+        invTotal: "Customer Signature and date",
+        },
+        footer: {
+        text: "We've suppied, No refund after payment.WE DON'T ACCEPT CASH,ONLY TRANSFER OR Issue CHEQUE TO ALL CHANNEL DISTRIBUTORS NIG",
+        },
+        pageEnable: true,
+        pageLabel: "BADE ",
+        }); //returns number of pages created
+  }
+
+
+    const apporved = async () =>{
+      const approveBtn = document.getElementById('approved')
+      const id = approveBtn.dataset.id
+      const api = `/api/v1/bill/${id}/approved`
+
+      const request = await fetch(api,{
+        method:'PATCH',
+        headers:{"content-type": "application/json"}
+      })
+      const response = await request.json()
+
+      if(response.message){
+        alert(response.message)
+        location.reload()
+      }
+    }
+ 
+    ////////////////////////////////////////////////////////////////send mail functionality////////////////////////////////
+    const MailBtn = async ()=>{
+      const MailBtn = document.getElementById('Mail')
+      const id = MailBtn.dataset.id
+      const api = `/api/v1/sendmail/${id}`
+      
+      const request = await fetch(api,{
+        method:'GET',
+        headers:{"content-type": "application/json"}
+      })
+      const response = await request.json()
+      
+      if (response.message) {
+        document.getElementById('myModal').style.display = 'block'
+        document.getElementById('myModalText').innerText = response.message;
+        setTimeout(() =>{
+          document.getElementById('myModal').style.display = 'none';
+        },5000)
+      }
+      if (response.error) alert(response.error)
+    }
+
+const Grandtotal = document.getElementById('Grandtotal').value
+
+    function test(n) {
+    if (n < 0)
+      return false;
+	 single_digit = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
+	 double_digit = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen']
+	 below_hundred = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety']
+	if (n === 0) return 'Zero'
+	function translate(n) {
+		word = ""
+		if (n < 10) {
+			word = single_digit[n] + ' '
+		}
+		else if (n < 20) {
+			word = double_digit[n - 10] + ' '
+		}
+		else if (n < 100) {
+			rem = translate(n % 10)
+			word = below_hundred[(n - n % 10) / 10 - 2] + ' ' + rem
+		}
+		else if (n < 1000) {
+			word = single_digit[Math.trunc(n / 100)] + ' Hundred ' + translate(n % 100)
+		}
+		else if (n < 1000000) {
+			word = translate(parseInt(n / 1000)).trim() + ' Thousand ' + translate(n % 1000)
+		}
+		else if (n < 1000000000) {
+			word = translate(parseInt(n / 1000000)).trim() + ' Million ' + translate(n % 1000000)
+		}
+		else {
+			word = translate(parseInt(n / 1000000000)).trim() + ' Billion ' + translate(n % 1000000000)
+		}
+		return word
+	}
+	 result = translate(n) 
+	return result.trim()+'.'
+}
+document.getElementById('words').innerHTML = `${test(parseInt(Grandtotal))} Naira only.`;
+Inwords =  `${test(parseInt(Grandtotal))} Naira only.`
+  
+  </script>
+</html>
